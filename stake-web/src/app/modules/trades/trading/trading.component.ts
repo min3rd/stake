@@ -3,6 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { DateTime } from 'luxon';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
+import { SocketService } from 'app/core/socket/socket.service';
 
 export const crypto = {
   btc: {
@@ -22,35 +23,35 @@ export const crypto = {
           data: [
             {
               x: -8,
-              y: [280123, 34767, 29213, 29609],
+              y: [28123, 34767, 29213, 29609],
             },
             {
               x: -7,
-              y: [280123, 28767, 27213, 27609],
+              y: [20123, 28767, 27213, 27609],
             },
             {
               x: -6,
-              y: [220123, 28767, 24213, 27609],
+              y: [22123, 28767, 24213, 27609],
             },
             {
               x: -5,
-              y: [230123, 28767, 27213, 27609],
+              y: [23123, 28767, 27213, 27609],
             },
             {
               x: -4,
-              y: [210123, 28767, 27213, 25609],
+              y: [21123, 28767, 27213, 25609],
             },
             {
               x: -3,
-              y: [250123, 28767, 27213, 27609],
+              y: [20123, 28767, 27213, 27609],
             },
             {
               x: -2,
-              y: [200123, 28767, 27213, 40609],
+              y: [20123, 28767, 27213, 40609],
             },
             {
               x: -1,
-              y: [280123, 28767, 27213, 27609],
+              y: [20123, 28767, 27213, 27609],
             },
           ]
         }
@@ -87,7 +88,8 @@ export class TradingComponent implements OnInit, OnDestroy {
    */
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
-    private _fuseMediaWatcherService: FuseMediaWatcherService
+    private _fuseMediaWatcherService: FuseMediaWatcherService,
+    private _socketService: SocketService,
   ) {
   }
 
@@ -110,6 +112,10 @@ export class TradingComponent implements OnInit, OnDestroy {
 
     // Prepare the chart data
     this._prepareChartData();
+    this._socketService.socket.fromEvent('message').subscribe(data=>{
+        console.log(data);
+
+    })
   }
 
   /**
@@ -217,7 +223,7 @@ export class TradingComponent implements OnInit, OnDestroy {
           rotate: 0,
           minHeight: 40,
           hideOverlappingLabels: true,
-          formatter: (value): string => DateTime.now().minus({ minutes: Math.abs(parseInt(value, 10)) }).toFormat('HH:mm'),
+          formatter: (value): string => DateTime.now().minus({ minutes: Math.abs(parseInt(value, 10)) }).toFormat('mm'),
           style: {
             colors: 'currentColor'
           }
@@ -241,7 +247,5 @@ export class TradingComponent implements OnInit, OnDestroy {
         }
       }
     };
-    console.log(this.btcOptions);
-
   }
 }

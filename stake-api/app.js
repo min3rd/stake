@@ -6,7 +6,11 @@ const { Server } = require("socket.io");
 const port = process.env.PORT;
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+    }
+});
 
 const onSocketConnection = (socket) => {
     require('./socket/userSocket')(io, socket)
