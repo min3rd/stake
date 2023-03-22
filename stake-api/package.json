@@ -1,5 +1,5 @@
 {
-  "name": "express",
+  "name": "stake-api",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -7,5 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "vanminh.vu",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.2",
+    "socket.io": "^4.6.1"
+  }
 }
