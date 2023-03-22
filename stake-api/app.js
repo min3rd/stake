@@ -1,22 +1,27 @@
 require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
-const http = require('http');
-const { Server } = require("socket.io");
-
 const port = process.env.PORT;
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: '*',
-    }
+app.use(cors({
+    origin: '*',
+    optionsSuccessStatus: 200,
+}));
+const expressWs = require('express-ws')(app);
+
+app.use(function (req, res, next) {
+    return next();
 });
 
-const onSocketConnection = (socket) => {
-    require('./socket/userSocket')(io, socket)
-};
+app.get('/client', function (req, res, next) {
+    res.end();
+});
 
-io.on('connection', onSocketConnection);
+app.ws('/client', function (ws, req) {
+    ws.on('message', function (msg) {
+        console.log(msg);
+    });
+});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

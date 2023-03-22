@@ -10,10 +10,11 @@
   "author": "vanminh.vu",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-ws": "^5.0.2",
     "mongoose": "^7.0.2",
-    "node-cron": "^3.0.2",
-    "socket.io": "^4.6.1"
+    "node-cron": "^3.0.2"
   }
 }

@@ -12,12 +12,12 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { ClientSocket } from './core/socket/socket.types';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
     scrollPositionRestoration: 'enabled'
 };
-const socketConfig: SocketIoConfig = { url: 'http://localhost:80', options: {} };
 @NgModule({
     declarations: [
         AppComponent
@@ -26,7 +26,7 @@ const socketConfig: SocketIoConfig = { url: 'http://localhost:80', options: {} }
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
-        SocketIoModule.forRoot(socketConfig),
+        SocketIoModule,
 
         // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
@@ -41,7 +41,8 @@ const socketConfig: SocketIoConfig = { url: 'http://localhost:80', options: {} }
     ],
     bootstrap: [
         AppComponent
-    ]
+    ],
+    providers: [ClientSocket]
 })
 export class AppModule {
 }
