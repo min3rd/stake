@@ -1,5 +1,5 @@
 <div class="w-full h-full">
-    <div class="bg-card dark:bg-default">
+    <div class="h-full bg-card dark:bg-default">
         <div class="items-center pl-4 pr-6 py-3 md:pl-6 border-b">
             <div class="md:flex md:flex-auto items-center justify-between my-3 mr-6">
                 <div class="flex flex-wrap items-center">
@@ -19,27 +19,51 @@
                 </div>
             </div>
         </div>
-
-        <div class="absolute bottom-0 border-t text-center w-full">
-            <div class="flex flex-wrap w-full my-2 items-end text-center">
-                <div class="mr-2">{{'benefit'| transloco | capitalize}}</div>
-                <div class="text-xl text-violet-600">{{'195%'}}</div>
+        <div class="md:flex md:flex-auto items-start">
+            <div class="relative flex flex-auto h-auto md:h-160 bg-gray-50 dark:bg-transparent">
+                <apx-chart class="relative w-full h-100 md:inset-0 md:h-full overflow-hidden" [chart]="btcOptions.chart"
+                    [colors]="btcOptions.colors" [dataLabels]="btcOptions.dataLabels" [grid]="btcOptions.grid"
+                    [legend]="btcOptions.legend" [series]="btcOptions.series" [stroke]="btcOptions.stroke"
+                    [tooltip]="btcOptions.tooltip" [xaxis]="btcOptions.xaxis" [yaxis]="btcOptions.yaxis"
+                    #btcChartComponent>
+                </apx-chart>
             </div>
-            <mat-form-field class="px-2 w-full">
-                <button mat-icon-button>
-                    <mat-icon svgIcon="heroicons_outline:minus-circle"></mat-icon>
-                </button>
-                <input class="h-8" matInput type="number">
-                <button mat-icon-button>
-                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
-                </button>
-            </mat-form-field>
+            <div class="absolute md:relative bottom-0 border-t text-center w-full py-2 md:w-80">
+                <div class="flex flex-wrap w-full mb-2 items-center justify-center text-center">
+                    <div class="mr-2 font-medium">{{'benefit'| transloco | capitalize}}</div>
+                    <div class="mr-2 text-xl font-medium text-violet-600">{{'195%'}}</div>
+                    <div class="text-xl font-semibold text-teal-500">{{'(200$)'}}</div>
+                </div>
+                <div class="text-left font-medium px-2 pb-2">
+                    {{'value' | transloco | capitalize}}
+                </div>
+                <mat-form-field class="px-2 w-full">
+                    <button mat-icon-button>
+                        <mat-icon svgIcon="heroicons_outline:minus-circle"></mat-icon>
+                    </button>
+                    <span class="mx-2">{{'$' | transloco | capitalize}}</span>
+                    <input class="h-8" matInput type="number">
+                    <button mat-icon-button>
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
+                    </button>
+                </mat-form-field>
+                <div class="flex flex-auto px-2 justify-between items-center">
+                    <button mat-flat-button class="rounded-md bg-lime-500">
+                        <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
+                        {{'buy' | transloco | capitalize}}
+                    </button>
+                    <button mat-flat-button class="rounded-md bg-gray-300 w-full mx-2">
+                        <mat-icon svgIcon="heroicons_outline:clock"></mat-icon>
+                        {{'time' | transloco | capitalize}}
+                    </button>
+                    <button mat-flat-button class="rounded-md bg-red-600">
+                        <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
+                        {{'sell' | transloco | capitalize}}
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <apx-chart [chart]="btcOptions.chart" [colors]="btcOptions.colors" [dataLabels]="btcOptions.dataLabels"
-            [grid]="btcOptions.grid" [legend]="btcOptions.legend" [series]="btcOptions.series"
-            [stroke]="btcOptions.stroke" [tooltip]="btcOptions.tooltip" [xaxis]="btcOptions.xaxis"
-            [yaxis]="btcOptions.yaxis" #btcChartComponent>
-        </apx-chart>
+
     </div>
 </div>

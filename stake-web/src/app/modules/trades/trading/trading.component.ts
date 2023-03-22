@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 
-const now = DateTime.now();
 export const crypto = {
   btc: {
     amount: 8878.48,
@@ -103,7 +102,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     // Subscribe to media changes
     this._fuseMediaWatcherService.onMediaChange$
       .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(({ matchingAliases }) => {
+      .subscribe(() => {
         this._changeDetectorRef.markForCheck();
       });
     // Store the data
@@ -242,5 +241,7 @@ export class TradingComponent implements OnInit, OnDestroy {
         }
       }
     };
+    console.log(this.btcOptions);
+
   }
 }
