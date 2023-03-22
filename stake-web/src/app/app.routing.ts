@@ -21,14 +21,26 @@ export const appRoutes: Route[] = [
     {
         path: '',
         component: LayoutComponent,
-        data: {
-            layout: 'dense'
-        },
         resolve: {
             initialData: InitialDataResolver,
         },
         children: [
             { path: '', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule) },
+        ]
+    },
+
+    // Trading
+    {
+        path: '',
+        component: LayoutComponent,
+        resolve: {
+            initialData: InitialDataResolver,
+        },
+        children: [
+            {
+                path: 'trades',
+                loadChildren: () => import('app/modules/trades/trades.module').then(m => m.TradesModule),
+            }
         ]
     },
     // Auth routes for guests

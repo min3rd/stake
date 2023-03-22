@@ -1,39 +1,29 @@
 /* tslint:disable:max-line-length */
 import { FuseNavigationItem } from '@fuse/components/navigation';
 
-export const defaultNavigation: FuseNavigationItem[] = [
-    {
-        id   : 'games',
-        title: 'Games',
-        type : 'basic',
-        icon : 'gamepad',
-        link : '/'
-    }
-];
-export const compactNavigation: FuseNavigationItem[] = [
-    {
-        id   : 'games',
-        title: 'Games',
-        type : 'basic',
-        icon : 'gamepad',
-        link : '/',
-    }
-];
-export const futuristicNavigation: FuseNavigationItem[] = [
-    {
-        id   : 'games',
-        title: 'Games',
-        type : 'basic',
-        icon : 'gamepad',
-        link : '/'
-    }
-];
-export const horizontalNavigation: FuseNavigationItem[] = [
-    {
-        id   : 'games',
-        title: 'Games',
-        type : 'basic',
-        icon : 'gamepad',
-        link : '/'
-    }
-];
+const navigations: FuseNavigationItem[] = [{
+    id: 'home',
+    title: 'Home',
+    type: 'basic',
+    icon: 'heroicons_outline:home',
+    link: '/'
+},
+{
+    id: 'trades',
+    title: 'Trades',
+    type: 'basic',
+    icon: 'heroicons_outline:trending-up',
+    link: '/trades',
+},
+{
+    id: 'games',
+    title: 'Games',
+    type: 'basic',
+    icon: 'gamepad',
+    link: '/games'
+}];
+
+export const defaultNavigation: FuseNavigationItem[] = navigations;
+export const compactNavigation: FuseNavigationItem[] = navigations;
+export const futuristicNavigation: FuseNavigationItem[] = navigations;
+export const horizontalNavigation: FuseNavigationItem[] = navigations;

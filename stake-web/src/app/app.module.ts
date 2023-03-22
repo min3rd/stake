@@ -11,20 +11,22 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
 const routerConfig: ExtraOptions = {
-    preloadingStrategy       : PreloadAllModules,
+    preloadingStrategy: PreloadAllModules,
     scrollPositionRestoration: 'enabled'
 };
-
+const socketConfig: SocketIoConfig = { url: 'http://localhost:80', options: {} };
 @NgModule({
     declarations: [
         AppComponent
     ],
-    imports     : [
+    imports: [
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
+        SocketIoModule.forRoot(socketConfig),
 
         // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
@@ -37,10 +39,9 @@ const routerConfig: ExtraOptions = {
         // Layout module of your application
         LayoutModule
     ],
-    bootstrap   : [
+    bootstrap: [
         AppComponent
     ]
 })
-export class AppModule
-{
+export class AppModule {
 }
