@@ -21,38 +21,6 @@ export const crypto = {
         {
           name: 'Price',
           data: [
-            {
-              x: -8,
-              y: [28123, 34767, 29213, 29609],
-            },
-            {
-              x: -7,
-              y: [20123, 28767, 27213, 27609],
-            },
-            {
-              x: -6,
-              y: [22123, 28767, 24213, 27609],
-            },
-            {
-              x: -5,
-              y: [23123, 28767, 27213, 27609],
-            },
-            {
-              x: -4,
-              y: [21123, 28767, 27213, 25609],
-            },
-            {
-              x: -3,
-              y: [20123, 28767, 27213, 27609],
-            },
-            {
-              x: -2,
-              y: [20123, 28767, 27213, 40609],
-            },
-            {
-              x: -1,
-              y: [20123, 28767, 27213, 27609],
-            },
           ]
         }
       ]
@@ -81,6 +49,7 @@ export class TradingComponent implements OnInit, OnDestroy {
   appConfig: any;
   btcOptions: ApexOptions = {};
   data: any;
+  lastMinute: number = 0;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   /**
@@ -112,10 +81,28 @@ export class TradingComponent implements OnInit, OnDestroy {
 
     // Prepare the chart data
     this._prepareChartData();
-    this._socketService.socket.fromEvent('message').subscribe(data=>{
-        console.log(data);
+    this._socketService.socket.fromEvent('message').subscribe(data => {
+      console.log(data);
 
-    })
+    });
+    setInterval(() => {
+      let now = new Date();
+      let series = this.btcOptions.series;
+      if (this.lastMinute != now.getMinutes()) {
+        series[0]['data'].push({
+          x: now.getMinutes(),
+          y: [28000 + Math.random() * 20000, 28000, 20000, 28000 + Math.random() * 20000]
+        });
+        this.lastMinute = now.getMinutes();
+      } else {
+        series[0]['data'].splice(-1);
+        series[0]['data'].push({
+          x: now.getMinutes(),
+          y: [28000 + Math.random() * 20000, 28000, 20000, 28000 + Math.random() * 20000]
+        });
+      }
+      this.btcChartComponent.updateSeries(series);
+    }, 1000);
   }
 
   /**
@@ -153,7 +140,7 @@ export class TradingComponent implements OnInit, OnDestroy {
         },
         zoom: {
           enabled: false
-        }
+        },
       },
       colors: ['#5A67D8'],
       dataLabels: {
@@ -223,7 +210,8 @@ export class TradingComponent implements OnInit, OnDestroy {
           rotate: 0,
           minHeight: 40,
           hideOverlappingLabels: true,
-          formatter: (value): string => DateTime.now().minus({ minutes: Math.abs(parseInt(value, 10)) }).toFormat('mm'),
+          // formatter: (value): string => DateTime.now().minus({ minutes: Math.abs(parseInt(value, 10)) }).toFormat('mm'),
+          formatter: (value): string => parseInt(value).toString(),
           style: {
             colors: 'currentColor'
           }
@@ -245,7 +233,7 @@ export class TradingComponent implements OnInit, OnDestroy {
             colors: 'currentColor'
           }
         }
-      }
+      },
     };
   }
 }
