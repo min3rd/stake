@@ -3,18 +3,17 @@
         <div class="items-center pl-4 pr-6 py-3 md:pl-6 border-b">
             <div class="md:flex md:flex-auto items-center justify-between my-3 mr-6">
                 <div class="flex flex-wrap items-center">
-                    <div class="font-medium text-2xl text-secondary mr-2">Bitcoin</div>
-                    <div class="font-medium text-lg text-hint tracking-wider">(BTC)</div>
+                    <div class="font-medium text-2xl text-secondary mr-2">{{tradingType | transloco | capitalize}}</div>
                 </div>
                 <div class="flex flex-wrap items-end">
-                    <div class="mr-2 font-mono text-3xl leading-none tracking-tight">{{data.btc.amount |
+                    <div class="mr-2 font-mono text-3xl leading-none tracking-tight">{{amount |
                         currency:'USD':'symbol':'1.2-2'}}</div>
                     <mat-icon class="text-green-500 icon-size-5 mr-0.5 mb-px"
-                        [ngClass]="{'text-green-500': data.btc.trend.dir === 'up', 'text-red-500': data.btc.trend.dir === 'down'}"
-                        [svgIcon]="data.btc.trend.dir === 'up' ? 'heroicons_solid:arrow-narrow-up' : 'heroicons_solid:arrow-narrow-down'"></mat-icon>
+                        [ngClass]="{'text-green-500': trend.dir === 'up', 'text-red-500': trend.dir === 'down'}"
+                        [svgIcon]="trend.dir === 'up' ? 'heroicons_solid:arrow-narrow-up' : 'heroicons_solid:arrow-narrow-down'"></mat-icon>
                     <div class="font-mono font-medium text-lg leading-none mb-px"
-                        [ngClass]="{'text-green-500': data.btc.trend.dir === 'up', 'text-red-500': data.btc.trend.dir === 'down'}">
-                        {{data.btc.trend.amount}}%
+                        [ngClass]="{'text-green-500': trend.dir === 'up', 'text-red-500': trend.dir === 'down'}">
+                        {{trend.amount}}%
                     </div>
                 </div>
             </div>

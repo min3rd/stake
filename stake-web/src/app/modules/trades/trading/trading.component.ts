@@ -4,48 +4,6 @@ import { ApexOptions, ChartComponent, ApexAxisChartSeries } from 'ng-apexcharts'
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { SocketService } from 'app/core/socket/socket.service';
 import moment from 'moment';
-
-export const crypto = {
-  btc: {
-    amount: 8878.48,
-    trend: {
-      dir: 'up',
-      amount: 0.17
-    },
-    marketCap: 148752956966,
-    volume: 22903438381,
-    supply: 18168448,
-    allTimeHigh: 19891.00,
-    price: {
-      series: [
-        {
-          name: 'candlestick',
-          type: 'candlestick',
-          data: [
-          ]
-        },
-        {
-          name: 'line',
-          type: 'line',
-          data: [
-          ]
-        }
-      ]
-    }
-  },
-  prices: {
-    btc: 8878.48,
-    eth: 170.46,
-    bch: 359.93,
-    xrp: 0.23512
-  },
-  wallets: {
-    btc: 24.97311243,
-    eth: 126.3212,
-    bch: 78.454412,
-    xrp: 11278.771123
-  },
-};
 @Component({
   selector: 'app-trading',
   templateUrl: './trading.component.html',
@@ -55,8 +13,13 @@ export class TradingComponent implements OnInit, OnDestroy {
   @ViewChild('btcChartComponent') btcChartComponent: ChartComponent;
   appConfig: any;
   btcOptions: ApexOptions = {};
-  data: any;
   countdownTime: any;
+  amount: number = 0;
+  trend: any = {
+    dir: 'up',
+    amount: 0
+  };
+  tradingType: string = "BTCUSDT";
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   /**
@@ -83,8 +46,6 @@ export class TradingComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this._changeDetectorRef.markForCheck();
       });
-    // Store the data
-    this.data = crypto;
 
     // Prepare the chart data
     this._prepareChartData();
@@ -110,6 +71,9 @@ export class TradingComponent implements OnInit, OnDestroy {
         y: data.k.c,
       });
       this.btcOptions.series = [candlestick, line];
+      this.amount = data.k.c;
+      this.trend.dir = data.k.o - data.k.c ? 'down' : 'up';
+      this.trend.amount = parseFloat(data.k.v).toFixed(2);
     });
   }
 
@@ -152,7 +116,7 @@ export class TradingComponent implements OnInit, OnDestroy {
       },
       colors: ['#5A67D8'],
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       grid: {
         borderColor: 'var(--fuse-border)',
@@ -168,22 +132,47 @@ export class TradingComponent implements OnInit, OnDestroy {
           lines: {
             show: true
           }
-        }
+        },
       },
       legend: {
         show: false
       },
-      series: this.data.btc.price.series,
+      series: [
+        {
+          name: 'candlestick',
+          type: 'candlestick',
+          data: [
+          ]
+        },
+        {
+          name: 'line',
+          type: 'line',
+          data: [
+          ]
+        }
+      ],
       stroke: {
         width: 2,
-        curve: 'straight'
+        curve: 'smooth',
+        fill: {
+          type: "gradient",
+          gradient: {
+            shade: "dark",
+            gradientToColors: ["#FDD835"],
+            shadeIntensity: 1,
+            type: "horizontal",
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 100, 100, 100]
+          }
+        },
       },
       tooltip: {
         shared: true,
         theme: 'dark',
         y: {
           formatter: (value: number): string => '$' + value.toFixed(2)
-        }
+        },
       },
       xaxis: {
         type: 'numeric',
@@ -210,7 +199,7 @@ export class TradingComponent implements OnInit, OnDestroy {
           show: false
         },
         tooltip: {
-          enabled: false
+          enabled: true
         },
         labels: {
           show: true,
