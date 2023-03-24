@@ -37,6 +37,7 @@
                 <div class="text-left font-medium px-2 pb-2">
                     {{'value' | transloco | capitalize}}
                 </div>
+
                 <mat-form-field class="px-2 w-full">
                     <button mat-icon-button>
                         <mat-icon svgIcon="heroicons_outline:minus-circle"></mat-icon>
@@ -47,16 +48,17 @@
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="flex flex-auto px-2 justify-between items-center">
-                    <button mat-flat-button class="rounded-md bg-lime-500">
+                <div class="flex flex-auto md:flex-col px-2 justify-between items-center">
+                    <button mat-flat-button class="rounded-md bg-lime-500 md:w-full md:p-8 md:font-bold md:text-2xl">
                         <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
                         {{'buy' | transloco | capitalize}}
                     </button>
-                    <button mat-flat-button class="rounded-md bg-gray-300 w-full mx-2">
+                    <button mat-flat-button
+                        class="rounded-md bg-neutral-400 w-full mx-2 md:mx-0 md:my-2 md:p-8 md:text-2xl">
                         <mat-icon svgIcon="heroicons_outline:clock"></mat-icon>
-                        {{'time' | transloco | capitalize}}
+                        {{countdownTime | datetime: 'mm:ss'}}
                     </button>
-                    <button mat-flat-button class="rounded-md bg-red-600">
+                    <button mat-flat-button class="rounded-md bg-red-600 md:w-full md:p-8 md:font-bold md:text-2xl">
                         <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
                         {{'sell' | transloco | capitalize}}
                     </button>

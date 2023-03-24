@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { DateTime } from 'luxon';
-import { ApexOptions, ChartComponent } from 'ng-apexcharts';
+import { ApexOptions, ChartComponent, ApexAxisChartSeries } from 'ng-apexcharts';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { SocketService } from 'app/core/socket/socket.service';
+import moment from 'moment';
 
 export const crypto = {
   btc: {
@@ -19,7 +19,14 @@ export const crypto = {
     price: {
       series: [
         {
-          name: 'Price',
+          name: 'candlestick',
+          type: 'candlestick',
+          data: [
+          ]
+        },
+        {
+          name: 'line',
+          type: 'line',
           data: [
           ]
         }
@@ -49,7 +56,7 @@ export class TradingComponent implements OnInit, OnDestroy {
   appConfig: any;
   btcOptions: ApexOptions = {};
   data: any;
-  lastMinute: number = 0;
+  countdownTime: any;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   /**
@@ -81,28 +88,29 @@ export class TradingComponent implements OnInit, OnDestroy {
 
     // Prepare the chart data
     this._prepareChartData();
-    this._socketService.socket.fromEvent('message').subscribe(data => {
-      console.log(data);
-
+    this._socketService.socket.fromEvent('now').subscribe(data => {
+      this.countdownTime = data;
     });
-    setInterval(() => {
-      let now = new Date();
-      let series = this.btcOptions.series;
-      if (this.lastMinute != now.getMinutes()) {
-        series[0]['data'].push({
-          x: now.getMinutes(),
-          y: [28000 + Math.random() * 20000, 28000, 20000, 28000 + Math.random() * 20000]
-        });
-        this.lastMinute = now.getMinutes();
-      } else {
-        series[0]['data'].splice(-1);
-        series[0]['data'].push({
-          x: now.getMinutes(),
-          y: [28000 + Math.random() * 20000, 28000, 20000, 28000 + Math.random() * 20000]
-        });
+    this._socketService.socket.fromEvent('kline').subscribe((data: any) => {
+      let key = moment(data.k.t).format('HH:mm');
+      let series: any[] = this.btcOptions.series;
+      let candlestick: any = series.find(seri => seri.type == 'candlestick');
+      let line: any = series.find(seri => seri.type == 'line');
+      let index = candlestick.data.findIndex(e => e.x == key);
+      if (index >= 0) {
+        candlestick.data.splice(index, 1);
+        line.data.splice(index, 1);
       }
-      this.btcChartComponent.updateSeries(series);
-    }, 1000);
+      candlestick.data.push({
+        x: key,
+        y: [data.k.o, data.k.h, data.k.l, data.k.c],
+      });
+      line.data.push({
+        x: key,
+        y: data.k.c,
+      });
+      this.btcOptions.series = [candlestick, line];
+    });
   }
 
   /**
@@ -210,8 +218,7 @@ export class TradingComponent implements OnInit, OnDestroy {
           rotate: 0,
           minHeight: 40,
           hideOverlappingLabels: true,
-          // formatter: (value): string => DateTime.now().minus({ minutes: Math.abs(parseInt(value, 10)) }).toFormat('mm'),
-          formatter: (value): string => parseInt(value).toString(),
+          formatter: (value): string => value,
           style: {
             colors: 'currentColor'
           }
@@ -227,7 +234,6 @@ export class TradingComponent implements OnInit, OnDestroy {
         },
         forceNiceScale: true,
         labels: {
-          minWidth: 40,
           formatter: (value: number): string => '$' + value.toFixed(0),
           style: {
             colors: 'currentColor'
