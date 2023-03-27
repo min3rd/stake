@@ -4,7 +4,7 @@ import { ClientSocket } from './socket.types';
 @Injectable({
   providedIn: 'root'
 })
-export class SocketService {
+export class ClientSocketService {
   constructor(private _socket: ClientSocket) {
   }
   get socket(): Socket {

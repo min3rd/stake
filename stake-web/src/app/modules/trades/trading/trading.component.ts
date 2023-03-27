@@ -2,8 +2,9 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@ang
 import { Subject, takeUntil } from 'rxjs';
 import { ApexOptions, ChartComponent, ApexAxisChartSeries } from 'ng-apexcharts';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { SocketService } from 'app/core/socket/socket.service';
+import { ClientSocketService } from 'app/core/socket/socket.service';
 import moment from 'moment';
+import { SocketEvent, SocketRoom } from 'app/core/config/socket.config';
 @Component({
   selector: 'app-trading',
   templateUrl: './trading.component.html',
@@ -28,7 +29,7 @@ export class TradingComponent implements OnInit, OnDestroy {
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
-    private _socketService: SocketService,
+    private _socketService: ClientSocketService,
   ) {
   }
 
@@ -53,27 +54,23 @@ export class TradingComponent implements OnInit, OnDestroy {
       this.countdownTime = data;
     });
     this._socketService.socket.fromEvent('kline').subscribe((data: any) => {
-      let key = moment(data.k.t).format('HH:mm');
+      let klines = [];
       let series: any[] = this.btcOptions.series;
       let candlestick: any = series.find(seri => seri.type == 'candlestick');
       let line: any = series.find(seri => seri.type == 'line');
-      let index = candlestick.data.findIndex(e => e.x == key);
-      if (index >= 0) {
-        candlestick.data.splice(index, 1);
-        line.data.splice(index, 1);
+      for (let raw of data) {
+        klines.push({
+          x: moment(raw.startTime).format('HH:mm'),
+          y: [raw.openPrice, raw.highPrice, raw.lowPrice, raw.closePrice],
+        });
+
       }
-      candlestick.data.push({
-        x: key,
-        y: [data.k.o, data.k.h, data.k.l, data.k.c],
-      });
-      line.data.push({
-        x: key,
-        y: data.k.c,
-      });
-      this.btcOptions.series = [candlestick, line];
-      this.amount = data.k.c;
-      this.trend.dir = data.k.o - data.k.c ? 'down' : 'up';
-      this.trend.amount = parseFloat(data.k.v).toFixed(2);
+      candlestick.data = klines;
+      this.btcOptions.series = [candlestick];
+    });
+    this._socketService.socket.emit(SocketEvent.ROOM.JOIN, SocketRoom.TRADING.BTCUSDT);
+    this._socketService.socket.on('disconnect', () => {
+      this._socketService.socket.emit(SocketEvent.ROOM.JOIN, SocketRoom.TRADING.BTCUSDT);
     });
   }
 

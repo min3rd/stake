@@ -56,3 +56,11 @@
         <span>Invisible</span>
     </button>
 </mat-menu>
+
+<ng-container *ngIf="!user">
+    <div>
+        <button mat-flat-button>
+            {{'sign in' | transloco | capitalize}}
+        </button>
+    </div>
+</ng-container>
