@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
+import { ApiService } from '../api/api.service';
 
 @Injectable()
 export class AuthService
@@ -14,7 +15,8 @@ export class AuthService
      */
     constructor(
         private _httpClient: HttpClient,
-        private _userService: UserService
+        private _userService: UserService,
+        private _apiService: ApiService,
     )
     {
     }
@@ -73,7 +75,7 @@ export class AuthService
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post('api/auth/sign-in', credentials).pipe(
+        return this._httpClient.post(this._apiService.public_signIn(), credentials).pipe(
             switchMap((response: any) => {
 
                 // Store the access token in the local storage

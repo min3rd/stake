@@ -1,36 +1,35 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 
 @Component({
-    selector     : 'auth-sign-up',
-    templateUrl  : './sign-up.component.html',
+    selector: 'auth-sign-up',
+    templateUrl: './sign-up.component.html',
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations
 })
-export class AuthSignUpComponent implements OnInit
-{
+export class AuthSignUpComponent implements OnInit {
     @ViewChild('signUpNgForm') signUpNgForm: NgForm;
 
     alert: { type: FuseAlertType; message: string } = {
-        type   : 'success',
+        type: 'success',
         message: ''
     };
     signUpForm: UntypedFormGroup;
     showAlert: boolean = false;
-
+    redirectUrl: string;
     /**
      * Constructor
      */
     constructor(
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-        private _router: Router
-    )
-    {
+        private _router: Router,
+        private _activeRoute: ActivatedRoute,
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -40,17 +39,16 @@ export class AuthSignUpComponent implements OnInit
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         // Create the form
         this.signUpForm = this._formBuilder.group({
-                name      : ['', Validators.required],
-                email     : ['', [Validators.required, Validators.email]],
-                password  : ['', Validators.required],
-                company   : [''],
-                agreements: ['', Validators.requiredTrue]
-            }
+            username: ['', [Validators.required, Validators.pattern(/(a-zA-Z)+[a-zA-Z0-9]*/), Validators.min(6), Validators.max(32)]],
+            name: ['', Validators.required],
+            password: ['', Validators.required, Validators.min(6), Validators.max(32)],
+            agreements: ['', Validators.requiredTrue]
+        }
         );
+        this.redirectUrl = this._activeRoute.snapshot.queryParamMap.get('redirectUrl') || '/signed-in-redirect';
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -60,11 +58,9 @@ export class AuthSignUpComponent implements OnInit
     /**
      * Sign up
      */
-    signUp(): void
-    {
+    signUp(): void {
         // Do nothing if the form is invalid
-        if ( this.signUpForm.invalid )
-        {
+        if (this.signUpForm.invalid) {
             return;
         }
 
@@ -92,7 +88,7 @@ export class AuthSignUpComponent implements OnInit
 
                     // Set the alert
                     this.alert = {
-                        type   : 'error',
+                        type: 'error',
                         message: 'Something went wrong, please try again.'
                     };
 
@@ -100,5 +96,12 @@ export class AuthSignUpComponent implements OnInit
                     this.showAlert = true;
                 }
             );
+    }
+    signIn() {
+        this._router.navigate(['/sign-in'], {
+            queryParams: {
+                redirectUrl: this.redirectUrl,
+            }
+        })
     }
 }

@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { ApiConfig } from './core/api/api.types';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
@@ -13,11 +14,23 @@ import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
 import { SocketIoModule } from 'ngx-socket-io';
 import { ClientSocket } from './core/socket/socket.types';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ApiService } from './core/api/api.service';
+import { Observable, tap } from 'rxjs';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
     scrollPositionRestoration: 'enabled'
 };
+
+function initializeAppFactory(httpClient: HttpClient, apiService: ApiService): () => Observable<any> {
+    return () => httpClient.get("/assets/json/config.json?v=" + new Date().getTime())
+        .pipe(
+            tap((res: ApiConfig) => {
+                apiService.handle(res);
+            })
+        );
+}
 @NgModule({
     declarations: [
         AppComponent
@@ -37,12 +50,21 @@ const routerConfig: ExtraOptions = {
         CoreModule,
 
         // Layout module of your application
-        LayoutModule
+        LayoutModule,
+        HttpClientModule,
     ],
     bootstrap: [
         AppComponent
     ],
-    providers: [ClientSocket]
+    providers: [
+        ClientSocket,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initializeAppFactory,
+            deps: [HttpClient, ApiService],
+            multi: true
+        }
+    ]
 })
 export class AppModule {
 }

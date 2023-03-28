@@ -4,7 +4,7 @@ import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ClientSocketService } from 'app/core/socket/socket.service';
 import { SocketEvent, SocketRoom } from 'app/core/config/socket.config';
-import { chartOptions } from 'app/core/config/trading,config';
+import { chartOptions } from 'app/core/config/trading.config';
 import moment from 'moment';
 @Component({
   selector: 'app-trading',

@@ -1,11 +1,9 @@
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
-import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
     selector: 'auth-sign-in',
@@ -22,7 +20,7 @@ export class AuthSignInComponent implements OnInit {
     };
     signInForm: UntypedFormGroup;
     showAlert: boolean = false;
-    isMobile: boolean = false;
+    redirectUrl: string;
     /**
      * Constructor
      */
@@ -31,8 +29,6 @@ export class AuthSignInComponent implements OnInit {
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
         private _router: Router,
-        private _deviceDetectorService: DeviceDetectorService,
-        private _dialogRef: MatDialogRef<AuthSignInComponent>,
     ) {
     }
 
@@ -46,11 +42,11 @@ export class AuthSignInComponent implements OnInit {
     ngOnInit(): void {
         // Create the form
         this.signInForm = this._formBuilder.group({
-            email: ['', [Validators.required, Validators.email]],
+            username: ['', [Validators.required]],
             password: ['', Validators.required],
             rememberMe: ['']
         });
-        this.isMobile = this._deviceDetectorService.isMobile();
+        this.redirectUrl = this._activatedRoute.snapshot.queryParamMap.get('redirectUrl') || '/signed-in-redirect';
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -81,10 +77,9 @@ export class AuthSignInComponent implements OnInit {
                     // The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
                     // to the correct page after a successful sign in. This way, that url can be set via
                     // routing file and we don't have to touch here.
-                    const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
 
                     // Navigate to the redirect url
-                    this._router.navigateByUrl(redirectURL);
+                    this._router.navigateByUrl(this.redirectUrl);
 
                 },
                 (response) => {
@@ -98,7 +93,7 @@ export class AuthSignInComponent implements OnInit {
                     // Set the alert
                     this.alert = {
                         type: 'error',
-                        message: 'Wrong email or password'
+                        message: '',
                     };
 
                     // Show the alert
@@ -106,7 +101,11 @@ export class AuthSignInComponent implements OnInit {
                 }
             );
     }
-    clickSignUp() {
-        this._dialogRef.close('sign up');
+    signUp() {
+        this._router.navigate(['/sign-up'], {
+            queryParams: {
+                redirectUrl: this.redirectUrl,
+            }
+        });
     }
 }

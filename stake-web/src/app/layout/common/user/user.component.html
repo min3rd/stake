@@ -58,9 +58,7 @@
 </mat-menu>
 
 <ng-container *ngIf="!user">
-    <div>
-        <button mat-flat-button class="bg-transparent" (click)="openSignInSignUpDialog()">
-            <span>{{'sign in/sign up' | transloco | capitalize}}</span>
-        </button>
-    </div>
+    <button mat-flat-button class="bg-transparent" (click)="signIn()">
+        <span>{{'sign in' | transloco | capitalize}}</span>
+    </button>
 </ng-container>

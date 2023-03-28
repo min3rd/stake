@@ -9,6 +9,8 @@ const UserSchema = new Schema({
     accessToken: { type: String, },
     refreshToken: { type: String, },
     verified: { type: Boolean, default: false, },
+    cash: { type: Number, default: 0, },
+    demoCash: { type: Number, default: 0, },
 });
 const User = publicMongoose.model('User', UserSchema);
 module.exports = {
