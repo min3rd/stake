@@ -1,15 +1,12 @@
 const SocketEvent = {
-    ROOM: {
-        JOIN: 'room:join'
-    }
+    ROOM_JOIN: 'ROOM_JOIN',
+    ROOM_LEFT: 'ROOM_LEFT',
 }
 
 const SocketRoom = {
-    TRADING: {
-        BTCUSDT: 'trading/btcusdt',
-        ETHUSDT: 'trading/ethusdt',
-        BNBUSDT: 'trading/bnbusdt',
-    }
+    TRADING_BTCUSDT: 'BTC/USDT',
+    TRADING_ETHUSDT: 'ETH/USDT',
+    TRADING_BNBUSDT: 'BNB/USDT',
 };
 
 module.exports = {

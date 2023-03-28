@@ -1,27 +1,28 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
-    selector     : 'auth-sign-in',
-    templateUrl  : './sign-in.component.html',
+    selector: 'auth-sign-in',
+    templateUrl: './sign-in.component.html',
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations
 })
-export class AuthSignInComponent implements OnInit
-{
+export class AuthSignInComponent implements OnInit {
     @ViewChild('signInNgForm') signInNgForm: NgForm;
 
     alert: { type: FuseAlertType; message: string } = {
-        type   : 'success',
+        type: 'success',
         message: ''
     };
     signInForm: UntypedFormGroup;
     showAlert: boolean = false;
-
+    isMobile: boolean = false;
     /**
      * Constructor
      */
@@ -29,9 +30,10 @@ export class AuthSignInComponent implements OnInit
         private _activatedRoute: ActivatedRoute,
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-        private _router: Router
-    )
-    {
+        private _router: Router,
+        private _deviceDetectorService: DeviceDetectorService,
+        private _dialogRef: MatDialogRef<AuthSignInComponent>,
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -41,14 +43,14 @@ export class AuthSignInComponent implements OnInit
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         // Create the form
         this.signInForm = this._formBuilder.group({
-            email     : ['hughes.brian@company.com', [Validators.required, Validators.email]],
-            password  : ['admin', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', Validators.required],
             rememberMe: ['']
         });
+        this.isMobile = this._deviceDetectorService.isMobile();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -58,11 +60,9 @@ export class AuthSignInComponent implements OnInit
     /**
      * Sign in
      */
-    signIn(): void
-    {
+    signIn(): void {
         // Return if the form is invalid
-        if ( this.signInForm.invalid )
-        {
+        if (this.signInForm.invalid) {
             return;
         }
 
@@ -97,7 +97,7 @@ export class AuthSignInComponent implements OnInit
 
                     // Set the alert
                     this.alert = {
-                        type   : 'error',
+                        type: 'error',
                         message: 'Wrong email or password'
                     };
 
@@ -105,5 +105,8 @@ export class AuthSignInComponent implements OnInit
                     this.showAlert = true;
                 }
             );
+    }
+    clickSignUp() {
+        this._dialogRef.close('sign up');
     }
 }

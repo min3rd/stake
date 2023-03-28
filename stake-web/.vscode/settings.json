@@ -4,5 +4,7 @@
         "src/app/layout/common/languages",
         "src/app/layout/common/messages",
         "src/app/mock-api/common/messages"
-    ]
+    ],
+    "i18n-ally.keystyle": "nested",
+    "i18n-ally.sourceLanguage": "en"
 }

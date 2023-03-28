@@ -3,7 +3,12 @@
         <div class="items-center pl-4 pr-6 py-3 md:pl-6 border-b">
             <div class="md:flex md:flex-auto items-center justify-between my-3 mr-6">
                 <div class="flex flex-wrap items-center">
-                    <div class="font-medium text-2xl text-secondary mr-2">{{tradingType | transloco | capitalize}}</div>
+                    <mat-form-field class="min-w-32">
+                        <mat-select [(value)]="tradingRoom" class="w-full" (valueChange)="onRoomChange($event)">
+                            <mat-option *ngFor="let room of tradingRooms" [value]="room">{{room | transloco |
+                                capitalize}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
                 <div class="flex flex-wrap items-end">
                     <div class="mr-2 font-mono text-3xl leading-none tracking-tight">{{amount |
@@ -48,16 +53,20 @@
                     </button>
                 </mat-form-field>
                 <div class="flex flex-auto md:flex-col px-2 justify-between items-center">
-                    <button mat-flat-button class="rounded-md bg-lime-500 md:w-full md:p-8 md:font-bold md:text-2xl">
+                    <button mat-flat-button
+                        class="rounded-md min-w-32 bg-lime-500 md:w-full md:p-8 md:font-bold md:text-2xl">
                         <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
                         {{'buy' | transloco | capitalize}}
                     </button>
-                    <button mat-flat-button
-                        class="rounded-md bg-neutral-400 w-full mx-2 md:mx-0 md:my-2 md:p-8 md:text-2xl">
+                    <div
+                        class="flex flex-auto rounded-m w-full mx-2 bg-transparent items-center justify-center md:mx-0 md:my-2 md:p-6 md:text-2xl">
                         <mat-icon svgIcon="heroicons_outline:clock"></mat-icon>
-                        {{countdownTime | datetime: 'mm:ss'}}
-                    </button>
-                    <button mat-flat-button class="rounded-md bg-red-600 md:w-full md:p-8 md:font-bold md:text-2xl">
+                        <span class="pl-2">
+                            {{countdownTime | datetime: 'mm:ss'}}
+                        </span>
+                    </div>
+                    <button mat-flat-button
+                        class="rounded-md min-w-32 bg-red-600 md:w-full md:p-8 md:font-bold md:text-2xl">
                         <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
                         {{'sell' | transloco | capitalize}}
                     </button>

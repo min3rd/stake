@@ -15,7 +15,7 @@ import { SharedModule } from 'app/shared/shared.module';
         MatDividerModule,
         MatIconModule,
         MatMenuModule,
-        SharedModule
+        SharedModule,
     ],
     exports     : [
         UserComponent

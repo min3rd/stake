@@ -14,18 +14,18 @@
 <mat-menu *ngIf="user" [xPosition]="'before'" #userActions="matMenu">
     <button mat-menu-item>
         <span class="flex flex-col leading-none">
-            <span>Signed in as</span>
+            <span>{{'signed in as' | transloco | capitalize}}</span>
             <span class="mt-1.5 text-md font-medium">{{user.email}}</span>
         </span>
     </button>
     <mat-divider class="my-2"></mat-divider>
     <button mat-menu-item>
         <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
-        <span>Profile</span>
+        <span>{{'profile' | transloco | capitalize}}</span>
     </button>
     <button mat-menu-item>
         <mat-icon [svgIcon]="'heroicons_outline:cog'"></mat-icon>
-        <span>Settings</span>
+        <span>{{'settings' | transloco | capitalize}}</span>
     </button>
     <button mat-menu-item [matMenuTriggerFor]="userStatus">
         <mat-icon [svgIcon]="'heroicons_outline:dots-circle-horizontal'"></mat-icon>
@@ -34,7 +34,7 @@
     <mat-divider class="my-2"></mat-divider>
     <button mat-menu-item (click)="signOut()">
         <mat-icon [svgIcon]="'heroicons_outline:logout'"></mat-icon>
-        <span>Sign out</span>
+        <span>{{'sign out' | transloco | capitalize}}</span>
     </button>
 </mat-menu>
 
@@ -59,8 +59,8 @@
 
 <ng-container *ngIf="!user">
     <div>
-        <button mat-flat-button>
-            {{'sign in' | transloco | capitalize}}
+        <button mat-flat-button class="bg-transparent" (click)="openSignInSignUpDialog()">
+            <span>{{'sign in/sign up' | transloco | capitalize}}</span>
         </button>
     </div>
 </ng-container>

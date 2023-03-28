@@ -1,11 +1,10 @@
-export const SocketRoom = {
-    TRADING: {
-        BTCUSDT: 'trading/btcusdt'
-    }
+export enum SocketRoom {
+    TRADING_BTCUSDT = 'BTC/USDT',
+    TRADING_ETHUSDT = 'ETH/USDT',
+    TRADING_BNBUSDT = 'BNB/USDT',
 };
 
-export const SocketEvent = {
-    ROOM: {
-        JOIN: 'room:join'
-    }
+export enum SocketEvent {
+    ROOM_JOIN = 'ROOM_JOIN',
+    ROOM_LEFT = 'ROOM_LEFT',
 }

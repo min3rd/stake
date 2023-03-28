@@ -5,7 +5,7 @@ import { Socket } from 'ngx-socket-io';
 export class ClientSocket extends Socket {
     constructor() {
         super({
-            url: 'http://localhost:80/client',
+            url: 'http://localhost:80/public',
             options: {
                 transports: ['websocket'],
             }

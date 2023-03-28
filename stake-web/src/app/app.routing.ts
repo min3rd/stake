@@ -20,6 +20,7 @@ export const appRoutes: Route[] = [
     { path: 'signed-in-redirect', pathMatch: 'full', redirectTo: '/' },
     {
         path: '',
+        canMatch: [NoAuthGuard],
         component: LayoutComponent,
         resolve: {
             initialData: InitialDataResolver,
@@ -32,6 +33,7 @@ export const appRoutes: Route[] = [
     // Trading
     {
         path: '',
+        canMatch: [NoAuthGuard],
         component: LayoutComponent,
         resolve: {
             initialData: InitialDataResolver,

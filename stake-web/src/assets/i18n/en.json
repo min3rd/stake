@@ -1,5 +1,11 @@
 {
-    "welcome-back": "Welcome back",
-    "Project": "Project",
-    "Analytics": "Analytics"
+  "welcome-back": "Welcome back",
+  "Project": "Project",
+  "Analytics": "Analytics",
+  "profile": "profile",
+  "settings": "settings",
+  "sign out": "sign out",
+  "sign in": "sign in",
+  "sign up": "sign up",
+  "sign in/sign up": "sign in/sign up"
 }

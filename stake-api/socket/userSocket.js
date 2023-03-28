@@ -1,23 +1,16 @@
 const { SocketRoom, SocketEvent } = require("../config/socket");
-const BinanceKline = require("../models/BinanceKline");
-
 module.exports = function (io) {
     let clientIo = io.of('/client');
-    setInterval(() => {
-        BinanceKline.find({
-            symbol: 'BTCUSDT'
-        }).sort({ startTime: 1 }).limit(60).exec().then(klines => {
-            clientIo.to(SocketRoom.TRADING.BTCUSDT).emit('kline', klines);
-        })
-        clientIo.to(SocketRoom.TRADING.ETHUSDT).emit('kline', 'ETHUSDT');
-        clientIo.to(SocketRoom.TRADING.BNBUSDT).emit('kline', 'BNBUSDT');
-    }, 1000);
-
     clientIo.on('connection', (socket) => {
-        socket.on(SocketEvent.ROOM.JOIN, (data) => {
-            socket.join(data);
+        socket.on(SocketEvent.ROOM_JOIN, (data) => {
+            for (let key in SocketRoom) {
+                if (SocketRoom[key] == data) {
+                    socket.join(SocketRoom[key]);
+                }
+            }
         });
-        socket.on('room:left', (data) => {
+        socket.on(SocketEvent.ROOM_LEFT, (data) => {
+            socket.leave(data);
         });
     });
 };
