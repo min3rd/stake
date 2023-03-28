@@ -1,4 +1,4 @@
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { BooleanInput } from '@angular/cdk/coercion';
@@ -7,6 +7,7 @@ import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { AuthSignInComponent } from 'app/modules/auth/sign-in/sign-in.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { AuthSignUpComponent } from 'app/modules/auth/sign-up/sign-up.component';
 @Component({
     selector: 'user',
     templateUrl: './user.component.html',
@@ -21,6 +22,8 @@ export class UserComponent implements OnInit, OnDestroy {
 
     @Input() showAvatar: boolean = true;
     user: User;
+    private signInDialogRef: MatDialogRef<AuthSignInComponent>;
+    private signUpDialogRef: MatDialogRef<AuthSignUpComponent>;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -53,6 +56,8 @@ export class UserComponent implements OnInit, OnDestroy {
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+
+
     }
 
     /**
@@ -96,7 +101,17 @@ export class UserComponent implements OnInit, OnDestroy {
         if (this._deviceDetector.isMobile()) {
             this._router.navigate(['/sign-in']);
         } else {
-            const dialogRef = this._matDialog.open(AuthSignInComponent);
+            this.signInDialogRef = this._matDialog.open(AuthSignInComponent);
+            this.signInDialogRef.afterClosed().subscribe(result => {
+                if (result == 'sign up') {
+                    this.signUpDialogRef = this._matDialog.open(AuthSignUpComponent);
+                    this.signUpDialogRef.afterClosed().subscribe(result => {
+                        if (result == 'sign in') {
+                            this.openSignInSignUpDialog();
+                        }
+                    });
+                }
+            });
         }
     }
 }
