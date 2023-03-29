@@ -42,9 +42,9 @@ export class AuthSignUpComponent implements OnInit {
     ngOnInit(): void {
         // Create the form
         this.signUpForm = this._formBuilder.group({
-            username: ['', [Validators.required, Validators.pattern(/(a-zA-Z)+[a-zA-Z0-9]*/), Validators.min(6), Validators.max(32)]],
+            username: ['', [Validators.required, Validators.pattern('[a-zA-Z]+[a-zA-Z0-9]*')]],
             name: ['', Validators.required],
-            password: ['', Validators.required, Validators.min(6), Validators.max(32)],
+            password: ['', Validators.required],
             agreements: ['', Validators.requiredTrue]
         }
         );
@@ -76,7 +76,11 @@ export class AuthSignUpComponent implements OnInit {
                 (response) => {
 
                     // Navigate to the confirmation required page
-                    this._router.navigateByUrl('/confirmation-required');
+                    this._router.navigate(['/sign-in'], {
+                        queryParams: {
+                            redirectUrl: this.redirectUrl,
+                        }
+                    });
                 },
                 (response) => {
 
@@ -84,12 +88,12 @@ export class AuthSignUpComponent implements OnInit {
                     this.signUpForm.enable();
 
                     // Reset the form
-                    this.signUpNgForm.resetForm();
+                    // this.signUpNgForm.resetForm();
 
                     // Set the alert
                     this.alert = {
                         type: 'error',
-                        message: 'Something went wrong, please try again.'
+                        message: response.error.code || '00x0000',
                     };
 
                     // Show the alert

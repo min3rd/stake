@@ -7,5 +7,12 @@
   "sign out": "sign out",
   "sign in": "sign in",
   "sign up": "sign up",
-  "sign in/sign up": "sign in/sign up"
+  "sign in/sign up": "sign in/sign up",
+  "username": "username",
+  "username is required": "username is required",
+  "full name": "full name",
+  "full name is required": "full name is required",
+  "password": "password",
+  "password is required": "password is required",
+  "wrong username format": "wrong username format"
 }

@@ -15,7 +15,7 @@ export class TradingComponent implements OnInit, OnDestroy {
   @ViewChild('btcChartComponent') btcChartComponent: ChartComponent;
   appConfig: any;
   btcOptions: ApexOptions = {};
-  countdownTime: any;
+  currentTime: any;
   amount: number = 0;
   trend: any = {
     dir: 'up',
@@ -38,10 +38,10 @@ export class TradingComponent implements OnInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
       });
     this._prepareChartData();
-    this._socketService.socket.fromEvent('now').subscribe(data => {
-      this.countdownTime = data;
+    this._socketService.socket.fromEvent(SocketEvent.NOW).subscribe(data => {
+      this.currentTime = data;
     });
-    this._socketService.socket.fromEvent('kline').subscribe((data: any) => {
+    this._socketService.socket.fromEvent(SocketEvent.KLINE).subscribe((data: any) => {
       // let klines = [];
       // let series: any[] = this.btcOptions.series;
       // let candlestick: any = series.find(seri => seri.type == 'candlestick');

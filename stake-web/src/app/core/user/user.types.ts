@@ -1,8 +1,8 @@
-export interface User
-{
-    id: string;
-    name: string;
-    email: string;
+export interface User {
+    id?: string;
+    name?: string;
+    username?: string;
     avatar?: string;
-    status?: string;
+    cash?: number;
+    demoCash?: number;
 }

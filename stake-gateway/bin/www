@@ -9,6 +9,7 @@ var debug = require('debug')('stake-gateway:server');
 var http = require('http');
 const publicSocket = require('../socket/publicSocket');
 const uuid = require('uuid');
+const tradingJob = require('../job/tradingJob');
 
 /**
  * Get port from environment and store in Express.
@@ -29,6 +30,7 @@ io.engine.generateId = (req) => {
   return uuid.v4();
 }
 publicSocket(io);
+tradingJob();
 
 /**
  * Listen on provided port, on all network interfaces.
