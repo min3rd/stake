@@ -10,10 +10,12 @@ const publicSocket = function (io) {
                 return;
             }
             socket.join(data);
+            publicIo.to(data).emit(SocketEvent.ROOM_JOIN, data);
         });
         socket.on(SocketEvent.ROOM_LEFT, data => {
             socket.leave(data);
         });
     });
+    return publicIo;
 }
 module.exports = publicSocket;

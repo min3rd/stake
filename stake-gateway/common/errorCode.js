@@ -11,5 +11,6 @@ const ErrorCode = {
     SIGN_UP_FAILED: "00x0009",
     USER_NOT_EXIST: "00x0010",
     TOKEN_GENERATION: "00x0011",
+    MIGRATION_UPDATE_VERSION: "00x0012",
 }
 module.exports = ErrorCode;

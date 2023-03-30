@@ -28,6 +28,15 @@ export class ApiService {
     public_signUp() {
         return this._publicApi('/sign-up');
     }
+    public_trading_rooms() {
+        return this._publicApi('/trading/rooms');
+    }
+    public_trading_latest_klines(symbol: string, size: number = 60) {
+        return this._publicApi(`/trading/rooms/${symbol}/klines/latest?size=${size}`);
+    }
+    public_trading_latest_rounds(symbol: string, size: number = 60) {
+        return this._publicApi(`/trading/rooms/${symbol}/rounds/latest?size=${size}`);
+    }
 }
 
 

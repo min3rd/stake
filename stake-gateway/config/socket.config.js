@@ -2,6 +2,7 @@ const SocketEvent = {
     ROOM_JOIN: "ROOM_JOIN",
     ROOM_LEFT: "ROOM_LEFT",
     NOW: "NOW",
+    KLINE: "KLINE",
 }
 const SocketRoom = {
     TRADING_BTCUSDT: 'BTCUSDT',

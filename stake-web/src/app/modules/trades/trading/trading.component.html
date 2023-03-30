@@ -1,12 +1,12 @@
 <div class="w-full h-full">
     <div class="h-full bg-card dark:bg-default">
         <div class="items-center pl-4 pr-6 py-3 md:pl-6 border-b">
-            <div class="md:flex md:flex-auto items-center justify-between my-3 mr-6">
+            <div class="md:flex md:flex-auto items-center justify-between">
                 <div class="flex flex-wrap items-center">
                     <mat-form-field class="min-w-32">
                         <mat-select [(value)]="tradingRoom" class="w-full" (valueChange)="onRoomChange($event)">
-                            <mat-option *ngFor="let room of tradingRooms" [value]="room">{{room | transloco |
-                                capitalize}}</mat-option>
+                            <mat-option *ngFor="let room of tradingRooms" [value]="room">
+                                {{room.symbol | transloco | capitalize}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -61,8 +61,8 @@
                     <div
                         class="flex flex-auto rounded-m w-full mx-2 bg-transparent items-center justify-center md:mx-0 md:my-2 md:p-6 md:text-2xl">
                         <mat-icon svgIcon="heroicons_outline:clock"></mat-icon>
-                        <span class="pl-2">
-                            {{currentTime | datetime: 'mm:ss'}}
+                        <span *ngIf="!!countdown" class="pl-2 md:text-2xl">
+                            {{countdown | countdown}}
                         </span>
                     </div>
                     <button mat-flat-button

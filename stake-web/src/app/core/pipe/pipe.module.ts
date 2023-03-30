@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CapitalizePipe } from './capitalize.pipe';
 import { DatetimePipe } from './datetime.pipe';
+import { CountdownPipe } from './countdown.pipe';
 
 
 
@@ -9,6 +10,7 @@ import { DatetimePipe } from './datetime.pipe';
   declarations: [
     CapitalizePipe,
     DatetimePipe,
+    CountdownPipe,
   ],
   imports: [
     CommonModule
@@ -16,6 +18,7 @@ import { DatetimePipe } from './datetime.pipe';
   exports: [
     CapitalizePipe,
     DatetimePipe,
+    CountdownPipe,
   ]
 })
 export class PipeModule { }

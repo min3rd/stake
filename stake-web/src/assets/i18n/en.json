@@ -14,5 +14,9 @@
   "full name is required": "full name is required",
   "password": "password",
   "password is required": "password is required",
-  "wrong username format": "wrong username format"
+  "wrong username format": "wrong username format",
+  "benefit": "benefit",
+  "buy": "buy",
+  "sell": "sell",
+  "value": "value"
 }
