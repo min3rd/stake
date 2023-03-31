@@ -4,26 +4,27 @@ export interface TradingRoom {
 }
 
 export interface Kline {
-    symbol?: string
-    time?: string
-    openTime?: string
-    closeTime?: string
-    openPrice?: number
-    highPrice?: number
-    lowPrice?: number
-    closePrice?: number
-    canTrade?: boolean
-    closed?: boolean
-    _id?: string
-    __v?: number
+    symbol?: string;
+    time?: string;
+    openTime?: string;
+    closeTime?: string;
+    openPrice?: number;
+    highPrice?: number;
+    lowPrice?: number;
+    closePrice?: number;
+    closed?: boolean;
+    canTrade?: boolean;
 }
 
 export interface TradingRound {
-    symbol?: string
-    openTime?: string
-    closeTime?: string
-    openPrice?: number
-    highPrice?: number
-    lowPrice?: number
-    closePrice?: number
+    symbol?: string;
+    time?: string;
+    openTime?: string;
+    closeTime?: string;
+    openPrice?: number;
+    highPrice?: number;
+    lowPrice?: number;
+    closePrice?: number;
+    closed?: boolean;
+    canTrade?: boolean;
 }

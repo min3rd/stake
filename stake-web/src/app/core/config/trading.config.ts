@@ -1,8 +1,9 @@
+import moment from 'moment';
 import { ApexOptions } from 'ng-apexcharts';
 export const chartOptions: ApexOptions = {
     chart: {
         animations: {
-            enabled: false
+            enabled: true
         },
         fontFamily: 'inherit',
         foreColor: 'inherit',
@@ -77,7 +78,7 @@ export const chartOptions: ApexOptions = {
         },
     },
     xaxis: {
-        type: 'numeric',
+        type: 'datetime',
         crosshairs: {
             show: true,
             position: 'back',
@@ -109,7 +110,7 @@ export const chartOptions: ApexOptions = {
             rotate: 0,
             minHeight: 40,
             hideOverlappingLabels: true,
-            formatter: (value): string => value,
+            formatter: (value): string => moment(value).format('HH:mm'),
             style: {
                 colors: 'currentColor'
             }

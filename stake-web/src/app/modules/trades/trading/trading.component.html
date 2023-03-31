@@ -10,17 +10,6 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="flex flex-wrap items-end">
-                    <div class="mr-2 font-mono text-3xl leading-none tracking-tight">{{amount |
-                        currency:'USD':'symbol':'1.2-2'}}</div>
-                    <mat-icon class="text-green-500 icon-size-5 mr-0.5 mb-px"
-                        [ngClass]="{'text-green-500': trend.dir === 'up', 'text-red-500': trend.dir === 'down'}"
-                        [svgIcon]="trend.dir === 'up' ? 'heroicons_solid:arrow-narrow-up' : 'heroicons_solid:arrow-narrow-down'"></mat-icon>
-                    <div class="font-mono font-medium text-lg leading-none mb-px"
-                        [ngClass]="{'text-green-500': trend.dir === 'up', 'text-red-500': trend.dir === 'down'}">
-                        {{trend.amount}}%
-                    </div>
-                </div>
             </div>
         </div>
         <div class="md:flex md:flex-auto items-start">

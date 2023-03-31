@@ -19,13 +19,8 @@ export class TradingComponent implements OnInit, OnDestroy {
   btcOptions: ApexOptions = {};
   currentTime: any;
   countdown: any;
-  amount: number = 0;
   canTrade: boolean = false;
   traded: boolean = false;
-  trend: any = {
-    dir: 'up',
-    amount: 0
-  };
   tradingRoom: TradingRoom;
   tradingRoom$: Subject<TradingRoom> = new Subject<TradingRoom>();
   tradingRooms: TradingRoom[];
@@ -52,13 +47,13 @@ export class TradingComponent implements OnInit, OnDestroy {
       }
       for (let round of rounds) {
         values.push({
-          x: moment(round.openTime).format('HH:mm'),
+          x: round.openTime,
           y: [round.openPrice, round.highPrice, round.lowPrice, round.closePrice],
         });
       }
       this.btcChartComponent.updateSeries([{
         data: values
-      }], false);
+      }], true);
       this.klines = values;
     });
 
@@ -80,7 +75,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     this._socketService.socket.fromEvent(SocketEvent.KLINE).subscribe((kline: Kline) => {
       this.canTrade = kline.canTrade;
       this.countdown = moment(kline.closeTime).diff(moment(kline.time), 'seconds');
-      let key = moment(kline.openTime).format('HH:mm');
+      let key = kline.openTime;
       let index = this.klines.findIndex(e => {
         return e.x == key;
       });
@@ -97,7 +92,7 @@ export class TradingComponent implements OnInit, OnDestroy {
       }
       this.btcChartComponent.updateSeries([{
         data: this.klines
-      }], false)
+      }], true)
     });
 
     this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
