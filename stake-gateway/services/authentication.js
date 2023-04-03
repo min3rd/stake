@@ -5,8 +5,11 @@ const { security } = require("./security");
 const jwt = require('jsonwebtoken');
 const { badRequestError } = require("../common/badRequestError");
 const randToken = require('rand-token');
-function generateAccessToken(publicUser) {
-    return jwt.sign(JSON.stringify(publicUser), process.env.TOKEN_SECRET);
+function generateAccessToken(publicUser, rememberMe = false) {
+    let clone = Object.assign({}, publicUser);
+    let now = new Date().getTime();
+    clone.exp = now + parseInt(!rememberMe ? process.env.TOKEN_LIFETIME : process.env.TOKEN_LIFETIME_REMEMBER);
+    return jwt.sign(JSON.stringify(clone), process.env.TOKEN_SECRET);
 }
 const validate = (data) => {
     if (!data.username) {
@@ -85,7 +88,19 @@ const signIn = async (req, res) => {
         user: publicUser,
     });
 }
+
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) return res.sendStatus(401)
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403)
+        req.user = user
+        next()
+    })
+}
 module.exports = {
     signUp: signUp,
     signIn: signIn,
+    authenticateToken: authenticateToken,
 }

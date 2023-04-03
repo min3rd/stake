@@ -1,3 +1,7 @@
+export enum CashAccount {
+    DEMO = 1,
+    REAL = 2,
+};
 export interface User {
     id?: string;
     name?: string;
@@ -5,4 +9,5 @@ export interface User {
     avatar?: string;
     cash?: number;
     demoCash?: number;
+    cashAccount?: CashAccount;
 }

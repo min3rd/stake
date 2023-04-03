@@ -1,0 +1,22 @@
+<ng-container *ngIf="user">
+    <div class="flex flex-auto items-center justify-between rounded-full border min-w-32 px-1">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="switchAccount(1)">{{'demo account' | transloco | capitalize}}</button>
+            <button mat-menu-item (click)="switchAccount(2)">{{'real account' | transloco | capitalize}}</button>
+        </mat-menu>
+        <div>
+            <div class="text-xs text-gray-500">
+                {{user.cashAccount | cashaccount | transloco | capitalize}}
+            </div>
+            <div class="text-xl">
+                {{(user.cashAccount != 2 ? user.demoCash : user.cash) | currency}}
+            </div>
+        </div>
+        <button mat-icon-button (click)="addCash()">
+            <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
+        </button>
+    </div>
+</ng-container>

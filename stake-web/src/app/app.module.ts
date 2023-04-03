@@ -17,6 +17,7 @@ import { ClientSocket } from './core/socket/socket.types';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ApiService } from './core/api/api.service';
 import { Observable, tap } from 'rxjs';
+import { UserService } from './core/user/user.service';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,

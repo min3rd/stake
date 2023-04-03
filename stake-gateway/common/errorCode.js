@@ -12,5 +12,7 @@ const ErrorCode = {
     USER_NOT_EXIST: "00x0010",
     TOKEN_GENERATION: "00x0011",
     MIGRATION_UPDATE_VERSION: "00x0012",
+    USERID_NOT_MATCH: "00x0013",
+    TRADING_CONFIG_NOT_EXIST: "00x0014",
 }
 module.exports = ErrorCode;

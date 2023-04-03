@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, ReplaySubject, tap } from 'rxjs';
 import { User } from 'app/core/user/user.types';
+import { take } from 'lodash';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
     private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
-
+    private _staticUser: User;
     /**
      * Constructor
      */
@@ -25,13 +26,24 @@ export class UserService {
      * @param value
      */
     set user(value: User) {
+        if (!value) {
+            return;
+        }
         // Store the value
         localStorage.setItem('user', JSON.stringify(value));
+        this._staticUser = value;
         this._user.next(value);
     }
 
     get user$(): Observable<User> {
         return this._user.asObservable();
+    }
+
+    get user(): User {
+        if (!this._staticUser) {
+            this.getLocal();
+        }
+        return this._staticUser;
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -44,7 +56,7 @@ export class UserService {
     get(): Observable<User> {
         return this._httpClient.get<User>('api/common/user').pipe(
             tap((user) => {
-                this._user.next(user);
+                this.user = user;
             })
         );
     }
@@ -57,11 +69,11 @@ export class UserService {
     update(user: User): Observable<any> {
         return this._httpClient.patch<User>('api/common/user', { user }).pipe(
             map((response) => {
-                this._user.next(response);
+                this.user = response;
             })
         );
     }
     getLocal() {
-        this._user.next(JSON.parse(localStorage.getItem('user')));
+        this.user = JSON.parse(localStorage.getItem('user'));
     }
 }

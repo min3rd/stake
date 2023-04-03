@@ -1,9 +1,10 @@
 var express = require('express');
+const { switchAccount, addDemoCash } = require('../services/userService');
+const { authenticateToken } = require('../services/authentication');
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.post('/:userId/switchAccount', authenticateToken, switchAccount);
+router.get('/:userId/addDemoCash', authenticateToken, addDemoCash);
 
 module.exports = router;

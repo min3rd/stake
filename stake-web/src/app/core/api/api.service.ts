@@ -1,3 +1,4 @@
+import { UserService } from '../user/user.service';
 import { ApiConfig } from './api.types';
 import { Injectable } from '@angular/core';
 
@@ -6,7 +7,7 @@ import { Injectable } from '@angular/core';
 })
 export class ApiService {
     API_URL: string;
-    constructor() { }
+    constructor(private _userService: UserService) { }
     handle(config: ApiConfig) {
         this.API_URL = config.API_URL;
     }
@@ -36,6 +37,23 @@ export class ApiService {
     }
     public_trading_latest_rounds(symbol: string, size: number = 60) {
         return this._publicApi(`/trading/rooms/${symbol}/rounds/latest?size=${size}`);
+    }
+    public_trading_config(symbol: string) {
+        return this._publicApi(`/trading/rooms/${symbol}/config`);
+    }
+
+    private _usersApi(endpoint: string) {
+        if (endpoint.startsWith('/')) {
+            endpoint = endpoint.substring(1);
+        }
+        return this._api(`/users/${this._userService.user.id}/${endpoint}`);
+    }
+    users_switchAccount() {
+        return this._usersApi(`/switchAccount`);
+    }
+
+    users_addDemoCash() {
+        return this._usersApi(`/addDemoCash`);
     }
 }
 

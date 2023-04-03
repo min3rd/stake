@@ -1,7 +1,7 @@
 import { Observable, tap, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Kline, TradingRoom, TradingRound } from './trading.types';
+import { Kline, TradingConfig, TradingRoom, TradingRound } from './trading.types';
 import { ApiService } from 'app/core/api/api.service';
 
 @Injectable({
@@ -11,6 +11,7 @@ export class TradingService {
   private _rooms: BehaviorSubject<TradingRoom[] | null> = new BehaviorSubject(null);
   private _klines: BehaviorSubject<Kline[] | null> = new BehaviorSubject(null);
   private _rounds: BehaviorSubject<TradingRound[] | null> = new BehaviorSubject(null);
+  private _config: BehaviorSubject<TradingConfig | null> = new BehaviorSubject(null);
 
   constructor(private _httpClient: HttpClient, private _apiService: ApiService) { }
 
@@ -24,6 +25,10 @@ export class TradingService {
 
   get rounds$(): Observable<TradingRound[]> {
     return this._rounds.asObservable();
+  }
+
+  get config$(): Observable<TradingConfig> {
+    return this._config.asObservable();
   }
 
   getTradingRooms(): Observable<TradingRoom[]> {
@@ -42,6 +47,13 @@ export class TradingService {
     return this._httpClient.get<TradingRound[]>(this._apiService.public_trading_latest_rounds(tradingRoom.symbol ?? '', size)).pipe(
       tap(response => {
         this._rounds.next(response);
+      })
+    );
+  }
+  getConfig(tradingRoom: TradingRoom, size: number = 60): Observable<TradingConfig> {
+    return this._httpClient.get<TradingConfig>(this._apiService.public_trading_config(tradingRoom.symbol ?? '')).pipe(
+      tap(response => {
+        this._config.next(response);
       })
     );
   }

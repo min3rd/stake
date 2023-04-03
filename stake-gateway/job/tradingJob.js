@@ -51,7 +51,7 @@ async function updateRound(publicIo) {
                 });
             }
             let random = Math.random();
-            let priceRange = openPrice * (tradingRoom.priceRangePercent || process.env.PRICE_RANGE_PERCENT || 5) / 100;
+            let priceRange = openPrice * (tradingRoom.priceRangePercent || process.env.PRICE_RANGE_PERCENT || 0.5) / 100;
             let highPrice = openPrice + priceRange * Math.random();
             let lowPrice = openPrice - priceRange * Math.random();
             let closePrice = openPrice + priceRange * Math.random();
@@ -90,7 +90,7 @@ async function updateKline(publicIo) {
         if (!tradingRound) {
             continue;
         }
-        let priceRange = tradingRound.openPrice * (tradingRoom.priceRangePercent || process.env.PRICE_RANGE_PERCENT || 5) / 100;
+        let priceRange = tradingRound.openPrice * (tradingRoom.priceRangePercent || process.env.PRICE_RANGE_PERCENT || 0.5) / 100;
         let kline = new Kline({
             symbol: tradingRound.symbol,
             openTime: tradingRound.openTime,

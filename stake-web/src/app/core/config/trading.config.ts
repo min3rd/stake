@@ -1,9 +1,13 @@
+import currency from 'currency.js';
 import moment from 'moment';
 import { ApexOptions } from 'ng-apexcharts';
 export const chartOptions: ApexOptions = {
     chart: {
         animations: {
-            enabled: true
+            enabled: true,
+            dynamicAnimation: {
+                enabled: true,
+            },
         },
         fontFamily: 'inherit',
         foreColor: 'inherit',
@@ -28,7 +32,7 @@ export const chartOptions: ApexOptions = {
         strokeDashArray: 6,
         xaxis: {
             lines: {
-                show: true
+                show: false
             }
         },
         yaxis: {
@@ -57,25 +61,17 @@ export const chartOptions: ApexOptions = {
     stroke: {
         width: 2,
         curve: 'smooth',
-        fill: {
-            type: "gradient",
-            gradient: {
-                shade: "dark",
-                gradientToColors: ["#FDD835"],
-                shadeIntensity: 1,
-                type: "horizontal",
-                opacityFrom: 1,
-                opacityTo: 1,
-                stops: [0, 100, 100, 100]
-            }
-        },
     },
     tooltip: {
         shared: true,
         theme: 'dark',
         y: {
-            formatter: (value: number): string => '$' + value.toFixed(2)
+            formatter: (value: number): string => '$' + currency(value)
         },
+        x: {
+            formatter: (value: number): string => moment(value).format("mm"),
+        },
+        
     },
     xaxis: {
         type: 'datetime',
@@ -86,23 +82,17 @@ export const chartOptions: ApexOptions = {
                 type: 'color',
                 color: 'var(--fuse-border)'
             },
-            width: 3,
-            stroke: {
-                dashArray: 0,
-                width: 0
-            },
-            opacity: 0.9
         },
-        tickAmount: 8,
+        tickAmount: "dataPoints",
         axisTicks: {
-            show: true,
+            show: false,
             color: 'var(--fuse-border)'
         },
         axisBorder: {
             show: false
         },
         tooltip: {
-            enabled: true
+            enabled: false,
         },
         labels: {
             show: true,
@@ -110,26 +100,38 @@ export const chartOptions: ApexOptions = {
             rotate: 0,
             minHeight: 40,
             hideOverlappingLabels: true,
-            formatter: (value): string => moment(value).format('HH:mm'),
+            formatter: (value): string => moment(value).format('mm'),
             style: {
                 colors: 'currentColor'
-            }
+            },
         }
     },
     yaxis: {
         axisTicks: {
             show: true,
-            color: 'var(--fuse-border)'
+            color: 'var(--fuse-border)',
         },
         axisBorder: {
             show: false
         },
         forceNiceScale: true,
         labels: {
-            formatter: (value: number): string => '$' + value.toFixed(0),
+            formatter: (value: number): string => '$' + currency(value),
             style: {
                 colors: 'currentColor'
             }
-        }
+        },
+        opposite: true,
+        tooltip: {
+            enabled: true,
+        },
     },
+    plotOptions: {
+        candlestick: {
+            colors: {
+                upward: '#00b19d',
+                downward: '#f74a5e'
+            }
+        }
+    }
 };

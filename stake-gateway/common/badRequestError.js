@@ -10,7 +10,4 @@ class BadRequestError {
     }
 }
 const badRequestError = new BadRequestError();
-module.exports = {
-    badRequestError: badRequestError,
-    BadRequestError: BadRequestError,
-};
+module.exports = badRequestError;

@@ -1,4 +1,7 @@
+const badRequestError = require("../common/badRequestError");
+const ErrorCode = require("../common/errorCode");
 const Kline = require("../models/Kline");
+const TradingConfig = require("../models/TradingConfig");
 const TradingRoom = require("../models/TradingRoom");
 const TradingRound = require("../models/TradingRound");
 
@@ -33,9 +36,24 @@ const latestRounds = async function (req, res) {
         };
     }));
 }
+const tradingConfig = async function (req, res) {
+    let config = await TradingConfig.findOne({
+        symbol: req.params.symbol,
+    });
+    if (!config) {
+        config = await TradingConfig.findOne({
+            symbol: 'default',
+        });
+    }
+    if (!config) {
+        return badRequestError.createError(res, ErrorCode.TRADING_CONFIG_NOT_EXIST)
+    }
+    res.json(config);
+}
 
 module.exports = {
     tradingRooms: tradingRooms,
+    tradingConfig: tradingConfig,
     latestKlines: latestKlines,
     latestRounds: latestRounds,
 }

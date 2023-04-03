@@ -1,12 +1,12 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subject, takeUntil, pairwise } from 'rxjs';
+import { Subject, takeUntil, pairwise, BehaviorSubject } from 'rxjs';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ClientSocketService } from 'app/core/socket/socket.service';
 import { SocketEvent } from 'app/core/config/socket.config';
 import { chartOptions } from 'app/core/config/trading.config';
 import { TradingService } from './trading.service';
-import { TradingRoom, Kline } from './trading.types';
+import { TradingRoom, Kline, ApexChartSeriesData, TradingConfig } from './trading.types';
 import moment from 'moment';
 @Component({
   selector: 'app-trading',
@@ -22,10 +22,12 @@ export class TradingComponent implements OnInit, OnDestroy {
   canTrade: boolean = false;
   traded: boolean = false;
   tradingRoom: TradingRoom;
-  tradingRoom$: Subject<TradingRoom> = new Subject<TradingRoom>();
+  tradingRoom$: BehaviorSubject<TradingRoom> = new BehaviorSubject(null);
   tradingRooms: TradingRoom[];
+  betCash: number = 0;
+  tradingConfig: TradingConfig;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private klines: any[] = [];
+  private klines: BehaviorSubject<ApexChartSeriesData[] | null> = new BehaviorSubject(null);
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -40,6 +42,11 @@ export class TradingComponent implements OnInit, OnDestroy {
       }
     });
 
+    this._tradingService.config$.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {
+      this.tradingConfig = config;
+      this.betCash = this.tradingConfig.sliderMin;
+    })
+
     this._tradingService.rounds$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rounds => {
       let values = [];
       if (!rounds) {
@@ -51,10 +58,16 @@ export class TradingComponent implements OnInit, OnDestroy {
           y: [round.openPrice, round.highPrice, round.lowPrice, round.closePrice],
         });
       }
+      this.klines.next(values.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime()).slice(0, 59));
+    });
+    this.klines.pipe(takeUntil(this._unsubscribeAll)).subscribe(klines => {
+      if (!klines) {
+        return;
+      }
+      klines = klines.filter(e => parseFloat(this.currentTime) - new Date(e.x).getTime() <= 60 * 60 * 1000);
       this.btcChartComponent.updateSeries([{
-        data: values
-      }], true);
-      this.klines = values;
+        data: klines,
+      }]);
     });
 
     this._fuseMediaWatcherService.onMediaChange$
@@ -76,26 +89,26 @@ export class TradingComponent implements OnInit, OnDestroy {
       this.canTrade = kline.canTrade;
       this.countdown = moment(kline.closeTime).diff(moment(kline.time), 'seconds');
       let key = kline.openTime;
-      let index = this.klines.findIndex(e => {
+      let klines = this.klines.getValue();
+      let index = klines.findIndex(e => {
         return e.x == key;
       });
       if (index >= 0) {
-        this.klines[index] = {
+        klines[index] = {
           x: key,
           y: [kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice],
         }
       } else {
-        this.klines.push({
+        klines.push({
           x: key,
           y: [kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice],
         });
       }
-      this.btcChartComponent.updateSeries([{
-        data: this.klines
-      }], true)
+      this.klines.next(klines.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime()).slice(0, 59));
     });
 
     this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
+      this.klines.next([]);
       this._socketService.socket.emit(SocketEvent.ROOM_LEFT, old.symbol);
       this._socketService.socket.emit(SocketEvent.ROOM_JOIN, newValue.symbol);
       this.updateRounds(newValue);
@@ -105,10 +118,8 @@ export class TradingComponent implements OnInit, OnDestroy {
       this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
       this.updateRounds(this.tradingRoom);
     });
-
     this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
     this.updateRounds(this.tradingRoom);
-
   }
 
   ngOnDestroy(): void {
@@ -126,6 +137,10 @@ export class TradingComponent implements OnInit, OnDestroy {
     this.tradingRoom$.next(this.tradingRoom);
   }
   updateRounds(tradingRoom: TradingRoom) {
+    this._tradingService.getConfig(tradingRoom).subscribe();
     this._tradingService.getLatestRounds(tradingRoom).subscribe();
+  }
+  addBetCash(value: number) {
+    this.betCash += value;
   }
 }
