@@ -63,6 +63,7 @@ export const chartOptions: ApexOptions = {
         curve: 'smooth',
     },
     tooltip: {
+        enabled: false,
         shared: true,
         theme: 'dark',
         y: {
@@ -71,7 +72,6 @@ export const chartOptions: ApexOptions = {
         x: {
             formatter: (value: number): string => moment(value).format("mm"),
         },
-        
     },
     xaxis: {
         type: 'datetime',
@@ -107,12 +107,14 @@ export const chartOptions: ApexOptions = {
         }
     },
     yaxis: {
+        show: true,
+        showAlways: true,
         axisTicks: {
             show: true,
             color: 'var(--fuse-border)',
         },
         axisBorder: {
-            show: false
+            show: true,
         },
         forceNiceScale: true,
         labels: {
@@ -125,13 +127,8 @@ export const chartOptions: ApexOptions = {
         tooltip: {
             enabled: true,
         },
-    },
-    plotOptions: {
-        candlestick: {
-            colors: {
-                upward: '#00b19d',
-                downward: '#f74a5e'
-            }
+        crosshairs: {
+            show: true,
         }
-    }
+    },
 };

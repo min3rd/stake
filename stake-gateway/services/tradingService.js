@@ -1,6 +1,8 @@
 const badRequestError = require("../common/badRequestError");
 const ErrorCode = require("../common/errorCode");
+const { publicMongoose } = require("../config/publicMongoose");
 const Kline = require("../models/Kline");
+const TradingCall = require("../models/TradingCall");
 const TradingConfig = require("../models/TradingConfig");
 const TradingRoom = require("../models/TradingRoom");
 const TradingRound = require("../models/TradingRound");
@@ -49,6 +51,25 @@ const tradingConfig = async function (req, res) {
         return badRequestError.createError(res, ErrorCode.TRADING_CONFIG_NOT_EXIST)
     }
     res.json(config);
+}
+
+const call = async function (req, res) {
+    const session = await publicMongoose.startSession();
+    let now = new Date();
+    try {
+        await session.startTransaction();
+        let tradingCall = await TradingCall.findOne({
+            userId: req.user.id,
+
+        });
+
+        await session.commitTransaction();
+    } catch (e) {
+        await session.abortTransaction();
+    } finally {
+        session.endSession();
+    }
+
 }
 
 module.exports = {

@@ -43,7 +43,7 @@
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="relative flex flex-auto items-center justify-center px-2">
+                <div class="relative flex flex-auto items-center justify-center px-2 mb-2">
                     <mat-slider class="w-full" [showTickMarks]="true" [min]="tradingConfig.sliderMin"
                         [max]="tradingConfig.sliderMax" [step]="tradingConfig.sliderStep">
                         <input matSliderThumb [(ngModel)]="betCash">
@@ -51,9 +51,11 @@
                 </div>
                 <div class="flex flex-auto md:flex-col px-2 justify-between items-center">
                     <button mat-flat-button [disabled]="!canTrade || traded"
-                        [class]="((canTrade && !traded) ? 'bg-lime-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8 md:font-bold md:text-2xl'">
+                        [class]="((canTrade && !traded) ? 'bg-lime-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'">
+                        <span class="md:font-bold md:text-2xl mx-2">
+                            {{'buy' | transloco | capitalize}}
+                        </span>
                         <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
-                        {{'buy' | transloco | capitalize}}
                     </button>
                     <div
                         class="flex flex-auto rounded-m w-full mx-2 bg-transparent items-center justify-center md:mx-0 md:my-2 md:p-6 md:text-2xl">
@@ -63,9 +65,11 @@
                         </span>
                     </div>
                     <button mat-flat-button [disabled]="!canTrade || traded"
-                        [class]="((canTrade && !traded) ? 'bg-red-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8 md:font-bold md:text-2xl'">
+                        [class]="((canTrade && !traded) ? 'bg-red-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'">
+                        <span class="md:font-bold md:text-2xl mx-2">
+                            {{'sell' | transloco | capitalize}}
+                        </span>
                         <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
-                        {{'sell' | transloco | capitalize}}
                     </button>
                 </div>
             </div>
