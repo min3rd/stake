@@ -5,7 +5,19 @@ import { Socket } from 'ngx-socket-io';
 export class ClientSocket extends Socket {
     constructor() {
         super({
-            url: 'http://localhost:80/public',
+            url: 'http://localhost/public',
+            options: {
+                transports: ['websocket'],
+            }
+        });
+    }
+}
+
+@Injectable()
+export class UserSocket extends Socket {
+    constructor() {
+        super({
+            url: 'http://localhost/user',
             options: {
                 transports: ['websocket'],
             }

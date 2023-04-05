@@ -24,9 +24,9 @@
             <div class="absolute md:relative bottom-0 border-t md:border-0 text-center w-full py-2 md:w-80">
                 <div class="flex flex-wrap w-full mb-2 items-center justify-center text-center">
                     <div class="mr-2 font-medium">{{'benefit'| transloco | capitalize}}</div>
-                    <div class="mr-2 text-xl font-medium text-violet-600">{{tradingConfig.benefitPercent}}%</div>
+                    <div class="mr-2 text-xl font-medium text-violet-600">{{tradingConfig?.benefitPercent ?? 0}}%</div>
                     <div class="text-xl font-semibold text-teal-500">
-                        {{betCash * tradingConfig.benefitPercent / 100 | currency}}
+                        {{(betCash * tradingConfig?.benefitPercent ?? 0 / 100) ?? 0 | currency}}
                     </div>
                 </div>
                 <div class="text-left font-medium px-2 pb-2">
@@ -44,18 +44,21 @@
                     </button>
                 </mat-form-field>
                 <div class="relative flex flex-auto items-center justify-center px-2 mb-2">
-                    <mat-slider class="w-full" [showTickMarks]="true" [min]="tradingConfig.sliderMin"
-                        [max]="tradingConfig.sliderMax" [step]="tradingConfig.sliderStep">
+                    <mat-slider class="w-full" [showTickMarks]="true" [min]="tradingConfig?.sliderMin ?? 0"
+                        [max]="tradingConfig?.sliderMax ?? 0" [step]="tradingConfig?.sliderStep ?? 0">
                         <input matSliderThumb [(ngModel)]="betCash">
                     </mat-slider>
                 </div>
                 <div class="flex flex-auto md:flex-col px-2 justify-between items-center">
-                    <button mat-flat-button [disabled]="!canTrade || traded"
-                        [class]="((canTrade && !traded) ? 'bg-lime-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'">
+                    <button mat-flat-button [disabled]="!checkCanTrade()"
+                        [class]="(checkCanTrade() ? 'bg-lime-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'"
+                        (click)="call(1)">
                         <span class="md:font-bold md:text-2xl mx-2">
                             {{'buy' | transloco | capitalize}}
                         </span>
                         <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
+                        <mat-progress-spinner *ngIf="calling" [diameter]="24"
+                            [mode]="'indeterminate'"></mat-progress-spinner>
                     </button>
                     <div
                         class="flex flex-auto rounded-m w-full mx-2 bg-transparent items-center justify-center md:mx-0 md:my-2 md:p-6 md:text-2xl">
@@ -64,12 +67,15 @@
                             {{countdown | countdown}}
                         </span>
                     </div>
-                    <button mat-flat-button [disabled]="!canTrade || traded"
-                        [class]="((canTrade && !traded) ? 'bg-red-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'">
+                    <button mat-flat-button [disabled]="!checkCanTrade()"
+                        [class]="(checkCanTrade() ? 'bg-red-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'"
+                        (click)="call(2)">
                         <span class="md:font-bold md:text-2xl mx-2">
                             {{'sell' | transloco | capitalize}}
                         </span>
                         <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
+                        <mat-progress-spinner *ngIf="calling" [diameter]="24"
+                            [mode]="'indeterminate'"></mat-progress-spinner>
                     </button>
                 </div>
             </div>

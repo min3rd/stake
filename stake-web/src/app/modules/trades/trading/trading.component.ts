@@ -6,8 +6,9 @@ import { ClientSocketService } from 'app/core/socket/socket.service';
 import { SocketEvent } from 'app/core/config/socket.config';
 import { chartOptions } from 'app/core/config/trading.config';
 import { TradingService } from './trading.service';
-import { TradingRoom, Kline, ApexChartSeriesData, TradingConfig } from './trading.types';
+import { TradingRoom, Kline, ApexChartSeriesData, TradingConfig, TradingCallType, TradingCall } from './trading.types';
 import moment from 'moment';
+import { UserService } from 'app/core/user/user.service';
 @Component({
   selector: 'app-trading',
   templateUrl: './trading.component.html',
@@ -20,12 +21,13 @@ export class TradingComponent implements OnInit, OnDestroy {
   currentTime: any;
   countdown: any;
   canTrade: boolean = false;
-  traded: boolean = false;
+  calling: boolean = false;
   tradingRoom: TradingRoom;
   tradingRoom$: BehaviorSubject<TradingRoom> = new BehaviorSubject(null);
   tradingRooms: TradingRoom[];
   betCash: number = 0;
   tradingConfig: TradingConfig;
+  tradingCall: TradingCall;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private klines: BehaviorSubject<ApexChartSeriesData[] | null> = new BehaviorSubject(null);
   constructor(
@@ -33,6 +35,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     private _fuseMediaWatcherService: FuseMediaWatcherService,
     private _socketService: ClientSocketService,
     private _tradingService: TradingService,
+    private _userService: UserService,
   ) { }
   ngOnInit(): void {
     this._tradingService.rooms$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rooms => {
@@ -142,5 +145,26 @@ export class TradingComponent implements OnInit, OnDestroy {
   }
   addBetCash(value: number) {
     this.betCash += value;
+  }
+  call(type: TradingCallType) {
+    if (this.betCash <= 0) {
+      return;
+    }
+    this.calling = true;
+    this._tradingService.call({
+      userId: this._userService.user.id,
+      symbol: this.tradingRoom.symbol,
+      betCash: this.betCash,
+      type: type,
+    }).subscribe(response => {
+      console.log(response);
+      this.tradingCall = response;
+      this.calling = false;
+    }, error => {
+      this.calling = false;
+    })
+  }
+  checkCanTrade() {
+    return this.canTrade && (!this.tradingCall || new Date(this.tradingCall.closeTime).getTime() < new Date().getTime()) && !this.calling;
   }
 }

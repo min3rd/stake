@@ -1,9 +1,6 @@
 const { Schema } = require("mongoose");
 const { publicMongoose } = require("../config/publicMongoose");
-const CashAccount = [
-    DEMO = 1, //Demo
-    REAL = 2, //Real
-];
+const { CashAccount } = require("../common/constants");
 const UserSchema = new Schema({
     username: { type: String, require: true, index: true, },
     password: { type: String, require: true, },
@@ -15,7 +12,7 @@ const UserSchema = new Schema({
     verified: { type: Boolean, default: false, },
     cash: { type: Number, default: 0, },
     demoCash: { type: Number, default: 0, },
-    cashAccount: { type: Number, enum: CashAccount },
+    cashAccount: { type: Number, enum: Object.values(CashAccount) },
 });
 const User = publicMongoose.model('User', UserSchema);
 

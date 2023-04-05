@@ -7,9 +7,9 @@ export interface TradingRoom {
 
 export interface Kline {
     symbol?: string;
-    time?: string;
-    openTime?: string;
-    closeTime?: string;
+    time?: Date;
+    openTime?: Date;
+    closeTime?: Date;
     openPrice?: number;
     highPrice?: number;
     lowPrice?: number;
@@ -20,9 +20,9 @@ export interface Kline {
 
 export interface TradingRound {
     symbol?: string;
-    time?: string;
-    openTime?: string;
-    closeTime?: string;
+    time?: Date;
+    openTime?: Date;
+    closeTime?: Date;
     openPrice?: number;
     highPrice?: number;
     lowPrice?: number;
@@ -49,4 +49,16 @@ export interface TradingConfig {
     sliderMin?: number;
     sliderStep?: number;
     symbol?: string;
+}
+export enum TradingCallType {
+    BUY = 1,
+    SELL = 2,
+}
+export interface TradingCall {
+    userId?: string,
+    symbol?: string,
+    openTime?: Date,
+    closeTime?: Date,
+    type?: TradingCallType,
+    betCash?: number,
 }

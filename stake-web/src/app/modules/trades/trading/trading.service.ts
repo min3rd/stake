@@ -1,7 +1,7 @@
 import { Observable, tap, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Kline, TradingConfig, TradingRoom, TradingRound } from './trading.types';
+import { Kline, TradingCall, TradingConfig, TradingRoom, TradingRound } from './trading.types';
 import { ApiService } from 'app/core/api/api.service';
 
 @Injectable({
@@ -56,5 +56,8 @@ export class TradingService {
         this._config.next(response);
       })
     );
+  }
+  call(tradingCall: TradingCall): Observable<TradingCall> {
+    return this._httpClient.post<TradingCall>(this._apiService.users_trading_call(), tradingCall);
   }
 }

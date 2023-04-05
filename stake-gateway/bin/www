@@ -11,6 +11,7 @@ const publicSocket = require('../socket/publicSocket');
 const uuid = require('uuid');
 const tradingJob = require('../job/tradingJob');
 const migration = require('../migration/migration');
+const userSocket = require('../socket/userSocket');
 
 /**
  * Get port from environment and store in Express.
@@ -32,7 +33,8 @@ io.engine.generateId = (req) => {
 }
 migration();
 const publicIo = publicSocket(io);
-tradingJob(publicIo);
+const userIo = userSocket(io);
+tradingJob(publicIo, userIo);
 
 /**
  * Listen on provided port, on all network interfaces.

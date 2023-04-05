@@ -13,7 +13,7 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
 import { SocketIoModule } from 'ngx-socket-io';
-import { ClientSocket } from './core/socket/socket.types';
+import { ClientSocket, UserSocket } from './core/socket/socket.types';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ApiService } from './core/api/api.service';
 import { Observable, tap } from 'rxjs';
@@ -59,6 +59,7 @@ function initializeAppFactory(httpClient: HttpClient, apiService: ApiService): (
     ],
     providers: [
         ClientSocket,
+        UserSocket,
         {
             provide: APP_INITIALIZER,
             useFactory: initializeAppFactory,

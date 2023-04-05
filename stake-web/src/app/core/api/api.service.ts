@@ -55,6 +55,12 @@ export class ApiService {
     users_addDemoCash() {
         return this._usersApi(`/addDemoCash`);
     }
+
+    users_trading_call() {
+        return this._usersApi(`/trading/call`);
+    }
+
+
 }
 
 

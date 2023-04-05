@@ -4,4 +4,5 @@ export enum SocketEvent {
     NOW = 'NOW',
     KLINE = 'KLINE',
     disconnect = 'disconnect',
+    CASH = 'CASH',
 }
