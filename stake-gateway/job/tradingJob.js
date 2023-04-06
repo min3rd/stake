@@ -192,7 +192,7 @@ const updateCallResult = async function (publicIo, userIo) {
 const tradingJob = function (publicIo, userIo) {
     updateRound(publicIo);
     updateKline(publicIo);
-    updateCallResult(publicIo);
+    updateCallResult(publicIo, userIo);
 }
 
 module.exports = tradingJob;
