@@ -4,6 +4,8 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
+import { ClientSocketService } from 'app/core/socket/socket.service';
+import { SocketEvent } from 'app/core/config/socket.config';
 @Component({
     selector: 'user',
     templateUrl: './user.component.html',
@@ -29,6 +31,7 @@ export class UserComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _userService: UserService,
         private _activeRoute: ActivatedRoute,
+        private _clientSocketService: ClientSocketService,
     ) {
     }
 
@@ -45,12 +48,9 @@ export class UserComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((user: User) => {
                 this.user = user;
-                
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
-
-
     }
 
     /**

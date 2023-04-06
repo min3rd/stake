@@ -30,38 +30,6 @@ export const appRoutes: Route[] = [
         ]
     },
 
-    // Trading
-    {
-        path: '',
-        canMatch: [NoAuthGuard],
-        component: LayoutComponent,
-        resolve: {
-            initialData: InitialDataResolver,
-        },
-        children: [
-            {
-                path: 'trades',
-                loadChildren: () => import('app/modules/trades/trades.module').then(m => m.TradesModule),
-            }
-        ]
-    },
-
-    // Games
-    {
-        path: '',
-        canMatch: [NoAuthGuard],
-        component: LayoutComponent,
-        resolve: {
-            initialData: InitialDataResolver,
-        },
-        children: [
-            {
-                path: 'games',
-                loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
-            }
-        ]
-    },
-
     // Auth routes for guests
     {
         path: '',
@@ -90,5 +58,27 @@ export const appRoutes: Route[] = [
         children: [
             { path: 'sign-out', loadChildren: () => import('app/modules/auth/sign-out/sign-out.module').then(m => m.AuthSignOutModule) },
         ]
+    },
+
+    // Trading
+    {
+        path: 'trades',
+        canMatch: [NoAuthGuard],
+        component: LayoutComponent,
+        resolve: {
+            initialData: InitialDataResolver,
+        },
+        loadChildren: () => import('app/modules/trades/trades.module').then(m => m.TradesModule),
+    },
+
+    // Games
+    {
+        path: 'games',
+        canMatch: [NoAuthGuard],
+        component: LayoutComponent,
+        resolve: {
+            initialData: InitialDataResolver,
+        },
+        loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
     },
 ];

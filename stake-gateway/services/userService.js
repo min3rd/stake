@@ -36,7 +36,9 @@ const getNotifications = async function (req, res) {
     }
     let notifications = await Notification.find({
         userId: req.user.id
-    });
+    }).sort({
+        time: -1
+    }).limit(20);
     res.json(notifications);
 }
 const markAllNotificationAsRead = async function (req, res) {

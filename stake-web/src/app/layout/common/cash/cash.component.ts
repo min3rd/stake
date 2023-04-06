@@ -6,7 +6,7 @@ import { SocketEvent } from 'app/core/config/socket.config';
 import { ClientSocketService } from 'app/core/socket/socket.service';
 import { UserService } from 'app/core/user/user.service';
 import { CashAccount, User } from 'app/core/user/user.types';
-import { Subject, map, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'cash',
@@ -26,16 +26,10 @@ export class CashComponent implements OnInit {
   ngOnInit(): void {
     this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
       this.user = user;
-      this._clientSocketService.userSocket.emit(SocketEvent.ROOM_JOIN, this._userService.user.id);
     });
     this._clientSocketService.userSocket.fromEvent(SocketEvent.USER).subscribe(user => {
       this._userService.user = user;
     })
-    this._clientSocketService.userSocket.on(SocketEvent.connect, () => {
-      if (this._userService.user) {
-        this._clientSocketService.userSocket.emit(SocketEvent.ROOM_JOIN, this._userService.user.id);
-      }
-    });
   }
   addCash() {
     if (this._userService.user.cashAccount != CashAccount.REAL) {
