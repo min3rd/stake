@@ -99,8 +99,24 @@ function authenticateToken(req, res, next) {
         next()
     })
 }
+
+function noGuard(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) {
+        next();
+    }
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        if (err) {
+            next();
+        }
+        req.user = user
+        next()
+    })
+}
 module.exports = {
     signUp: signUp,
     signIn: signIn,
     authenticateToken: authenticateToken,
+    noGuard: noGuard,
 }

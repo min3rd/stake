@@ -8,7 +8,8 @@ const Kline = require("../models/Kline");
 const TradingCall = require("../models/TradingCall");
 const TradingRoom = require("../models/TradingRoom");
 const TradingRound = require("../models/TradingRound");
-const { User } = require("../models/User");
+const { User, PublicUser } = require("../models/User");
+const notificationService = require("../services/notificationService");
 async function updateRound(publicIo) {
     const session = await publicMongoose.startSession();
     let now = new Date();
@@ -75,7 +76,7 @@ async function updateRound(publicIo) {
                     lowPrice: lowPrice,
                     closePrice: closePrice,
                     time: new Date(),
-                    canTrade: now % 2 == 0,
+                    canTrade: true,
                 });
                 tradingRound = await tradingRound.save();
                 logger.info('updateRound_CREATE_NEW_ROUND', JSON.stringify(tradingRound))
@@ -140,53 +141,66 @@ const updateCallResult = async function (publicIo, userIo) {
     const session = await publicMongoose.startSession();
     try {
         await session.startTransaction();
-        let tradingRounds = await TradingRoom.find({
+        let tradingRounds = await TradingRound.find({
             closeTime: {
                 $lt: now
             },
             closed: false,
         });
         for (let tradingRound of tradingRounds) {
-            let winType = tradingRound.closePrice - tradingRound.openPrice ? TradingCallType.BUY : TradingCallType.SELL;
+            logger.info("updateCallResult_START_PROCESS_ROUND", `round=${JSON.stringify(tradingRound)}`);
+            let winType = tradingRound.closePrice - tradingRound.openPrice > 0 ? TradingCallType.BUY : TradingCallType.SELL;
             let tradingCalls = await TradingCall.find({
                 symbol: tradingRound.symbol,
                 openTime: tradingRound.openTime,
                 closeTime: tradingRound.closeTime,
                 masterPaid: false,
             });
+            logger.info("updateCallResult_START_PROCESS_TRADING_CALLS", `tradingCalls=${JSON.stringify(tradingCalls)}`);
             if (!tradingCalls) {
                 continue;
             }
             for (let tradingCall of tradingCalls) {
+                logger.info("updateCallResult_START_PROCESS_TRADING_CALL", `tradingCall=${JSON.stringify(tradingCall)}`);
                 let user = await User.findById(tradingCall.userId);
                 if (!user) {
                     continue;
                 }
-                if (tradingCall.type === winType) {
+                logger.info("updateCallResult_PROCESS_TRADING_CALL_WINTYPE", `winType=${winType} tradingCall=${JSON.stringify(tradingCall)}`);
+                let oldCash = user.demoCash;
+                let isWin = tradingCall.type == winType;
+                let benefit = 0;
+                if (isWin || (process.env.DEBUG == 'true' && process.env.TRADING_ALWAYS_WIN == 'true')) {
+                    benefit = tradingCall.benefit;
                     if (tradingCall.cashAccount == CashAccount.REAL) {
+                        oldCash = user.cash;
                         user.cash += tradingCall.benefit;
                     } else {
                         user.demoCash += tradingCall.benefit;
                     }
                 }
+                logger.info("updateCallResult_PROCESS_PAID_TO_USER", `oldCash=${oldCash} user=${JSON.stringify(user)} tradingCall=${JSON.stringify(tradingCall)}`);
                 tradingCall.masterPaid = true;
                 user = await user.save();
                 tradingCall = await tradingCall.save();
-                logger.info("updateCallResult_MASTER_PAID",`user=${JSON.stringify(user)} tradingCall=${JSON.stringify(tradingCall)}`);
+                logger.info("updateCallResult_MASTER_PAID", `user=${JSON.stringify(user)} tradingCall=${JSON.stringify(tradingCall)}`);
+                let noti = await notificationService.createTradingCallResult(user, isWin, tradingCall.betCash, benefit);
+                userIo.to(user.id).emit(SocketEvent.USER, new PublicUser(user));
+                userIo.to(user.id).emit(SocketEvent.NOTIFICATION, noti);
             }
             tradingRound.closed = true;
             tradingRound = await tradingRound.save();
-            logger.info("updateCallResult_UPDATE_ROUND",`round=${JSON.stringify(tradingRound)}`);
+            logger.info("updateCallResult_UPDATE_ROUND", `round=${JSON.stringify(tradingRound)}`);
         }
         await session.commitTransaction();
     } catch (e) {
-
+        logger.error("updateCallResult_UPDATE_ROUND", `${error}`)
     } finally {
         session.endSession();
     }
 
     setTimeout(() => {
-        updateCallResult();
+        updateCallResult(publicIo, userIo);
     }, process.env.UPDATE_TRADING_CALL_DURARION)
 }
 const tradingJob = function (publicIo, userIo) {

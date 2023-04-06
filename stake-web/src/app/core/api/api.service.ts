@@ -42,11 +42,15 @@ export class ApiService {
         return this._publicApi(`/trading/rooms/${symbol}/config`);
     }
 
+    public_notifications() {
+        return this._publicApi(`/notifications`);
+    }
+
     private _usersApi(endpoint: string) {
         if (endpoint.startsWith('/')) {
             endpoint = endpoint.substring(1);
         }
-        return this._api(`/users/${this._userService.user.id}/${endpoint}`);
+        return this._api(`/users/${this._userService?.user?.id}/${endpoint}`);
     }
     users_switchAccount() {
         return this._usersApi(`/switchAccount`);
@@ -60,7 +64,17 @@ export class ApiService {
         return this._usersApi(`/trading/call`);
     }
 
+    users_notifications() {
+        return this._usersApi(`/notifications`);
+    }
 
+    users_notifications_mark_as_read() {
+        return this._usersApi(`/notifications/markAllAsRead`);
+    }
+
+    users_notifications_remove() {
+        return this._usersApi(`/notifications/remove`);
+    }
 }
 
 

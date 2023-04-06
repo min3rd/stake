@@ -26,12 +26,15 @@ export class CashComponent implements OnInit {
   ngOnInit(): void {
     this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
       this.user = user;
+      this._clientSocketService.userSocket.emit(SocketEvent.ROOM_JOIN, this._userService.user.id);
     });
-    this._clientSocketService.socket.fromEvent(SocketEvent.CASH).subscribe(data => {
-      console.log(data);
+    this._clientSocketService.userSocket.fromEvent(SocketEvent.USER).subscribe(user => {
+      this._userService.user = user;
     })
-    this._clientSocketService.socket.on(SocketEvent.disconnect, () => {
-      this._clientSocketService.socket.emit(SocketEvent.ROOM_JOIN, this._userService.user.id);
+    this._clientSocketService.userSocket.on(SocketEvent.connect, () => {
+      if (this._userService.user) {
+        this._clientSocketService.userSocket.emit(SocketEvent.ROOM_JOIN, this._userService.user.id);
+      }
     });
   }
   addCash() {

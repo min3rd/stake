@@ -45,6 +45,23 @@ export const appRoutes: Route[] = [
             }
         ]
     },
+
+    // Games
+    {
+        path: '',
+        canMatch: [NoAuthGuard],
+        component: LayoutComponent,
+        resolve: {
+            initialData: InitialDataResolver,
+        },
+        children: [
+            {
+                path: 'games',
+                loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
+            }
+        ]
+    },
+
     // Auth routes for guests
     {
         path: '',

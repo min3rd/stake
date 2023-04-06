@@ -20,5 +20,16 @@
   "sell": "sell",
   "value": "value",
   "demo account": "demo account",
-  "real account": "real account"
+  "real account": "real account",
+  "notifications": "notifications",
+  "no notifications": "no notifications",
+  "when you have notifications they will appear here": "when you have notifications, they will appear here.",
+  "remove": "remove",
+  "mark as unread": "mark as unread",
+  "mark as read": "mark as read",
+  "home": "home",
+  "go to": "go to",
+  "you have signed out": "you have signed out!",
+  "redirecting in": "redirecting in",
+  "you are now being redirected": "you are now being redirected!"
 }

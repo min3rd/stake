@@ -18,6 +18,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ApiService } from './core/api/api.service';
 import { Observable, tap } from 'rxjs';
 import { UserService } from './core/user/user.service';
+import { LandingComponent } from './modules/games/landing/landing.component';
+import { GamesModule } from './modules/games/games.module';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
@@ -34,7 +36,8 @@ function initializeAppFactory(httpClient: HttpClient, apiService: ApiService): (
 }
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        LandingComponent
     ],
     imports: [
         BrowserModule,
@@ -53,6 +56,7 @@ function initializeAppFactory(httpClient: HttpClient, apiService: ApiService): (
         // Layout module of your application
         LayoutModule,
         HttpClientModule,
+        GamesModule,
     ],
     bootstrap: [
         AppComponent

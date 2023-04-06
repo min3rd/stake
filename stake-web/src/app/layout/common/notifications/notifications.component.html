@@ -1,5 +1,5 @@
 <!-- Notifications toggle -->
-<button
+<button *ngIf="user"
     mat-icon-button
     (click)="openPanel()"
     #notificationsOrigin>
@@ -29,7 +29,7 @@
                         [svgIcon]="'heroicons_solid:x'"></mat-icon>
                 </button>
             </div>
-            <div class="text-lg font-medium leading-10">Notifications</div>
+            <div class="text-lg font-medium leading-10">{{'notifications' | transloco | capitalize}}</div>
             <div class="ml-auto">
                 <button
                     mat-icon-button
@@ -82,21 +82,18 @@
                     <div class="relative flex flex-col my-5 mr-6 ml-2">
                         <!-- Indicator -->
                         <button
-                            class="w-6 h-6 min-h-6"
+                            class="w-6 h-6 min-h-6 mb-6"
                             mat-icon-button
                             (click)="toggleRead(notification)"
-                            [matTooltip]="notification.read ? 'Mark as unread' : 'Mark as read'">
-                            <span
-                                class="w-2 h-2 rounded-full"
-                                [ngClass]="{'bg-gray-400 dark:bg-gray-500 sm:opacity-0 sm:group-hover:opacity-100': notification.read,
-                                            'bg-primary': !notification.read}"></span>
+                            [matTooltip]="notification.read ? ('mark as unread' | transloco | capitalize) : ('mark as read' | transloco | capitalize)">
+                            <mat-icon [svgIcon]="notification.read ? 'heroicons_outline:mail' : 'heroicons_outline:mail-open'"></mat-icon>
                         </button>
                         <!-- Remove -->
                         <button
                             class="w-6 h-6 min-h-6 sm:opacity-0 sm:group-hover:opacity-100"
                             mat-icon-button
                             (click)="delete(notification)"
-                            [matTooltip]="'Remove'">
+                            [matTooltip]="'remove' | transloco | capitalize">
                             <mat-icon
                                 class="icon-size-4"
                                 [svgIcon]="'heroicons_solid:x'"></mat-icon>
@@ -128,12 +125,12 @@
                         <ng-container *ngIf="notification.title">
                             <div
                                 class="font-semibold line-clamp-1"
-                                [innerHTML]="notification.title"></div>
+                                [innerHTML]="notification.title | transloco | capitalize"></div>
                         </ng-container>
                         <ng-container *ngIf="notification.description">
                             <div
                                 class="line-clamp-2"
-                                [innerHTML]="notification.description"></div>
+                                [innerHTML]="notification.description | transloco | capitalize"></div>
                         </ng-container>
                         <div class="mt-2 text-sm leading-none text-secondary">
                             {{notification.time | date:'MMM dd, h:mm a'}}
@@ -150,8 +147,8 @@
                             class="text-primary-700 dark:text-primary-50"
                             [svgIcon]="'heroicons_outline:bell'"></mat-icon>
                     </div>
-                    <div class="mt-5 text-2xl font-semibold tracking-tight">No notifications</div>
-                    <div class="w-full max-w-60 mt-1 text-md text-center text-secondary">When you have notifications, they will appear here.</div>
+                    <div class="mt-5 text-2xl font-semibold tracking-tight">{{'no notifications' | transloco | capitalize}}</div>
+                    <div class="w-full max-w-60 mt-1 text-md text-center text-secondary">{{'when you have notifications they will appear here' | transloco | capitalize}}</div>
                 </div>
             </ng-container>
 

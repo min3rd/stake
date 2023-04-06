@@ -9,6 +9,7 @@ import { TradingService } from './trading.service';
 import { TradingRoom, Kline, ApexChartSeriesData, TradingConfig, TradingCallType, TradingCall } from './trading.types';
 import moment from 'moment';
 import { UserService } from 'app/core/user/user.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-trading',
   templateUrl: './trading.component.html',
@@ -28,6 +29,7 @@ export class TradingComponent implements OnInit, OnDestroy {
   betCash: number = 0;
   tradingConfig: TradingConfig;
   tradingCall: TradingCall;
+  tradingCalls: TradingCall[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private klines: BehaviorSubject<ApexChartSeriesData[] | null> = new BehaviorSubject(null);
   constructor(
@@ -36,6 +38,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     private _socketService: ClientSocketService,
     private _tradingService: TradingService,
     private _userService: UserService,
+    private _router: Router,
   ) { }
   ngOnInit(): void {
     this._tradingService.rooms$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rooms => {
@@ -46,9 +49,19 @@ export class TradingComponent implements OnInit, OnDestroy {
     });
 
     this._tradingService.config$.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {
+      if (!config) {
+        return;
+      }
       this.tradingConfig = config;
       this.betCash = this.tradingConfig.sliderMin;
     })
+
+    this._tradingService.tradingCalls$.pipe(takeUntil(this._unsubscribeAll)).subscribe(tradingCalls => {
+      if (!tradingCalls) {
+        return;
+      }
+      this.tradingCalls = tradingCalls;
+    });
 
     this._tradingService.rounds$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rounds => {
       let values = [];
@@ -68,9 +81,9 @@ export class TradingComponent implements OnInit, OnDestroy {
         return;
       }
       klines = klines.filter(e => parseFloat(this.currentTime) - new Date(e.x).getTime() <= 60 * 60 * 1000);
-      this.btcChartComponent.updateSeries([{
-        data: klines,
-      }]);
+      // this.btcChartComponent.updateSeries([{
+      //   data: klines,
+      // }]);
     });
 
     this._fuseMediaWatcherService.onMediaChange$
@@ -142,11 +155,21 @@ export class TradingComponent implements OnInit, OnDestroy {
   updateRounds(tradingRoom: TradingRoom) {
     this._tradingService.getConfig(tradingRoom).subscribe();
     this._tradingService.getLatestRounds(tradingRoom).subscribe();
+    if (this._userService.user) {
+      this._tradingService.getTradingCalls().subscribe();
+    }
   }
   addBetCash(value: number) {
     this.betCash += value;
   }
   call(type: TradingCallType) {
+    if (!this._userService.user) {
+      return this._router.navigate(['/sign-in'], {
+        queryParams: {
+          redirectUrl: this._router.url,
+        }
+      })
+    }
     if (this.betCash <= 0) {
       return;
     }
@@ -157,7 +180,6 @@ export class TradingComponent implements OnInit, OnDestroy {
       betCash: this.betCash,
       type: type,
     }).subscribe(response => {
-      console.log(response);
       this.tradingCall = response;
       this.calling = false;
     }, error => {
@@ -165,6 +187,22 @@ export class TradingComponent implements OnInit, OnDestroy {
     })
   }
   checkCanTrade() {
-    return this.canTrade && (!this.tradingCall || new Date(this.tradingCall.closeTime).getTime() < new Date().getTime()) && !this.calling;
+    if (!this.canTrade) {
+      return false;
+    }
+    if (this.calling) {
+      return false;
+    }
+    if (!this.tradingCalls) {
+      return true;
+    }
+    let tradingCall = this.tradingCalls.find(e => e.symbol == this.tradingRoom.symbol);
+    if (!tradingCall) {
+      return true;
+    }
+    if (new Date(tradingCall.closeTime).getTime() > new Date().getTime()) {
+      return false;
+    }
+    return true;
   }
 }

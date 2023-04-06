@@ -20,5 +20,6 @@ const ErrorCode = {
     CASH_NOT_ENOUGH: "00x0018",
     BET_CASH_MUST_MORE_THAN_ZERO: "00x0019",
     TRADING_CALL_TYPE_INVALID: "00x0020",
+    TRADING_ROUND_CAN_NOT_TRADE: "00x0021",
 }
 module.exports = ErrorCode;

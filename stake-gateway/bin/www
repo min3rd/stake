@@ -12,6 +12,7 @@ const uuid = require('uuid');
 const tradingJob = require('../job/tradingJob');
 const migration = require('../migration/migration');
 const userSocket = require('../socket/userSocket');
+const engine = require('../engine');
 
 /**
  * Get port from environment and store in Express.
@@ -35,6 +36,8 @@ migration();
 const publicIo = publicSocket(io);
 const userIo = userSocket(io);
 tradingJob(publicIo, userIo);
+
+engine.init(app, io, publicIo, userIo, tradingJob, migration);
 
 /**
  * Listen on provided port, on all network interfaces.

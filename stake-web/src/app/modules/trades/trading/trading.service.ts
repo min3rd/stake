@@ -1,8 +1,10 @@
-import { Observable, tap, BehaviorSubject } from 'rxjs';
+import { Observable, tap, BehaviorSubject, switchMap, map, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Kline, TradingCall, TradingConfig, TradingRoom, TradingRound } from './trading.types';
 import { ApiService } from 'app/core/api/api.service';
+import { AuthService } from 'app/core/auth/auth.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +14,14 @@ export class TradingService {
   private _klines: BehaviorSubject<Kline[] | null> = new BehaviorSubject(null);
   private _rounds: BehaviorSubject<TradingRound[] | null> = new BehaviorSubject(null);
   private _config: BehaviorSubject<TradingConfig | null> = new BehaviorSubject(null);
+  private _tradingCalls: BehaviorSubject<TradingCall[] | null> = new BehaviorSubject(null);
 
-  constructor(private _httpClient: HttpClient, private _apiService: ApiService) { }
+  constructor(
+    private _httpClient: HttpClient,
+    private _apiService: ApiService,
+    private _authService: AuthService,
+    private _userService: UserService,
+  ) { }
 
   get rooms$(): Observable<TradingRoom[]> {
     return this._rooms.asObservable();
@@ -29,6 +37,10 @@ export class TradingService {
 
   get config$(): Observable<TradingConfig> {
     return this._config.asObservable();
+  }
+
+  get tradingCalls$(): Observable<TradingCall[]> {
+    return this._tradingCalls.asObservable();
   }
 
   getTradingRooms(): Observable<TradingRoom[]> {
@@ -58,6 +70,25 @@ export class TradingService {
     );
   }
   call(tradingCall: TradingCall): Observable<TradingCall> {
-    return this._httpClient.post<TradingCall>(this._apiService.users_trading_call(), tradingCall);
+    return this._tradingCalls.pipe(
+      take(1),
+      switchMap(tradingCalls => this._httpClient.post(this._apiService.users_trading_call(), tradingCall)
+        .pipe(map((newTradingCall: TradingCall) => {
+          let index = tradingCalls.findIndex(e => e.symbol == newTradingCall.symbol);
+          if (index >= 0) {
+            tradingCalls[index] = newTradingCall;
+          } else {
+            tradingCalls.push(newTradingCall);
+          }
+          this._tradingCalls.next(tradingCalls);
+          return newTradingCall;
+        }))
+      )
+    );
+  }
+  getTradingCalls(): Observable<TradingCall[]> {
+    return this._httpClient.get<TradingCall[]>(this._apiService.users_trading_call()).pipe(tap(tradingCalls => {
+      this._tradingCalls.next(tradingCalls);
+    }));
   }
 }

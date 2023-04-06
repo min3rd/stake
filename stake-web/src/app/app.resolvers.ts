@@ -41,10 +41,10 @@ export class InitialDataResolver implements Resolve<any>
         this._userService.getLocal();
         return forkJoin([
             this._navigationService.get(),
-            this._messagesService.getAll(),
+            // this._messagesService.getAll(),
             this._notificationsService.getAll(),
-            this._quickChatService.getChats(),
-            this._shortcutsService.getAll(),
+            // this._quickChatService.getChats(),
+            // this._shortcutsService.getAll(),
         ]);
     }
 }

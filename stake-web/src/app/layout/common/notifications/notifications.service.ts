@@ -1,20 +1,23 @@
+import { notifications } from './../../../mock-api/common/notifications/data';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
+import { ApiService } from 'app/core/api/api.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class NotificationsService
-{
+export class NotificationsService {
     private _notifications: ReplaySubject<Notification[]> = new ReplaySubject<Notification[]>(1);
 
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
-    {
+    constructor(
+        private _httpClient: HttpClient,
+        private _apiService: ApiService,
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -24,8 +27,7 @@ export class NotificationsService
     /**
      * Getter for notifications
      */
-    get notifications$(): Observable<Notification[]>
-    {
+    get notifications$(): Observable<Notification[]> {
         return this._notifications.asObservable();
     }
 
@@ -36,35 +38,21 @@ export class NotificationsService
     /**
      * Get all notifications
      */
-    getAll(): Observable<Notification[]>
-    {
-        return this._httpClient.get<Notification[]>('api/common/notifications').pipe(
+    getAll(): Observable<Notification[]> {
+        return this._httpClient.get<Notification[]>(this._apiService.public_notifications()).pipe(
             tap((notifications) => {
                 this._notifications.next(notifications);
             })
         );
     }
 
-    /**
-     * Create a notification
-     *
-     * @param notification
-     */
-    create(notification: Notification): Observable<Notification>
-    {
-        return this.notifications$.pipe(
-            take(1),
-            switchMap(notifications => this._httpClient.post<Notification>('api/common/notifications', {notification}).pipe(
-                map((newNotification) => {
-
-                    // Update the notifications with the new notification
-                    this._notifications.next([...notifications, newNotification]);
-
-                    // Return the new notification from observable
-                    return newNotification;
-                })
-            ))
-        );
+    add(notification: Notification) {
+        return this.notifications$.pipe(take(1)).subscribe(notifications => {
+            while (notifications.findIndex(e => e._id == notification._id) >= 0) {
+                notifications.slice(notifications.findIndex(e => e._id == notification._id), 1);
+            }
+            this._notifications.next([...notifications, notification])
+        });
     }
 
     /**
@@ -73,18 +61,14 @@ export class NotificationsService
      * @param id
      * @param notification
      */
-    update(id: string, notification: Notification): Observable<Notification>
-    {
+    update(id: string, notification: Notification): Observable<Notification> {
         return this.notifications$.pipe(
             take(1),
-            switchMap(notifications => this._httpClient.patch<Notification>('api/common/notifications', {
-                id,
-                notification
-            }).pipe(
+            switchMap(notifications => this._httpClient.patch<Notification>(this._apiService.users_notifications(), notification).pipe(
                 map((updatedNotification: Notification) => {
 
                     // Find the index of the updated notification
-                    const index = notifications.findIndex(item => item.id === id);
+                    const index = notifications.findIndex(item => item._id === id);
 
                     // Update the notification
                     notifications[index] = updatedNotification;
@@ -104,15 +88,14 @@ export class NotificationsService
      *
      * @param id
      */
-    delete(id: string): Observable<boolean>
-    {
+    delete(id: string): Observable<boolean> {
         return this.notifications$.pipe(
             take(1),
-            switchMap(notifications => this._httpClient.delete<boolean>('api/common/notifications', {params: {id}}).pipe(
+            switchMap(notifications => this._httpClient.post<boolean>(this._apiService.users_notifications_remove(), { id: id }).pipe(
                 map((isDeleted: boolean) => {
 
                     // Find the index of the deleted notification
-                    const index = notifications.findIndex(item => item.id === id);
+                    const index = notifications.findIndex(item => item._id === id);
 
                     // Delete the notification
                     notifications.splice(index, 1);
@@ -130,25 +113,15 @@ export class NotificationsService
     /**
      * Mark all notifications as read
      */
-    markAllAsRead(): Observable<boolean>
-    {
-        return this.notifications$.pipe(
-            take(1),
-            switchMap(notifications => this._httpClient.get<boolean>('api/common/notifications/mark-all-as-read').pipe(
-                map((isUpdated: boolean) => {
+    markAllAsRead(): Observable<Notification[]> {
+        return this._httpClient.get<Notification[]>(this._apiService.users_notifications_mark_as_read()).pipe(
+            map((notifications: Notification[]) => {
+                // Update the notifications
+                this._notifications.next(notifications);
 
-                    // Go through all notifications and set them as read
-                    notifications.forEach((notification, index) => {
-                        notifications[index].read = true;
-                    });
-
-                    // Update the notifications
-                    this._notifications.next(notifications);
-
-                    // Return the updated status
-                    return isUpdated;
-                })
-            ))
+                // Return the updated status
+                return notifications;
+            })
         );
     }
 }
