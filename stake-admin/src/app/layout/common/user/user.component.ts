@@ -1,0 +1,85 @@
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
+import { BooleanInput } from '@angular/cdk/coercion';
+import { Subject, takeUntil } from 'rxjs';
+import { User } from 'app/core/user/user.types';
+import { UserService } from 'app/core/user/user.service';
+import { ClientSocketService } from 'app/core/socket/socket.service';
+import { SocketEvent } from 'app/core/config/socket.config';
+@Component({
+    selector: 'user',
+    templateUrl: './user.component.html',
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    exportAs: 'user'
+})
+export class UserComponent implements OnInit, OnDestroy {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    static ngAcceptInputType_showAvatar: BooleanInput;
+    /* eslint-enable @typescript-eslint/naming-convention */
+
+    @Input() showAvatar: boolean = true;
+    user: User;
+
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+    /**
+     * Constructor
+     */
+    constructor(
+        private _changeDetectorRef: ChangeDetectorRef,
+        private _router: Router,
+        private _userService: UserService,
+        private _clientSocketService: ClientSocketService,
+    ) {
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Lifecycle hooks
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * On init
+     */
+    ngOnInit(): void {
+        // Subscribe to user changes
+        this._userService.user$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((user: User) => {
+                if (!user) {
+                    return;
+                }
+                this.user = user;
+                this._clientSocketService.userSocket.emit(SocketEvent.ROOM_JOIN, user.id);
+                // Mark for check
+                this._changeDetectorRef.markForCheck();
+            });
+    }
+
+    /**
+     * On destroy
+     */
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * Sign out
+     */
+    signOut(): void {
+        this._router.navigate(['/sign-out']);
+    }
+    signIn() {
+        this._router.navigate(['/sign-in'], {
+            queryParams: {
+                redirectUrl: this._router.url,
+            }
+        });
+    }
+}
