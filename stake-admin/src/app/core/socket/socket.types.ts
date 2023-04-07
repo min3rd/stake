@@ -1,23 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { ApiService } from '../api/api.service';
 
-@Injectable()
-export class ClientSocket extends Socket {
-    constructor() {
+@Injectable({
+    providedIn: 'root'
+})
+export class AdminSocket extends Socket {
+    constructor(
+        private _apiService: ApiService,
+    ) {
         super({
-            url: 'http://localhost/public',
-            options: {
-                transports: ['websocket'],
-            }
-        });
-    }
-}
-
-@Injectable()
-export class UserSocket extends Socket {
-    constructor() {
-        super({
-            url: 'http://localhost/user',
+            url: _apiService.admin_socket(),
             options: {
                 transports: ['websocket'],
             }

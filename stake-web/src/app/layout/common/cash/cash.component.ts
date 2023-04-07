@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from 'app/core/api/api.service';
 import { SocketEvent } from 'app/core/config/socket.config';
-import { ClientSocketService } from 'app/core/socket/socket.service';
+import { SocketService } from 'app/core/socket/socket.service';
 import { UserService } from 'app/core/user/user.service';
 import { CashAccount, User } from 'app/core/user/user.types';
 import { Subject, takeUntil } from 'rxjs';
@@ -21,7 +21,7 @@ export class CashComponent implements OnInit {
     private _router: Router,
     private _httpClient: HttpClient,
     private _apiService: ApiService,
-    private _clientSocketService: ClientSocketService
+    private _clientSocketService: SocketService
   ) { }
   ngOnInit(): void {
     this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {

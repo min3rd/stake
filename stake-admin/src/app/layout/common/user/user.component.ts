@@ -4,8 +4,7 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
-import { ClientSocketService } from 'app/core/socket/socket.service';
-import { SocketEvent } from 'app/core/config/socket.config';
+import { SocketService } from 'app/core/socket/socket.service';
 @Component({
     selector: 'user',
     templateUrl: './user.component.html',
@@ -30,7 +29,7 @@ export class UserComponent implements OnInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _userService: UserService,
-        private _clientSocketService: ClientSocketService,
+        private _clientSocketService: SocketService,
     ) {
     }
 
@@ -50,7 +49,6 @@ export class UserComponent implements OnInit, OnDestroy {
                     return;
                 }
                 this.user = user;
-                this._clientSocketService.userSocket.emit(SocketEvent.ROOM_JOIN, user.id);
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });

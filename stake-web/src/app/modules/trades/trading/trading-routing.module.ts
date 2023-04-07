@@ -1,4 +1,4 @@
-import { TradingRoomResolver, TradingSocketResolver } from './trading.resolver';
+import { TradingRoomResolver } from './trading.resolver';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TradingComponent } from './trading.component';
@@ -9,7 +9,6 @@ const routes: Routes = [
     component: TradingComponent,
     resolve: {
       TradingRoomResolver: TradingRoomResolver,
-      TradingSocketResolver: TradingSocketResolver,
     },
   }
 ];

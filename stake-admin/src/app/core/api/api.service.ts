@@ -11,6 +11,9 @@ export class ApiService {
     handle(config: ApiConfig) {
         this.API_URL = config.API_URL;
     }
+    admin_socket(): string {
+        return `${this.API_URL}/admin`;
+    }
     private _api(endpoint: string): string {
         if (endpoint.startsWith('/')) {
             endpoint = endpoint.substring(1);

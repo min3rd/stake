@@ -3,12 +3,13 @@ const validateRegex = require("../common/validateRegex");
 const { User, PublicUser } = require("../models/User");
 const { security } = require("./security");
 const jwt = require('jsonwebtoken');
-const { badRequestError } = require("../common/badRequestError");
+const badRequestError = require("../common/badRequestError");
 const randToken = require('rand-token');
-function generateAccessToken(publicUser, rememberMe = false) {
+const logger = require("../common/logger");
+function generateAccessToken(publicUser) {
     let clone = Object.assign({}, publicUser);
     let now = new Date().getTime();
-    clone.exp = now + parseInt(!rememberMe ? process.env.TOKEN_LIFETIME : process.env.TOKEN_LIFETIME_REMEMBER);
+    clone.exp = now + parseInt(process.env.TOKEN_LIFETIME);
     return jwt.sign(JSON.stringify(clone), process.env.TOKEN_SECRET);
 }
 const validate = (data) => {
@@ -76,16 +77,52 @@ const signIn = async (req, res) => {
     let publicUser = new PublicUser(exist);
     let accessToken = generateAccessToken(publicUser)
     exist.refreshToken = randToken.generate(128);
+    let refreshExpiryAt = new Date().getTime() + parseInt(!req.body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER);
+    console.log(refreshExpiryAt);
+    exist.refreshExpiryAt = new Date(refreshExpiryAt);
     exist.accessToken = accessToken;
     try {
         await exist.save();
     } catch (e) {
-        throw new Error(ErrorCode.TOKEN_GENERATION);
+        logger.error('signIn', `error=${e}`);
+        return badRequestError.createError(res, ErrorCode.TOKEN_GENERATION);
     }
     res.json({
         accessToken: accessToken,
         refreshToken: exist.refreshToken,
         user: publicUser,
+    });
+}
+
+const signInByRefreshToken = async (req, res) => {
+    let body = req.body;
+    let exist = await User.findOne({
+        refreshToken: body.refreshToken,
+        refreshToken: {
+            $gt: new Date(),
+        }
+    });
+    if (!exist) {
+        return badRequestError.createError(res, ErrorCode.USER_NOT_EXIST);
+    }
+    let publicUser = new PublicUser(exist);
+
+    let accessToken = generateAccessToken(publicUser)
+    exist.accessToken = accessToken;
+
+    let refreshExpiryAt = new Date().getTime() + parseInt(!body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER);
+    exist.refreshToken = randToken.generate(128);
+    exist.refreshExpiryAt = new Date(refreshExpiryAt);
+    try {
+        exist = await exist.save();
+    } catch (e) {
+        logger.error('signIn', `error=${e}`);
+        return badRequestError.createError(res, ErrorCode.TOKEN_GENERATION);
+    }
+    res.json({
+        accessToken: accessToken,
+        refreshToken: exist.refreshToken,
+        user: new PublicUser(exist),
     });
 }
 
@@ -95,6 +132,7 @@ function authenticateToken(req, res, next) {
     if (token == null) return res.sendStatus(401)
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403)
+        if (user.exp < new Date().getTime()) return res.sendStatus(401)
         req.user = user
         next()
     })
@@ -119,4 +157,5 @@ module.exports = {
     signIn: signIn,
     authenticateToken: authenticateToken,
     noGuard: noGuard,
+    signInByRefreshToken: signInByRefreshToken,
 }

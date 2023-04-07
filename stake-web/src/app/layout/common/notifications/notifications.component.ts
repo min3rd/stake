@@ -7,7 +7,7 @@ import { Notification } from 'app/layout/common/notifications/notifications.type
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
-import { ClientSocketService } from 'app/core/socket/socket.service';
+import { SocketService } from 'app/core/socket/socket.service';
 import { Socket } from 'ngx-socket-io';
 import { SocketEvent } from 'app/core/config/socket.config';
 
@@ -37,7 +37,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         private _overlay: Overlay,
         private _viewContainerRef: ViewContainerRef,
         private _userService: UserService,
-        private _clientSocketService: ClientSocketService,
+        private _clientSocketService: SocketService,
     ) {
     }
 

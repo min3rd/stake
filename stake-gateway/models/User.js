@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     phone: { type: String, },
     accessToken: { type: String, },
     refreshToken: { type: String, },
+    refreshExpiryAt: { type: Date, default: new Date(), },
     verified: { type: Boolean, default: false, },
     cash: { type: Number, default: 0, },
     demoCash: { type: Number, default: 0, },

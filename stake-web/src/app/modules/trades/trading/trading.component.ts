@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@ang
 import { Subject, takeUntil, pairwise, BehaviorSubject } from 'rxjs';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { ClientSocketService } from 'app/core/socket/socket.service';
+import { SocketService } from 'app/core/socket/socket.service';
 import { SocketEvent } from 'app/core/config/socket.config';
 import { chartOptions } from 'app/core/config/trading.config';
 import { TradingService } from './trading.service';
@@ -35,7 +35,7 @@ export class TradingComponent implements OnInit, OnDestroy {
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
-    private _socketService: ClientSocketService,
+    private _socketService: SocketService,
     private _tradingService: TradingService,
     private _userService: UserService,
     private _router: Router,

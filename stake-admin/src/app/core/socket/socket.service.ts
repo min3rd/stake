@@ -1,21 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
-import { ClientSocket, UserSocket } from './socket.types';
+import { AdminSocket } from './socket.types';
 @Injectable({
   providedIn: 'root'
 })
-export class ClientSocketService {
+export class SocketService {
   constructor(
-    private _socket: ClientSocket,
-    private _userSocket: UserSocket,
+    private _adminSocket: AdminSocket
   ) {
   }
-  get socket(): Socket {
-    return this._socket;
-  }
-
-  get userSocket(): Socket {
-    return this._userSocket;
+  get adminSocket(): AdminSocket {
+    return this._adminSocket;
   }
 }
 

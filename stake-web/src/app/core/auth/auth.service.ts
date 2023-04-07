@@ -4,6 +4,7 @@ import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
 import { ApiService } from '../api/api.service';
+import { SignIn } from './auth.types';
 
 @Injectable()
 export class AuthService {
@@ -76,11 +77,11 @@ export class AuthService {
         }
 
         return this._httpClient.post(this._apiService.public_signIn(), credentials).pipe(
-            switchMap((response: any) => {
+            switchMap((response: SignIn) => {
 
                 // Store the access token in the local storage
                 this.accessToken = response.accessToken;
-
+                this.refreshToken = response.refreshToken;
                 // Set the authenticated flag to true
                 this._authenticated = true;
 
@@ -98,15 +99,15 @@ export class AuthService {
      */
     signInUsingToken(): Observable<any> {
         // Sign in using the token
-        return this._httpClient.post('api/auth/sign-in-with-token', {
-            accessToken: this.accessToken
+        return this._httpClient.post(this._apiService.public_signIn_refreshToken(), {
+            refreshToken: this.refreshToken
         }).pipe(
             catchError(() =>
 
                 // Return false
                 of(false)
             ),
-            switchMap((response: any) => {
+            switchMap((response: SignIn) => {
 
                 // Replace the access token with the new one if it's available on
                 // the response object.
@@ -117,6 +118,10 @@ export class AuthService {
                 // piece of code can replace the token with the refreshed one.
                 if (response.accessToken) {
                     this.accessToken = response.accessToken;
+                }
+
+                if (response.refreshToken) {
+                    this.refreshToken = response.refreshToken;
                 }
 
                 // Set the authenticated flag to true
@@ -137,6 +142,7 @@ export class AuthService {
     signOut(): Observable<any> {
         // Remove the access token from the local storage
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
 
         // Set the authenticated flag to false
@@ -179,9 +185,9 @@ export class AuthService {
         }
 
         // Check the access token expire date
-        if (AuthUtils.isTokenExpired(this.accessToken)) {
-            return of(false);
-        }
+        // if (AuthUtils.isTokenExpired(this.accessToken)) {
+        //     return of(false);
+        // }
 
         // If the access token exists and it didn't expire, sign in using it
         return this.signInUsingToken();

@@ -7,9 +7,6 @@ import { Notification } from 'app/layout/common/notifications/notifications.type
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
-import { ClientSocketService } from 'app/core/socket/socket.service';
-import { Socket } from 'ngx-socket-io';
-import { SocketEvent } from 'app/core/config/socket.config';
 
 @Component({
     selector: 'notifications',
@@ -37,7 +34,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         private _overlay: Overlay,
         private _viewContainerRef: ViewContainerRef,
         private _userService: UserService,
-        private _clientSocketService: ClientSocketService,
     ) {
     }
 
@@ -51,9 +47,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
             this.user = user;
-        });
-        this._clientSocketService.userSocket.fromEvent(SocketEvent.NOTIFICATION).subscribe((notification: Notification) => {
-            this._notificationsService.add(notification);
         });
         // Subscribe to notification changes
         this._notificationsService.notifications$

@@ -28,6 +28,10 @@ export class ApiService {
     public_signIn() {
         return this._publicApi('/sign-in');
     }
+
+    public_signIn_refreshToken() {
+        return this._publicApi('/sign-in/refreshToken');
+    }
     public_signUp() {
         return this._publicApi('/sign-up');
     }
