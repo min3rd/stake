@@ -7,11 +7,11 @@ const notificationService = require("./notificationService");
 const switchAccount = async function (req, res) {
     let userId = req.params.userId;
     if (req.user.id != userId) {
-        return badRequestError.createError(res, ErrorCode.USERID_NOT_MATCH);
+        next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
     }
     let user = await User.findById(userId);
     if (!user) {
-        return badRequestError.createError(res, ErrorCode.USER_NOT_EXIST);
+        next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
     }
     user.cashAccount = req.body.cashAccount;
     user = await user.save();
@@ -20,27 +20,34 @@ const switchAccount = async function (req, res) {
 const addDemoCash = async function (req, res) {
     let userId = req.params.userId;
     if (req.user.id != userId) {
-        return badRequestError.createError(res, ErrorCode.USERID_NOT_MATCH);
+        next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
     }
     let user = await User.findById(userId);
     if (!user) {
-        return badRequestError.createError(res, ErrorCode.USER_NOT_EXIST);
+        next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
     }
     user.demoCash = user.demoCash + 10000 || 10000;
     user = await user.save();
     res.send(new PublicUser(user));
 }
-const getNotifications = async function (req, res) {
-    if (!req.user) {
-        return res.json([]);
+const getNotifications = async function (req, res, next) {
+    try {
+        if (!req.user) {
+            return res.json([]);
+        }
+        const notifications = await Notification.find({
+            userId: req.user.id
+        }).sort({
+            time: -1
+        }).limit(20);
+        return res.json(notifications);
+
+    } catch (err) {
+        next(err);
     }
-    let notifications = await Notification.find({
-        userId: req.user.id
-    }).sort({
-        time: -1
-    }).limit(20);
-    res.json(notifications);
-}
+};
+
+
 const markAllNotificationAsRead = async function (req, res) {
     let notifications = await notificationService.markAllAsRead(req.user);
     res.json(notifications);

@@ -4,9 +4,12 @@ class BadRequestError {
     }
     createError(res, code) {
         res.status(400);
-        res.json({
+        return res.json({
             code: code,
         });
+    }
+    make(code) {
+        return new Error(code);
     }
 }
 const badRequestError = new BadRequestError();
