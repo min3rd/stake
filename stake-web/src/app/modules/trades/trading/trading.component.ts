@@ -10,6 +10,7 @@ import { TradingRoom, Kline, ApexChartSeriesData, TradingConfig, TradingCallType
 import moment from 'moment';
 import { UserService } from 'app/core/user/user.service';
 import { Router } from '@angular/router';
+import { TimeUtils } from 'app/common/timeutils';
 @Component({
   selector: 'app-trading',
   templateUrl: './trading.component.html',
@@ -28,7 +29,6 @@ export class TradingComponent implements OnInit, OnDestroy {
   tradingRooms: TradingRoom[];
   betCash: number = 0;
   tradingConfig: TradingConfig;
-  tradingCall: TradingCall;
   tradingCalls: TradingCall[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private klines: BehaviorSubject<ApexChartSeriesData[] | null> = new BehaviorSubject(null);
@@ -180,7 +180,6 @@ export class TradingComponent implements OnInit, OnDestroy {
       betCash: this.betCash,
       type: type,
     }).subscribe(response => {
-      this.tradingCall = response;
       this.calling = false;
     }, error => {
       this.calling = false;
@@ -188,6 +187,19 @@ export class TradingComponent implements OnInit, OnDestroy {
   }
   checkCanTrade() {
     if (!this.canTrade) {
+      return false;
+    }
+    if (!this.klines.getValue()) {
+      return false;
+    }
+    let maxX = Math.max(...this.klines.getValue().map(o => new Date(o.x).getTime()));
+    let currentRound = this.klines.getValue()
+      .find(e => new Date(e.x).getTime() == maxX);
+    if (!currentRound) {
+      return false;
+    }
+    let closeDate = TimeUtils.getCloseDate(new Date(currentRound.x));
+    if (new Date(this.currentTime).getTime() > (closeDate.getTime() - this.tradingConfig.blockingTime)) {
       return false;
     }
     if (this.calling) {

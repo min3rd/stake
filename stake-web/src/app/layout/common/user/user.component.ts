@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
@@ -30,7 +30,6 @@ export class UserComponent implements OnInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _userService: UserService,
-        private _activeRoute: ActivatedRoute,
         private _clientSocketService: ClientSocketService,
     ) {
     }
@@ -47,7 +46,11 @@ export class UserComponent implements OnInit, OnDestroy {
         this._userService.user$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((user: User) => {
+                if (!user) {
+                    return;
+                }
                 this.user = user;
+                this._clientSocketService.userSocket.emit(SocketEvent.ROOM_JOIN, user.id);
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });

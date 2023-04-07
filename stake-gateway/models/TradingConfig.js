@@ -7,6 +7,7 @@ const TradingConfigSchema = new Schema({
     sliderMin: { type: Number },
     sliderMax: { type: Number },
     sliderStep: { type: Number },
+    blockingTime: { type: Number, default: process.env.DEFAULT_BLOCKING_TIME ?? 5000 },
 });
 const TradingConfig = publicMongoose.model("TradingConfig", TradingConfigSchema);
 module.exports = TradingConfig;

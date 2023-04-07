@@ -49,6 +49,7 @@ export interface TradingConfig {
     sliderMin?: number;
     sliderStep?: number;
     symbol?: string;
+    blockingTime?: number;
 }
 export enum TradingCallType {
     BUY = 1,
