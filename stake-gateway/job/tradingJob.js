@@ -170,9 +170,9 @@ const updateCallResult = async function (publicIo, userIo) {
                 let oldCash = user.demoCash;
                 let isWin = tradingCall.type == winType;
                 let benefit = 0;
-                if (isWin || (process.env.DEBUG == 'true' && process.env.TRADING_ALWAYS_WIN == 'true')) {
+                if (isWin || (process.env.DEBUG === 'true' && process.env.TRADING_ALWAYS_WIN === 'true')) {
                     benefit = tradingCall.benefit;
-                    if (tradingCall.cashAccount == CashAccount.REAL) {
+                    if (tradingCall.cashAccount === CashAccount.REAL) {
                         oldCash = user.cash;
                         user.cash += tradingCall.benefit;
                     } else {

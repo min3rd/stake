@@ -18,28 +18,6 @@ export const appRoutes: Route[] = [
     // path. Below is another redirection for that path to redirect the user to the desired
     // location. This is a small convenience to keep all main routes together here on this file.
     { path: 'signed-in-redirect', pathMatch: 'full', redirectTo: '/' },
-    
-    // Trading
-    {
-        path: 'trades',
-        canMatch: [NoAuthGuard],
-        component: LayoutComponent,
-        resolve: {
-            initialData: InitialDataResolver,
-        },
-        loadChildren: () => import('app/modules/trades/trades.module').then(m => m.TradesModule),
-    },
-
-    // Games
-    {
-        path: 'games',
-        canMatch: [NoAuthGuard],
-        component: LayoutComponent,
-        resolve: {
-            initialData: InitialDataResolver,
-        },
-        loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
-    },
 
     {
         path: '',
@@ -50,9 +28,21 @@ export const appRoutes: Route[] = [
         },
         children: [
             { path: '', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule) },
+
+            // Trading
+            {
+                path: 'trades',
+                loadChildren: () => import('app/modules/trades/trades.module').then(m => m.TradesModule),
+            },
+
+            // Games
+            {
+                path: 'games',
+                loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
+            },
+
         ]
     },
-
     // Auth routes for guests
     {
         path: '',

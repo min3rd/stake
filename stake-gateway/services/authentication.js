@@ -62,7 +62,7 @@ const signUp = async (req, res) => {
         }
         res.send();
     }
-    next(badRequestError.make(ErrorCode.USERNAME_EXISTS));
+    return next(badRequestError.make(ErrorCode.USERNAME_EXISTS));
 }
 
 const signIn = async (req, res) => {
@@ -72,7 +72,7 @@ const signIn = async (req, res) => {
         password: security.hashPassword(body.password),
     });
     if (!exist) {
-        next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
+        return next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
     }
     let publicUser = new PublicUser(exist);
     let accessToken = generateAccessToken(publicUser)
@@ -85,7 +85,7 @@ const signIn = async (req, res) => {
         await exist.save();
     } catch (e) {
         logger.error('signIn', `error=${e}`);
-        next(badRequestError.make(ErrorCode.TOKEN_GENERATION));
+        return next(badRequestError.make(ErrorCode.TOKEN_GENERATION));
     }
     res.json({
         accessToken: accessToken,
@@ -103,7 +103,7 @@ const signInByRefreshToken = async (req, res) => {
         }
     });
     if (!exists) {
-        next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
+        return next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
     }
     let publicUser = new PublicUser(exists);
 
@@ -117,7 +117,7 @@ const signInByRefreshToken = async (req, res) => {
         exists = await exists.save();
     } catch (e) {
         logger.error('signIn', `error=${e}`);
-        next(badRequestError.make(ErrorCode.TOKEN_GENERATION));
+        return next(badRequestError.make(ErrorCode.TOKEN_GENERATION));
     }
     res.json({
         accessToken: accessToken,
