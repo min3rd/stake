@@ -1,13 +1,13 @@
 const ErrorCode = require("../common/errorCode");
 const validateRegex = require("../common/validateRegex");
-const { User, PublicUser } = require("../models/User");
+const { User, ClientUser } = require("../models/User");
 const { security } = require("./security");
 const jwt = require('jsonwebtoken');
 const badRequestError = require("../common/badRequestError");
 const randToken = require('rand-token');
 const logger = require("../common/logger");
-function generateAccessToken(publicUser) {
-    let clone = Object.assign({}, publicUser);
+function generateAccessToken(clientUser) {
+    let clone = Object.assign({}, clientUser);
     let now = new Date().getTime();
     clone.exp = now + parseInt(process.env.TOKEN_LIFETIME);
     return jwt.sign(JSON.stringify(clone), process.env.TOKEN_SECRET);
@@ -44,7 +44,7 @@ const validate = (data) => {
     };
 }
 
-const signUp = async (req, res) => {
+const signUp = async (req, res, next) => {
     let body = req.body;
     let valid = validate(body);
     let exist = await User.findOne({
@@ -65,7 +65,7 @@ const signUp = async (req, res) => {
     return next(badRequestError.make(ErrorCode.USERNAME_EXISTS));
 }
 
-const signIn = async (req, res) => {
+const signIn = async (req, res, next) => {
     let body = req.body;
     let exist = await User.findOne({
         username: body.username,
@@ -74,11 +74,11 @@ const signIn = async (req, res) => {
     if (!exist) {
         return next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
     }
-    let publicUser = new PublicUser(exist);
-    let accessToken = generateAccessToken(publicUser)
+    let clientUser = new ClientUser(exist);
+    let accessToken = generateAccessToken(clientUser)
     exist.refreshToken = randToken.generate(128);
     let refreshExpiryAt = new Date().getTime() + parseInt(!req.body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER);
-    console.log(refreshExpiryAt);
+
     exist.refreshExpiryAt = new Date(refreshExpiryAt);
     exist.accessToken = accessToken;
     try {
@@ -90,11 +90,11 @@ const signIn = async (req, res) => {
     res.json({
         accessToken: accessToken,
         refreshToken: exist.refreshToken,
-        user: publicUser,
+        user: clientUser,
     });
 }
 
-const signInByRefreshToken = async (req, res) => {
+const signInByRefreshToken = async (req, res, next) => {
     let body = req.body;
     let exists = await User.findOne({
         refreshToken: body.refreshToken,
@@ -105,9 +105,9 @@ const signInByRefreshToken = async (req, res) => {
     if (!exists) {
         return next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
     }
-    let publicUser = new PublicUser(exists);
+    let clientUser = new ClientUser(exists);
 
-    let accessToken = generateAccessToken(publicUser)
+    let accessToken = generateAccessToken(clientUser)
     exists.accessToken = accessToken;
 
     let refreshExpiryAt = new Date().getTime() + parseInt(!body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER);
@@ -122,7 +122,7 @@ const signInByRefreshToken = async (req, res) => {
     res.json({
         accessToken: accessToken,
         refreshToken: exists.refreshToken,
-        user: new PublicUser(exists),
+        user: new ClientUser(exists),
     });
 }
 

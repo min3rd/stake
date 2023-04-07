@@ -11,7 +11,7 @@ const TradingCall = require("../models/TradingCall");
 const TradingConfig = require("../models/TradingConfig");
 const TradingRoom = require("../models/TradingRoom");
 const TradingRound = require("../models/TradingRound");
-const { User, PublicUser } = require("../models/User");
+const { User, ClientUser } = require("../models/User");
 const notificationService = require("./notificationService");
 
 const tradingRooms = async function (req, res, next) {
@@ -185,7 +185,7 @@ const call = async function (req, res, next) {
         }
         await tradingRound.save();
         await session.commitTransaction();
-        engine.userIo.to(user.id).emit(SocketEvent.USER, new PublicUser(user));
+        engine.userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));
         engine.userIo.to(user.id).emit(SocketEvent.NOTIFICATION, noti);
         await session.endSession();
         res.json({

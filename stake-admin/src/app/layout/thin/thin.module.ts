@@ -16,13 +16,12 @@ import { ShortcutsModule } from 'app/layout/common/shortcuts/shortcuts.module';
 import { UserModule } from 'app/layout/common/user/user.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { ThinLayoutComponent } from './thin.component';
-import { CashModule } from '../common/cash/cash.module';
 
 @NgModule({
     declarations: [
         ThinLayoutComponent
     ],
-    imports     : [
+    imports: [
         HttpClientModule,
         RouterModule,
         MatButtonModule,
@@ -39,12 +38,10 @@ import { CashModule } from '../common/cash/cash.module';
         ShortcutsModule,
         UserModule,
         SharedModule,
-        CashModule,
     ],
-    exports     : [
+    exports: [
         ThinLayoutComponent
     ]
 })
-export class ThinLayoutModule
-{
+export class ThinLayoutModule {
 }

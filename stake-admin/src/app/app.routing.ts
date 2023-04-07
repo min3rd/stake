@@ -10,7 +10,7 @@ import { InitialDataResolver } from 'app/app.resolvers';
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/example'
-    { path: '', pathMatch: 'full', redirectTo: '/' },
+    { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
 
     // Redirect signed-in user to the '/example'
     //
@@ -48,25 +48,34 @@ export const appRoutes: Route[] = [
             { path: 'sign-out', loadChildren: () => import('app/modules/auth/sign-out/sign-out.module').then(m => m.AuthSignOutModule) },
         ]
     },
-    // Trading
-    {
-        path: 'trades',
-        canMatch: [AuthGuard],
-        component: LayoutComponent,
-        resolve: {
-            initialData: InitialDataResolver,
-        },
-        loadChildren: () => import('app/modules/trades/trades.module').then(m => m.TradesModule),
-    },
 
-    // Games
     {
-        path: 'games',
+        path: '',
         canMatch: [AuthGuard],
         component: LayoutComponent,
         resolve: {
-            initialData: InitialDataResolver,
+            InitialDataResolver: InitialDataResolver,
         },
-        loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
-    },
+        children: [
+
+            // Dashboard
+            {
+                path: 'dashboard',
+                loadChildren: () => import('app/modules/dashboard/dashboard.module').then(m => m.DashboardModule),
+            },
+
+            // Trading
+            {
+                path: 'trades',
+                loadChildren: () => import('app/modules/trades/trades.module').then(m => m.TradesModule),
+            },
+
+            // Games
+            {
+                path: 'games',
+                loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
+            },
+
+        ]
+    }
 ];

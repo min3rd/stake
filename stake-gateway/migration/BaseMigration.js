@@ -5,10 +5,11 @@ class BaseMigration {
     constructor() {
     }
     create(version, migration = () => { }) {
-        this.version = version;
-        this.canRun = false;
-        this.migration = migration;
-        return this;
+        let tmp = new BaseMigration();
+        tmp.version = version;
+        tmp.canRun = false;
+        tmp.migration = migration;
+        return tmp;
     }
     async prepare() {
         let exist = await Migration.findOne({

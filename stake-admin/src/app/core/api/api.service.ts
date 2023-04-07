@@ -78,6 +78,21 @@ export class ApiService {
     users_notifications_remove() {
         return this._usersApi(`/notifications/remove`);
     }
+
+    private _adminApi(endpoint: string) {
+        if (endpoint.startsWith('/')) {
+            endpoint = endpoint.substring(1);
+        }
+        return this._api(`/admin/${endpoint}`);
+    }
+
+    admin_signIn() {
+        return this._adminApi('/sign-in')
+    }
+
+    admin_signInByToken() {
+        return this._adminApi('/sign-in/refreshToken');
+    }
 }
 
 

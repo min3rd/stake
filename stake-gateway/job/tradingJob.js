@@ -8,7 +8,7 @@ const Kline = require("../models/Kline");
 const TradingCall = require("../models/TradingCall");
 const TradingRoom = require("../models/TradingRoom");
 const TradingRound = require("../models/TradingRound");
-const { User, PublicUser } = require("../models/User");
+const { User, ClientUser } = require("../models/User");
 const notificationService = require("../services/notificationService");
 async function updateRound(publicIo) {
     const session = await publicMongoose.startSession();
@@ -185,7 +185,7 @@ const updateCallResult = async function (publicIo, userIo) {
                 tradingCall = await tradingCall.save();
                 logger.info("updateCallResult_MASTER_PAID", `user=${JSON.stringify(user)} tradingCall=${JSON.stringify(tradingCall)}`);
                 let noti = await notificationService.createTradingCallResult(user, isWin, tradingCall.betCash, benefit);
-                userIo.to(user.id).emit(SocketEvent.USER, new PublicUser(user));
+                userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));
                 userIo.to(user.id).emit(SocketEvent.NOTIFICATION, noti);
             }
             tradingRound.closed = true;

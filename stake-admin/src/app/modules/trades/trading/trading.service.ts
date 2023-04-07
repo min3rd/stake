@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Kline, TradingCall, TradingConfig, TradingRoom, TradingRound } from './trading.types';
 import { ApiService } from 'app/core/api/api.service';
-import { AuthService } from 'app/core/auth/auth.service';
-import { UserService } from 'app/core/user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +17,6 @@ export class TradingService {
   constructor(
     private _httpClient: HttpClient,
     private _apiService: ApiService,
-    private _authService: AuthService,
-    private _userService: UserService,
   ) { }
 
   get rooms$(): Observable<TradingRoom[]> {

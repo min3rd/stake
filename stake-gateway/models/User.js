@@ -17,7 +17,7 @@ const UserSchema = new Schema({
 });
 const User = publicMongoose.model('User', UserSchema);
 
-class PublicUser {
+class ClientUser {
     constructor(user) {
         this.id = user._id;
         this.username = user.username;
@@ -33,5 +33,5 @@ class PublicUser {
 module.exports = {
     UserSchema: UserSchema,
     User: User,
-    PublicUser: PublicUser,
+    ClientUser: ClientUser,
 }

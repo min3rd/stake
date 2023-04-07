@@ -36,9 +36,11 @@ export class InitialDataResolver implements Resolve<any>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         // Fork join multiple API endpoint calls to wait all of them to finish
         this._userService.getLocal();
-        if (this._userService.user) {
-            this._socketService.userSocket.emit(SocketEvent.ROOM_JOIN, this._userService.user.id);
-        }
+        this._socketService.userSocket.on(SocketEvent.connect, () => {
+            if (this._userService.user) {
+                this._socketService.userSocket.emit(SocketEvent.ROOM_JOIN, this._userService.user.id);
+            }
+        });
         return forkJoin([
             this._navigationService.get(),
             this._notificationsService.getAll(),

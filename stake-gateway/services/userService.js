@@ -1,7 +1,7 @@
 const badRequestError = require("../common/badRequestError");
 const ErrorCode = require("../common/errorCode");
 const Notification = require("../models/Notification");
-const { User, PublicUser } = require("../models/User");
+const { User, ClientUser } = require("../models/User");
 const notificationService = require("./notificationService");
 
 const switchAccount = async function (req, res, next) {
@@ -15,7 +15,7 @@ const switchAccount = async function (req, res, next) {
     }
     user.cashAccount = req.body.cashAccount;
     user = await user.save();
-    res.send(new PublicUser(user));
+    res.send(new ClientUser(user));
 }
 const addDemoCash = async function (req, res, next) {
     let userId = req.params.userId;
@@ -28,7 +28,7 @@ const addDemoCash = async function (req, res, next) {
     }
     user.demoCash = user.demoCash + 10000 || 10000;
     user = await user.save();
-    res.send(new PublicUser(user));
+    res.send(new ClientUser(user));
 }
 const getNotifications = async function (req, res, next) {
     try {

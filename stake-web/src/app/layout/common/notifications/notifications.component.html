@@ -82,7 +82,7 @@
                     <div class="relative flex flex-col my-5 mr-6 ml-2">
                         <!-- Indicator -->
                         <button
-                            class="w-6 h-6 min-h-6 mb-6"
+                            class="w-6 h-6 min-h-6 mb-10"
                             mat-icon-button
                             (click)="toggleRead(notification)"
                             [matTooltip]="notification.read ? ('mark as unread' | transloco | capitalize) : ('mark as read' | transloco | capitalize)">
@@ -90,7 +90,7 @@
                         </button>
                         <!-- Remove -->
                         <button
-                            class="w-6 h-6 min-h-6 sm:opacity-0 sm:group-hover:opacity-100"
+                            class="w-6 h-6 min-h-6"
                             mat-icon-button
                             (click)="delete(notification)"
                             [matTooltip]="'remove' | transloco | capitalize">
@@ -133,7 +133,7 @@
                                 [innerHTML]="notification.description | transloco | capitalize"></div>
                         </ng-container>
                         <div class="mt-2 text-sm leading-none text-secondary">
-                            {{notification.time | date:'MMM dd, h:mm a'}}
+                            {{notification.time | date:'YYYY/MM/dd: HH:mm'}}
                         </div>
                     </div>
                 </ng-template>

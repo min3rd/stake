@@ -4,6 +4,7 @@ import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
 import { ApiService } from '../api/api.service';
+import { SignIn } from './auth.types';
 
 @Injectable()
 export class AuthService {
@@ -75,11 +76,12 @@ export class AuthService {
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post(this._apiService.public_signIn(), credentials).pipe(
-            switchMap((response: any) => {
+        return this._httpClient.post(this._apiService.admin_signIn(), credentials).pipe(
+            switchMap((response: SignIn) => {
 
                 // Store the access token in the local storage
                 this.accessToken = response.accessToken;
+                this.refreshToken = response.refreshToken;
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
@@ -98,15 +100,15 @@ export class AuthService {
      */
     signInUsingToken(): Observable<any> {
         // Sign in using the token
-        return this._httpClient.post('api/auth/sign-in-with-token', {
-            accessToken: this.accessToken
+        return this._httpClient.post(this._apiService.admin_signInByToken(), {
+            refreshToken: this.refreshToken
         }).pipe(
             catchError(() =>
 
                 // Return false
                 of(false)
             ),
-            switchMap((response: any) => {
+            switchMap((response: SignIn) => {
 
                 // Replace the access token with the new one if it's available on
                 // the response object.
@@ -115,10 +117,8 @@ export class AuthService {
                 // in using the token, you should generate a new one on the server
                 // side and attach it to the response object. Then the following
                 // piece of code can replace the token with the refreshed one.
-                if (response.accessToken) {
-                    this.accessToken = response.accessToken;
-                }
-
+                this.accessToken = response.accessToken;
+                this.refreshToken = response.refreshToken;
                 // Set the authenticated flag to true
                 this._authenticated = true;
 
