@@ -7,7 +7,9 @@ import { Injectable } from '@angular/core';
 })
 export class ApiService {
     API_URL: string;
-    constructor(private _userService: UserService) { }
+    constructor(
+        private _userService: UserService,
+    ) { }
     handle(config: ApiConfig) {
         this.API_URL = config.API_URL;
     }
@@ -44,6 +46,14 @@ export class ApiService {
 
     public_notifications() {
         return this._publicApi(`/notifications`);
+    }
+
+    public_socket(): string {
+        return `${this.API_URL}/public`;
+    }
+
+    user_socket(): string {
+        return `${this.API_URL}/user`;
     }
 
     private _usersApi(endpoint: string) {

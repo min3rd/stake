@@ -57,14 +57,12 @@ function initializeAppFactory(httpClient: HttpClient, apiService: ApiService): (
         AppComponent
     ],
     providers: [
-        ClientSocket,
-        UserSocket,
         {
             provide: APP_INITIALIZER,
             useFactory: initializeAppFactory,
             deps: [HttpClient, ApiService],
             multi: true
-        }
+        },
     ]
 })
 export class AppModule {

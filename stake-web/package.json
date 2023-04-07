@@ -1,9 +1,9 @@
 {
-    "name": "fuse-angular",
-    "version": "17.2.0",
-    "description": "Fuse - Angular Admin Template and Starter Project",
-    "author": "https://themeforest.net/user/srcn",
-    "license": "https://themeforest.net/licenses/standard",
+    "name": "stake-web",
+    "version": "1.0.0",
+    "description": "Cổng trò chơi stake",
+    "author": "https://github.com/min3rd",
+    "license": "https://github.com/min3rd",
     "private": true,
     "scripts": {
         "ng": "ng",

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { ClientSocket, UserSocket } from './socket.types';
+import { BaseSocket, ClientSocket, UserSocket } from './socket.types';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,11 +10,11 @@ export class ClientSocketService {
     private _userSocket: UserSocket,
   ) {
   }
-  get socket(): Socket {
+  get socket(): BaseSocket {
     return this._socket;
   }
 
-  get userSocket(): Socket {
+  get userSocket(): BaseSocket {
     return this._userSocket;
   }
 }
