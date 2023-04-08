@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 
@@ -43,12 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
                 // Catch "401 Unauthorized" responses
                 if (error instanceof HttpErrorResponse && error.status === 401) {
                     if (this._authService.refreshToken) {
-                        return this._authService.signInUsingToken().pipe(switchMap((authenicated: any) => {
-                            if (authenicated) {
-                                return next.handle(this.addTokenHeader(req, this._authService.accessToken));
-                            }
-                            return throwError(new Error('can not sign in by refresh token'));
-                        }));
+                        return this._authService.signInUsingToken().pipe();
                     } else {
                         // Sign out
                         this._authService.signOut();

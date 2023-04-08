@@ -102,10 +102,12 @@ export class AuthService {
         return this._httpClient.post(this._apiService.public_signIn_refreshToken(), {
             refreshToken: this.refreshToken
         }).pipe(
-            catchError(() =>
-
+            catchError(() => {
+                this.signOut();
+                location.reload();
                 // Return false
-                of(false)
+                return of(false)
+            }
             ),
             switchMap((response: SignIn) => {
 
@@ -116,9 +118,13 @@ export class AuthService {
                 // in using the token, you should generate a new one on the server
                 // side and attach it to the response object. Then the following
                 // piece of code can replace the token with the refreshed one.
-                this.accessToken = response.accessToken;
+                if (response.accessToken) {
+                    this.accessToken = response.accessToken;
+                }
 
-                this.refreshToken = response.refreshToken;
+                if (response.refreshToken) {
+                    this.refreshToken = response.refreshToken;
+                }
 
                 // Set the authenticated flag to true
                 this._authenticated = true;

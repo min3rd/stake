@@ -17,12 +17,18 @@ function adminAuthenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, adminUser) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, async (err, adminUser) => {
         if (err) return res.sendStatus(403)
         if (adminUser.exp < new Date().getTime()) {
             return res.sendStatus(401);
         }
-        req.adminUser = adminUser
+        let admin = await AdminUser.findOne({
+            username: adminUser.username,
+        });
+        if (!admin) {
+            return res.sendStatus(401);
+        }
+        req.admin = admin
         next();
     })
 }
