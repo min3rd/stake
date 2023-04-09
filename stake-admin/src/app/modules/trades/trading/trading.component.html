@@ -1,5 +1,18 @@
 <div class="w-full h-full">
+    <!-- Drawer -->
+    <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+        [disableClose]="true" #matDrawer>
+        <router-outlet></router-outlet>
+    </mat-drawer>
     <div class="h-full bg-card dark:bg-default">
-
+        <div class="flex flex-auto p-6 gap-6">
+            <ng-container *ngIf="rooms$ | async as rooms">
+                <ng-container *ngFor="let room of rooms">
+                    <div class="rounded-xl min-w-80 min-h-80 border p-2">
+                        {{room.symbol}}
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
     </div>
 </div>

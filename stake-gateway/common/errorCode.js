@@ -23,5 +23,6 @@ const ErrorCode = {
     TRADING_ROUND_CAN_NOT_TRADE: "00x0021",
     SAVE_TRADING_CALL_FAIL: "00x0022",
     CAN_NOT_TRADE_IN_BLOCKING_TIME: "00x0023",
+    UNAUTHORIZATION: "00x0024",
 }
 module.exports = ErrorCode;

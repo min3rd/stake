@@ -1,8 +1,7 @@
-const badRequestError = require("../common/badRequestError");
-const ErrorCode = require("../common/errorCode");
-const AdminUser = require("../models/AdminUser");
-const { ClientUser } = require("../models/User");
-const { security } = require("./security");
+const badRequestError = require("../../common/badRequestError");
+const ErrorCode = require("../../common/errorCode");
+const AdminUser = require("../../models/AdminUser");
+const { ClientUser } = require("../../models/User");
 const jwt = require('jsonwebtoken');
 const randToken = require('rand-token');
 
@@ -73,11 +72,7 @@ const adminSignInByToken = async function (req, res, next) {
     }
     let clientUser = new ClientUser(exists);
     let accessToken = generateAdminAccessToken(clientUser)
-    exists.refreshToken = randToken.generate(128);
-    let refreshExpiryAt = new Date().getTime() + parseInt(!req.body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER);
 
-    exists.refreshExpiryAt = new Date(refreshExpiryAt);
-    exists.accessToken = accessToken;
     try {
         await exists.save();
     } catch (e) {
@@ -94,4 +89,5 @@ const adminSignInByToken = async function (req, res, next) {
 module.exports = {
     adminSignIn: adminSignIn,
     adminSignInByToken: adminSignInByToken,
+    adminAuthenticateToken: adminAuthenticateToken,
 }

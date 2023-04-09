@@ -1,7 +1,7 @@
 const express = require('express');
-const { signUp, signIn, noGuard, signInByRefreshToken } = require('../services/authentication');
-const { tradingRooms, latestKlines, latestRounds, tradingConfig } = require('../services/tradingService');
-const { getNotifications } = require('../services/userService');
+const { signUp, signIn, signInByRefreshToken, noGuard } = require('../services/public/authentication');
+const { tradingRooms, latestKlines, latestRounds, tradingConfig } = require('../services/public/tradingService');
+const { getNotifications } = require('../services/public/userService');
 const publicRoute = express.Router();
 
 publicRoute.post('/sign-up', signUp);

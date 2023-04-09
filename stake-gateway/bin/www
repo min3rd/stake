@@ -13,6 +13,7 @@ const tradingJob = require('../job/tradingJob');
 const migration = require('../migration/migration');
 const userSocket = require('../socket/userSocket');
 const engine = require('../engine');
+const adminSocket = require('../socket/adminSocket');
 
 /**
  * Get port from environment and store in Express.
@@ -35,6 +36,7 @@ io.engine.generateId = (req) => {
 migration();
 const publicIo = publicSocket(io);
 const userIo = userSocket(io);
+const adminIo = adminSocket(io);
 tradingJob(publicIo, userIo);
 
 engine.init(app, io, publicIo, userIo, tradingJob, migration);

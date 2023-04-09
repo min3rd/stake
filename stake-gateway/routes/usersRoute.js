@@ -1,8 +1,7 @@
 var express = require('express');
-const { switchAccount, addDemoCash, getNotifications, markAllNotificationAsRead, updateNotification } = require('../services/userService');
-const { authenticateToken } = require('../services/authentication');
-const { call, getTradingCalls } = require('../services/tradingService');
-const { removeNotification } = require('../services/userService');
+const { authenticateToken } = require('../services/public/authentication');
+const { call, getTradingCalls } = require('../services/public/tradingService');
+const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification } = require('../services/public/userService');
 var router = express.Router();
 
 /* GET users listing. */

@@ -93,6 +93,10 @@ export class ApiService {
     admin_signInByToken() {
         return this._adminApi('/sign-in/refreshToken');
     }
+
+    admin_trading_rooms(){
+        return this._adminApi('/trading/rooms');
+    }
 }
 
 

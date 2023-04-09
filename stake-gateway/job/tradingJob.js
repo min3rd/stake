@@ -9,7 +9,6 @@ const TradingCall = require("../models/TradingCall");
 const TradingRoom = require("../models/TradingRoom");
 const TradingRound = require("../models/TradingRound");
 const { User, ClientUser } = require("../models/User");
-const notificationService = require("../services/notificationService");
 async function updateRound(publicIo) {
     const session = await publicMongoose.startSession();
     let now = new Date();

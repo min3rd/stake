@@ -1,7 +1,7 @@
-const badRequestError = require("../common/badRequestError");
-const ErrorCode = require("../common/errorCode");
-const Notification = require("../models/Notification");
-const { User, ClientUser } = require("../models/User");
+const badRequestError = require("../../common/badRequestError");
+const ErrorCode = require("../../common/errorCode");
+const Notification = require("../../models/Notification");
+const { User, ClientUser } = require("../../models/User");
 const notificationService = require("./notificationService");
 
 const switchAccount = async function (req, res, next) {

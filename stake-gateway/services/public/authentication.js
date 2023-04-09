@@ -1,18 +1,17 @@
-const ErrorCode = require("../common/errorCode");
-const validateRegex = require("../common/validateRegex");
-const { User, ClientUser } = require("../models/User");
-const { security } = require("./security");
+const ErrorCode = require("../../common/errorCode");
+const validateRegex = require("../../common/validateRegex");
+const { User, ClientUser } = require("../../models/User");
+const { security } = require("../security");
 const jwt = require('jsonwebtoken');
-const badRequestError = require("../common/badRequestError");
+const badRequestError = require("../../common/badRequestError");
 const randToken = require('rand-token');
-const logger = require("../common/logger");
+const logger = require("../../common/logger");
 function generateAccessToken(clientUser) {
     let clone = Object.assign({}, clientUser);
     let now = new Date().getTime();
     clone.exp = now + parseInt(process.env.TOKEN_LIFETIME);
     return jwt.sign(JSON.stringify(clone), process.env.TOKEN_SECRET);
-}
-const validate = (data) => {
+}const validate = (data) => {
     if (!data.username) {
         throw new Error(ErrorCode.USERNAME_NOT_BLANK);
     }
@@ -110,9 +109,6 @@ const signInByRefreshToken = async (req, res, next) => {
     let accessToken = generateAccessToken(clientUser)
     exists.accessToken = accessToken;
 
-    let refreshExpiryAt = new Date().getTime() + parseInt(!body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER);
-    exists.refreshToken = randToken.generate(128);
-    exists.refreshExpiryAt = new Date(refreshExpiryAt);
     try {
         exists = await exists.save();
     } catch (e) {
