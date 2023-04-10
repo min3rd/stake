@@ -31,5 +31,18 @@
   "go to": "go to",
   "you have signed out": "you have signed out!",
   "redirecting in": "redirecting in",
-  "you are now being redirected": "you are now being redirected!"
+  "you are now being redirected": "you are now being redirected!",
+  "crypto trade code": "crypto trade code",
+  "price range in percent": "price range in percent",
+  "min slider value": "min slider value",
+  "max slider value": "max slider value",
+  "slider step value": "slider step value",
+  "blocking time": "blocking time",
+  "buy amount": "buy amount",
+  "sell amount": "sell amount",
+  "open price": "open price",
+  "close price": "close price",
+  "trading time": "trading time",
+  "benefit in percent": "benefit in percent",
+  "delete": "delete"
 }

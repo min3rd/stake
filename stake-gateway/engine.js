@@ -6,14 +6,16 @@ class Engine {
         this._userIo = null;
         this._tradingJob = null;
         this._migration = null;
+        this._adminIo = null;
     }
-    init(app, io, publicIo, userIo, tradingJob, migration) {
+    init(app, io, publicIo, userIo, tradingJob, migration, adminIo) {
         this._app = app;
         this._io = io;
         this._publicIo = publicIo;
         this._userIo = userIo;
         this._tradingJob = tradingJob;
         this._migration = migration;
+        this._adminIo = adminIo;
     }
     get app() {
         return this._app;

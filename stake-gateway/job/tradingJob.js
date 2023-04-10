@@ -3,13 +3,14 @@ const { TradingCallType, CashAccount } = require("../common/constants");
 const logger = require("../common/logger");
 const TimeUtils = require("../common/timeUtils");
 const { publicMongoose } = require("../config/publicMongoose");
-const { SocketEvent } = require("../config/socket.config");
+const { SocketEvent, SocketRoom } = require("../config/socket.config");
 const Kline = require("../models/Kline");
 const TradingCall = require("../models/TradingCall");
 const TradingRoom = require("../models/TradingRoom");
 const TradingRound = require("../models/TradingRound");
 const { User, ClientUser } = require("../models/User");
-async function updateRound(publicIo) {
+const notificationService = require("../services/public/notificationService");
+async function updateRound(publicIo, adminIo) {
     const session = await publicMongoose.startSession();
     let now = new Date();
     let openTime = TimeUtils.getOpenDate(now);
@@ -78,6 +79,7 @@ async function updateRound(publicIo) {
                     canTrade: true,
                 });
                 tradingRound = await tradingRound.save();
+                adminIo.to(SocketRoom.ADMIN_TRADING).emit(SocketEvent.ADMIN_TRADING_ROUND, tradingRound);
                 logger.info('updateRound_CREATE_NEW_ROUND', JSON.stringify(tradingRound))
             }
         }
@@ -88,7 +90,7 @@ async function updateRound(publicIo) {
         session.endSession();
     }
     setTimeout(() => {
-        updateRound(publicIo);
+        updateRound(publicIo, adminIo);
     }, process.env.UPDATE_TRADING_ROUND_DURARION || 1000);
 }
 async function updateKline(publicIo) {
@@ -193,7 +195,8 @@ const updateCallResult = async function (publicIo, userIo) {
         }
         await session.commitTransaction();
     } catch (e) {
-        logger.error("updateCallResult_UPDATE_ROUND", `${error}`)
+        await session.abortTransaction();
+        logger.error("updateCallResult_UPDATE_ROUND", `${e}`)
     } finally {
         session.endSession();
     }
@@ -202,8 +205,8 @@ const updateCallResult = async function (publicIo, userIo) {
         updateCallResult(publicIo, userIo);
     }, process.env.UPDATE_TRADING_CALL_DURARION)
 }
-const tradingJob = function (publicIo, userIo) {
-    updateRound(publicIo);
+const tradingJob = function (publicIo, userIo, adminIo) {
+    updateRound(publicIo, adminIo);
     updateKline(publicIo);
     updateCallResult(publicIo, userIo);
 }

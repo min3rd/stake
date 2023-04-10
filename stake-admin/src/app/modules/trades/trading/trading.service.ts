@@ -1,7 +1,7 @@
 import { Observable, tap, BehaviorSubject, switchMap, map, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Kline, TradingCall, TradingConfig, TradingRoom, TradingRound } from './trading.types';
+import { Kline, TradingCall, TradingCallType, TradingConfig, TradingRoom, TradingRound } from './trading.types';
 import { ApiService } from 'app/core/api/api.service';
 import { SocketService } from 'app/core/socket/socket.service';
 
@@ -10,35 +10,19 @@ import { SocketService } from 'app/core/socket/socket.service';
 })
 export class TradingService {
     _rooms: BehaviorSubject<TradingRoom[] | null> = new BehaviorSubject(null);
-    _klines: BehaviorSubject<Kline[] | null> = new BehaviorSubject(null);
     _rounds: BehaviorSubject<TradingRound[] | null> = new BehaviorSubject(null);
-    _config: BehaviorSubject<TradingConfig | null> = new BehaviorSubject(null);
-    _tradingCalls: BehaviorSubject<TradingCall[] | null> = new BehaviorSubject(null);
 
     constructor(
         private _httpClient: HttpClient,
         private _apiService: ApiService,
-        private _socketSocket: SocketService,
     ) { }
 
     get rooms$(): Observable<TradingRoom[]> {
         return this._rooms.asObservable();
     }
 
-    get klines$(): Observable<Kline[]> {
-        return this._klines.asObservable();
-    }
-
     get rounds$(): Observable<TradingRound[]> {
         return this._rounds.asObservable();
-    }
-
-    get config$(): Observable<TradingConfig> {
-        return this._config.asObservable();
-    }
-
-    get tradingCalls$(): Observable<TradingCall[]> {
-        return this._tradingCalls.asObservable();
     }
 
     getTradingRooms(): Observable<TradingRoom[]> {
@@ -46,47 +30,60 @@ export class TradingService {
             this._rooms.next(response);
         }));
     }
-    getLatestKlines(tradingRoom: TradingRoom, size: number = 60): Observable<Kline[]> {
-        return this._httpClient.get<Kline[]>(this._apiService.public_trading_latest_klines(tradingRoom.symbol ?? '', size)).pipe(
-            tap(response => {
-                this._klines.next(response);
-            })
-        );
-    }
-    getLatestRounds(tradingRoom: TradingRoom, size: number = 60): Observable<TradingRound[]> {
-        return this._httpClient.get<TradingRound[]>(this._apiService.public_trading_latest_rounds(tradingRoom.symbol ?? '', size)).pipe(
+    getLatestRounds(): Observable<TradingRound[]> {
+        return this._httpClient.get<TradingRound[]>(this._apiService.admin_trading_rounds()).pipe(
             tap(response => {
                 this._rounds.next(response);
             })
         );
     }
-    getConfig(tradingRoom: TradingRoom, size: number = 60): Observable<TradingConfig> {
-        return this._httpClient.get<TradingConfig>(this._apiService.public_trading_config(tradingRoom.symbol ?? '')).pipe(
-            tap(response => {
-                this._config.next(response);
+    switchResult(tradingRound: TradingRound, type: TradingCallType): Observable<TradingRound> {
+        return this._rounds.pipe(
+            take(1),
+            switchMap(tradingRounds => {
+                return this._httpClient.post<TradingRound>(this._apiService.admin_trading_rounds(), {
+                    _id: tradingRound._id,
+                    type: type,
+                }).pipe(tap(tradingRound => {
+                    let index = tradingRounds.findIndex(e => e.symbol == tradingRound.symbol);
+                    if (index >= 0) {
+                        tradingRounds[index] = tradingRound;
+                    }
+                    this._rounds.next(tradingRounds);
+                }));
             })
         );
     }
-    call(tradingCall: TradingCall): Observable<TradingCall> {
-        return this._tradingCalls.pipe(
+
+    updateTradingRoom(tradingRoom: TradingRoom): Observable<TradingRoom> {
+        return this._rooms.pipe(
             take(1),
-            switchMap(tradingCalls => this._httpClient.post(this._apiService.users_trading_call(), tradingCall)
-                .pipe(map((newTradingCall: TradingCall) => {
-                    let index = tradingCalls.findIndex(e => e.symbol == newTradingCall.symbol);
-                    if (index >= 0) {
-                        tradingCalls[index] = newTradingCall;
-                    } else {
-                        tradingCalls.push(newTradingCall);
-                    }
-                    this._tradingCalls.next(tradingCalls);
-                    return newTradingCall;
-                }))
-            )
+            switchMap(tradingRooms => {
+                return this._httpClient.post<TradingRoom>(this._apiService.admin_trading_rooms(), tradingRoom).pipe(
+                    tap(tradingRoom => {
+                        let index = tradingRooms.findIndex(e => e.symbol == tradingRoom.symbol);
+                        if (index >= 0) {
+                            tradingRooms[index] = tradingRoom;
+                        } else {
+                            tradingRooms.push(tradingRoom);
+                        }
+                        this._rooms.next(tradingRooms);
+                    })
+                );
+            })
         );
     }
-    getTradingCalls(): Observable<TradingCall[]> {
-        return this._httpClient.get<TradingCall[]>(this._apiService.users_trading_call()).pipe(tap(tradingCalls => {
-            this._tradingCalls.next(tradingCalls);
-        }));
+
+    deleteTradingRoom(tradingRoom: TradingRoom): Observable<any> {
+        return this._rooms.pipe(
+            take(1),
+            switchMap(tradingRooms => {
+                return this._httpClient.delete<any>(this._apiService.admin_trading_rooms_room(tradingRoom._id)).pipe(
+                    tap(response => {
+                        console.log(response);
+                    })
+                );
+            })
+        );
     }
 }

@@ -1,7 +1,7 @@
 var express = require('express');
 const { authenticateToken } = require('../services/public/authentication');
 const { call, getTradingCalls } = require('../services/public/tradingService');
-const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification } = require('../services/public/userService');
+const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification, updateUser, changePassword } = require('../services/public/userService');
 var router = express.Router();
 
 /* GET users listing. */
@@ -13,5 +13,8 @@ router.get('/:userId/notifications', authenticateToken, getNotifications);
 router.patch('/:userId/notifications', authenticateToken, updateNotification);
 router.get('/:userId/notifications/markAllAsRead', authenticateToken, markAllNotificationAsRead);
 router.post('/:userId/notifications/remove', authenticateToken, removeNotification);
+router.post('/:userId/user', authenticateToken, updateUser);
+router.post('/:userId/user/changePassword', authenticateToken, changePassword);
+
 
 module.exports = router;

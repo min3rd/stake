@@ -94,8 +94,16 @@ export class ApiService {
         return this._adminApi('/sign-in/refreshToken');
     }
 
-    admin_trading_rooms(){
+    admin_trading_rooms() {
         return this._adminApi('/trading/rooms');
+    }
+
+    admin_trading_rooms_room(id: string) {
+        return this._adminApi(`/trading/rooms/${id}`);
+    }
+
+    admin_trading_rounds() {
+        return this._adminApi('/trading/rounds');
     }
 }
 

@@ -16,6 +16,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { TradingComponent } from './trading.component';
 import { CommonModule } from '@angular/common';
 import { TradingRoutingModule } from './trading-routing.module';
+import { FuseHighlightModule } from '@fuse/components/highlight';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { TradingRoutingModule } from './trading-routing.module';
     MatTabsModule,
     MatSliderModule,
     NgApexchartsModule,
+    FuseHighlightModule,
     SharedModule
   ]
 })

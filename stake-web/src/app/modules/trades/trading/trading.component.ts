@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, takeUntil, pairwise, BehaviorSubject } from 'rxjs';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
-import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { SocketService } from 'app/core/socket/socket.service';
 import { SocketEvent } from 'app/core/config/socket.config';
 import { chartOptions } from 'app/core/config/trading.config';
@@ -34,7 +33,6 @@ export class TradingComponent implements OnInit, OnDestroy {
   private klines: BehaviorSubject<ApexChartSeriesData[] | null> = new BehaviorSubject(null);
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
-    private _fuseMediaWatcherService: FuseMediaWatcherService,
     private _socketService: SocketService,
     private _tradingService: TradingService,
     private _userService: UserService,
@@ -81,22 +79,13 @@ export class TradingComponent implements OnInit, OnDestroy {
         return;
       }
       klines = klines.filter(e => parseFloat(this.currentTime) - new Date(e.x).getTime() <= 60 * 60 * 1000);
-      // this.btcChartComponent.updateSeries([{
-      //   data: klines,
-      // }]);
+      this.btcChartComponent.updateSeries([{
+        data: klines,
+      }]);
     });
-
-    this._fuseMediaWatcherService.onMediaChange$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(() => {
-        this._changeDetectorRef.markForCheck();
-      });
-    this._prepareChartData();
-
     this._socketService.socket.fromEvent(SocketEvent.NOW).subscribe(data => {
       this.currentTime = data;
     });
-
     this._socketService.socket.fromEvent(SocketEvent.ROOM_JOIN).subscribe(data => {
       this.tradingRoom = this.tradingRooms.find(e => e.symbol == data);
     });
@@ -134,6 +123,12 @@ export class TradingComponent implements OnInit, OnDestroy {
       this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
       this.updateRounds(this.tradingRoom);
     });
+
+    this._socketService.socket.fromEvent(SocketEvent.TRADING_CONFIG).subscribe((tradingConfig: TradingConfig) => {
+      this.tradingConfig = tradingConfig;
+    })
+
+    this._prepareChartData();
     this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
     this.updateRounds(this.tradingRoom);
   }

@@ -22,5 +22,18 @@
   "go to": "đi đến",
   "you have signed out": "bạn đã đăng xuất!",
   "redirecting in": "chuyển hướng trong",
-  "you are now being redirected": "bạn hiện đang được chuyển hướng!"
+  "you are now being redirected": "bạn hiện đang được chuyển hướng!",
+  "crypto trade code": "mã giao dịch tiền điện tử",
+  "price range in percent": "phạm vi giá theo phần trăm",
+  "min slider value": "giá trị thanh trượt tối thiểu",
+  "max slider value": "giá trị thanh trượt tối đa",
+  "slider step value": "giá trị bước trượt",
+  "blocking time": "chặn thời gian",
+  "buy amount": "số lượng mua",
+  "sell amount": "số lượng bán",
+  "open price": "giá mở cửa",
+  "close price": "giá đóng cửa",
+  "trading time": "thời gian giao dịch",
+  "benefit in percent": "hưởng lợi theo phần trăm",
+  "delete": "xóa bỏ"
 }

@@ -75,4 +75,8 @@ export class UserComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    settings() {
+        this._router.navigate(['/settings']);
+    }
 }

@@ -4,12 +4,30 @@ const AdminUser = require("../../models/AdminUser");
 const { ClientUser } = require("../../models/User");
 const jwt = require('jsonwebtoken');
 const randToken = require('rand-token');
+const { security } = require("../security");
 
-function generateAdminAccessToken(clientUser) {
+function generateAdminAccessToken(clientUser, lifetime = parseInt(process.env.TOKEN_LIFETIME)) {
     let clone = Object.assign({}, clientUser);
     let now = new Date().getTime();
-    clone.exp = now + parseInt(process.env.TOKEN_LIFETIME);
+    clone.exp = now + lifetime;
     return jwt.sign(JSON.stringify(clone), process.env.TOKEN_SECRET);
+}
+
+function verifyToken(socket) {
+    const token = socket.handshake.auth.token;
+    if (token == null) {
+        return false;
+    }
+    return jwt.verify(token, process.env.TOKEN_SECRET, (err, adminUser) => {
+        if (err) {
+            return false;
+        }
+        if (!adminUser) {
+            return false;
+        }
+        socket.adminuser = adminUser;
+        return true;
+    });
 }
 
 function adminAuthenticateToken(req, res, next) {
@@ -41,9 +59,12 @@ const adminSignIn = async function (req, res, next) {
         return next(badRequestError.make(ErrorCode.USER_NOT_FOUND));
     }
     let clientUser = new ClientUser(exists);
-    let accessToken = generateAdminAccessToken(clientUser)
+    let accessToken = generateAdminAccessToken(clientUser);
+
     exists.refreshToken = randToken.generate(128);
     let refreshExpiryAt = new Date().getTime() + parseInt(!req.body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER);
+
+    exists.socketToken = generateAdminAccessToken(clientUser, parseInt(!req.body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER));
 
     exists.refreshExpiryAt = new Date(refreshExpiryAt);
     exists.accessToken = accessToken;
@@ -56,6 +77,7 @@ const adminSignIn = async function (req, res, next) {
     res.json({
         accessToken: accessToken,
         refreshToken: exists.refreshToken,
+        socketToken: exists.socketToken,
         user: clientUser,
     });
 }
@@ -73,6 +95,8 @@ const adminSignInByToken = async function (req, res, next) {
     let clientUser = new ClientUser(exists);
     let accessToken = generateAdminAccessToken(clientUser)
 
+    exists.socketToken = generateAdminAccessToken(clientUser, parseInt(!req.body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER));
+
     try {
         await exists.save();
     } catch (e) {
@@ -82,6 +106,7 @@ const adminSignInByToken = async function (req, res, next) {
     res.json({
         accessToken: accessToken,
         refreshToken: exists.refreshToken,
+        socketToken: exists.socketToken,
         user: clientUser,
     });
 }
@@ -90,4 +115,5 @@ module.exports = {
     adminSignIn: adminSignIn,
     adminSignInByToken: adminSignInByToken,
     adminAuthenticateToken: adminAuthenticateToken,
+    verifyToken: verifyToken,
 }

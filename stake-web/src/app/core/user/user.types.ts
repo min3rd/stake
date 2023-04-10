@@ -7,7 +7,12 @@ export interface User {
     name?: string;
     username?: string;
     avatar?: string;
+    phone?: string;
+    email?: string;
+    country?: string;
+    language?: string;
     cash?: number;
     demoCash?: number;
     cashAccount?: CashAccount;
+    verified?: boolean;
 }

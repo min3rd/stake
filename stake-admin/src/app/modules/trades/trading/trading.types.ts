@@ -1,9 +1,17 @@
 import { ApexFill } from "ng-apexcharts";
 
 export interface TradingRoom {
-    id?: string;
+    priceRangePercent?: number;
+    benefitPercent?: number;
+    sliderMin?: number;
+    sliderMax?: number;
+    sliderStep?: number;
+    blockingTime?: number;
+    _id?: string;
     symbol?: string;
+    __v?: number;
 }
+
 
 export interface Kline {
     symbol?: string;
@@ -19,16 +27,22 @@ export interface Kline {
 }
 
 export interface TradingRound {
-    symbol?: string;
-    time?: Date;
-    openTime?: Date;
-    closeTime?: Date;
-    openPrice?: number;
-    highPrice?: number;
-    lowPrice?: number;
-    closePrice?: number;
-    closed?: boolean;
-    canTrade?: boolean;
+    _id?: string,
+    symbol?: string,
+    time?: string,
+    openTime?: string,
+    closeTime?: string,
+    openPrice?: number,
+    highPrice?: number,
+    lowPrice?: number,
+    closePrice?: number,
+    canTrade?: boolean,
+    closed?: boolean,
+    buyAmount?: number,
+    sellAmount?: number,
+    buyCount?: number,
+    sellCount?: number,
+    __v?: number,
 }
 
 export interface ApexChartSeriesData {

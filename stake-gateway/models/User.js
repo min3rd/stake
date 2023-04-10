@@ -7,6 +7,9 @@ const UserSchema = new Schema({
     name: { type: String, },
     avatar: { type: String, },
     phone: { type: String, },
+    email: { type: String },
+    country: { type: String },
+    language: { type: String },
     accessToken: { type: String, },
     refreshToken: { type: String, },
     refreshExpiryAt: { type: Date, default: new Date(), },
@@ -22,10 +25,14 @@ class ClientUser {
         this.id = user._id;
         this.username = user.username;
         this.name = user.name;
+        this.avatar = user.avatar;
+        this.phone = user.phone;
+        this.email = user.email;
+        this.country = user.country;
+        this.language = user.language;
         this.verified = user.verified;
         this.cash = user.cash;
         this.demoCash = user.demoCash;
-        this.avatar = user.avatar;
         this.cashAccount = user.cashAccount;
     }
 }

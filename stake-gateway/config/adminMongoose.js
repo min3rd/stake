@@ -11,5 +11,6 @@ const config = {
     },
 };
 const adminMongoose = mongoose;
+require('mongoose-long')(adminMongoose);
 adminMongoose.connect(config.url, config.options);
 module.exports = adminMongoose;

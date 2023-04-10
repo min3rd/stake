@@ -8,7 +8,6 @@ const { SocketEvent } = require("../../config/socket.config");
 const engine = require("../../engine");
 const Kline = require("../../models/Kline");
 const TradingCall = require("../../models/TradingCall");
-const TradingConfig = require("../../models/TradingConfig");
 const TradingRoom = require("../../models/TradingRoom");
 const TradingRound = require("../../models/TradingRound");
 const { User, ClientUser } = require("../../models/User");
@@ -45,19 +44,22 @@ const latestRounds = async function (req, res, next) {
         };
     }));
 }
+
 const tradingConfig = async function (req, res, next) {
-    let config = await TradingConfig.findOne({
+    let tradingRoom = await TradingRoom.findOne({
         symbol: req.params.symbol,
     });
-    if (!config) {
-        config = await TradingConfig.findOne({
-            symbol: 'default',
-        });
-    }
-    if (!config) {
+    if (!tradingRoom) {
         return next(badRequestError.make(ErrorCode.TRADING_CONFIG_NOT_EXISTS));
     }
-    res.json(config);
+    res.json({
+        benefitPercent: tradingRoom.benefitPercent,
+        sliderMax: tradingRoom.sliderMax,
+        sliderMin: tradingRoom.sliderMin,
+        sliderStep: tradingRoom.sliderStep,
+        symbol: tradingRoom.symbol,
+        blockingTime: tradingRoom.blockingTime,
+    });
 }
 const getTradingCalls = async function (req, res, next) {
     let now = new Date();
@@ -107,15 +109,15 @@ const call = async function (req, res, next) {
             await session.abortTransaction();
             return next(badRequestError.make(ErrorCode.TRADING_CALL_EXISTS));
         }
-        let tradingConfig = await TradingConfig.findOne({
-            symbol: [tradingRound.symbol, 'default']
+        let tradingRoom = await TradingRoom.findOne({
+            symbol: [tradingRound.symbol]
         });
-        let blockingTime = tradingConfig?.blockingTime ?? process.env.DEFAULT_BLOCKING_TIME ?? 5000;
+        let blockingTime = tradingRoom?.blockingTime ?? process.env.DEFAULT_BLOCKING_TIME ?? 5000;
         if (now.getTime() > (new Date(tradingRound.closeTime).getTime() - blockingTime)) {
             await session.abortTransaction();
             return next(badRequestError.make(ErrorCode.CAN_NOT_TRADE_IN_BLOCKING_TIME));
         }
-        let benefitPercent = tradingConfig?.benefitPercent ?? process.env.TRADING_BENEFIT_PERCENT ?? 195;
+        let benefitPercent = tradingRoom?.benefitPercent ?? process.env.TRADING_BENEFIT_PERCENT ?? 195;
 
         let user = await User.findById(req.user.id);
         if (!user) {
@@ -176,12 +178,14 @@ const call = async function (req, res, next) {
         let noti = await notificationService.createTradingCall(user, betCash, tradingCall.benefit);
         logger.info('CREATE_TRADING_CALL', JSON.stringify(tradingCall));
 
-        if (type == TradingCallType.BUY) {
-            tradingRound.buyAmount += betCash;
-            tradingRound.buyCount += 1;
-        } else {
-            tradingRound.sellAmount += betCash;
-            tradingRound.sellCount += 1;
+        if (user.cashAccount == CashAccount.REAL) {
+            if (type == TradingCallType.BUY) {
+                tradingRound.buyAmount += betCash;
+                tradingRound.buyCount += 1;
+            } else {
+                tradingRound.sellAmount += betCash;
+                tradingRound.sellCount += 1;
+            }
         }
         await tradingRound.save();
         await session.commitTransaction();

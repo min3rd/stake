@@ -7,4 +7,5 @@ export enum SocketEvent {
     USER = 'USER',
     connect = 'connect',
     NOTIFICATION = 'NOTIFICATION',
+    TRADING_CONFIG = 'TRADING_CONFIG',
 }

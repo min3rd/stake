@@ -89,6 +89,13 @@ export class ApiService {
     users_notifications_remove() {
         return this._usersApi(`/notifications/remove`);
     }
+
+    users_user() {
+        return this._usersApi(`/user`);
+    }
+    users_user_change_password() {
+        return this._usersApi(`/user/changePassword`);
+    }
 }
 
 

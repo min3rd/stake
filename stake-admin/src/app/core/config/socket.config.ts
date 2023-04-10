@@ -7,4 +7,8 @@ export enum SocketEvent {
     USER = 'USER',
     connect = 'connect',
     NOTIFICATION = 'NOTIFICATION',
+    ADMIN_TRADING_ROUND = 'ADMIN_TRADING_ROUND',
+}
+export enum SocketRoom {
+    ADMIN_TRADING = 'ADMIN_TRADING',
 }

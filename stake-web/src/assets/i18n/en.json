@@ -31,5 +31,19 @@
   "go to": "go to",
   "you have signed out": "you have signed out!",
   "redirecting in": "redirecting in",
-  "you are now being redirected": "you are now being redirected!"
+  "you are now being redirected": "you are now being redirected!",
+  "following information is publicly displayed be careful": "following information is publicly displayed, be careful!",
+  "personal information": "personal information",
+  "communication details in case we want to connect with you these will be kept private": "Communication details in case we want to connect with you. These will be kept private.",
+  "email": "email",
+  "phone": "phone",
+  "country": "country",
+  "language": "language",
+  "cancel": "cancel",
+  "save": "save",
+  "please enter a valid email address": "please enter a valid email address",
+  "change your password": "change your password",
+  "current password": "current password",
+  "new password": "new password",
+  "minimum 8 characters must include numbers letters and special characters": "minimum 8 characters. Must include numbers, letters and special characters."
 }

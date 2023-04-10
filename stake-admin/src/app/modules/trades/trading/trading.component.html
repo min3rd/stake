@@ -5,11 +5,86 @@
         <router-outlet></router-outlet>
     </mat-drawer>
     <div class="h-full bg-card dark:bg-default">
-        <div class="flex flex-auto p-6 gap-6">
-            <ng-container *ngIf="rooms$ | async as rooms">
-                <ng-container *ngFor="let room of rooms">
-                    <div class="rounded-xl min-w-80 min-h-80 border p-2">
-                        {{room.symbol}}
+        <div class="md:flex md:flex-auto p-6 gap-6">
+            <ng-container *ngIf="tradingRooms$ | async as tradingRooms">
+                <ng-container *ngFor="let tradingRoom of tradingRooms; let index = index">
+                    <div class="rounded-xl w-80 border p-2 my-2">
+                        <div class="flex flex-auto justify-between items-center p-2 border-b">
+                            <div>
+                                {{tradingRoom.symbol}}
+                                <button mat-icon-button *ngIf="getLatestRound(tradingRoom)"
+                                    [class]="(!result(getLatestRound(tradingRoom)) ? 'bg-red-500' : 'bg-lime-500') + ' icon-size-3 ml-2'"></button>
+                            </div>
+                            <button mat-flat-button class="bg-lime-500"
+                                (click)="switchResult(index, TradingCallType.BUY)">
+                                <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
+                            </button>
+                            <button mat-flat-button class="bg-red-500"
+                                (click)="switchResult(index, TradingCallType.SELL)">
+                                <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
+                            </button>
+                            <button *ngIf="!editMode[index]" mat-icon-button (click)="toggleEditMode(index, true)">
+                                <mat-icon svgIcon="heroicons_outline:cog"></mat-icon>
+                            </button>
+                            <button *ngIf="editMode[index]" mat-icon-button (click)="updateRoom(index)">
+                                <mat-icon svgIcon="heroicons_outline:check"></mat-icon>
+                            </button>
+                        </div>
+                        <div class="justify-start mt-2">
+                            <ng-container *ngIf="!editMode[index]">
+                                <ng-container *ngIf="getLatestRound(tradingRoom)">
+                                    <div class="flex flex-auto justify-between w-full p-2 gap-6">
+                                        <div
+                                            [class]="'p-2 rounded-md min-w-12 ' + ((getLatestRound(tradingRoom).buyAmount > getLatestRound(tradingRoom).sellAmount) ? 'bg-lime-500' : '')">
+                                            {{getLatestRound(tradingRoom).buyAmount | currency}}
+                                        </div>
+                                        <div
+                                            [class]="'p-2 rounded-md min-w-12 ' + ((getLatestRound(tradingRoom).buyAmount < getLatestRound(tradingRoom).sellAmount) ? 'bg-red-500' : '')">
+                                            {{getLatestRound(tradingRoom).sellAmount | currency}}
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="editMode[index]">
+                                <form [formGroup]="tradingRoomForms[index]">
+                                    <!-- <button mat-flat-button (click)="deleteRoom(index)">
+                                        {{'delete' | transloco | capitalize}}
+                                    </button> -->
+                                    <input type="hidden" name="_id" formControlName="_id">
+                                    <mat-form-field class="w-full">
+                                        <mat-label>{{'crypto trade code' | transloco | capitalize}}</mat-label>
+                                        <input matInput type="text" formControlName="symbol">
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full">
+                                        <mat-label>{{'benefit in percent' | transloco | capitalize}}</mat-label>
+                                        <input matInput type="number" formControlName="benefitPercent">
+                                        <span>%</span>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full">
+                                        <mat-label>{{'price range in percent' | transloco | capitalize}}</mat-label>
+                                        <input matInput type="number" formControlName="priceRangePercent">
+                                        <span>%</span>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full">
+                                        <mat-label>{{'min slider value' | transloco | capitalize}}</mat-label>
+                                        <input matInput type="number" formControlName="sliderMin">
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full">
+                                        <mat-label>{{'max slider value' | transloco | capitalize}}</mat-label>
+                                        <input matInput type="number" formControlName="sliderMax">
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full">
+                                        <mat-label>{{'slider step value' | transloco | capitalize}}</mat-label>
+                                        <input matInput type="number" formControlName="sliderStep">
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full">
+                                        <mat-label>{{'blocking time' | transloco | capitalize}}</mat-label>
+                                        <input matInput type="text" formControlName="blockingTime">
+                                        <span>ms</span>
+                                    </mat-form-field>
+                                </form>
+                            </ng-container>
+                        </div>
                     </div>
                 </ng-container>
             </ng-container>

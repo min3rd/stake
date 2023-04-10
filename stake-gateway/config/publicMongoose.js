@@ -11,8 +11,8 @@ const config = {
         //'autoIndex':       false,
     },
 };
-
 const publicMongoose = mongoose;
+require('mongoose-long')(publicMongoose)
 publicMongoose.connect(config.url, config.options);
 module.exports = {
     publicMongoose: publicMongoose,

@@ -3,7 +3,7 @@ const { publicMongoose } = require("../config/publicMongoose");
 
 const TradingRoomSchema = new Schema({
     symbol: { type: String, require: true, },
-    benefitPercent: { type: Number, require: true, },
+    benefitPercent: { type: Number, require: true, default: process.env.TRADING_BENEFIT_PERCENT ?? 195 },
     priceRangePercent: { type: Number, default: 5 },
     sliderMin: { type: Number, default: 10, },
     sliderMax: { type: Number, default: 100, },

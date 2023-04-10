@@ -43,6 +43,14 @@ export class AuthService {
         return localStorage.getItem('refreshToken') ?? '';
     }
 
+    set socketToken(socketToken: string) {
+        localStorage.setItem('socketToken', socketToken);
+    }
+
+    get socketToken(): string {
+        return localStorage.getItem('socketToken') ?? '';
+    }
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -82,6 +90,7 @@ export class AuthService {
                 // Store the access token in the local storage
                 this.accessToken = response.accessToken;
                 this.refreshToken = response.refreshToken;
+                this.socketToken = response.socketToken;
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
@@ -124,6 +133,9 @@ export class AuthService {
                 if (response.refreshToken) {
                     this.refreshToken = response.refreshToken;
                 }
+                if (response.socketToken) {
+                    this.socketToken = response.socketToken;
+                }
                 // Set the authenticated flag to true
                 this._authenticated = true;
 
@@ -141,9 +153,7 @@ export class AuthService {
      */
     signOut(): Observable<any> {
         // Remove the access token from the local storage
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
+        localStorage.clear();
 
         // Set the authenticated flag to false
         this._authenticated = false;

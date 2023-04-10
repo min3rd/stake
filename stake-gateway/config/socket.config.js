@@ -5,12 +5,14 @@ const SocketEvent = {
     KLINE: "KLINE",
     USER: "USER",
     NOTIFICATION: "NOTIFICATION",
-    
+    disconnect: 'disconnect',
+    connect: 'connect',
+    TRADING_CONFIG: 'TRADING_CONFIG',
+
+    ADMIN_TRADING_ROUND: 'ADMIN_TRADING_ROUND',
 }
 const SocketRoom = {
-    TRADING_BTCUSDT: 'BTCUSDT',
-    TRADING_ETHUSDT: 'ETHUSDT',
-    TRADING_BNBUSDT: 'BNBUSDT',
+    ADMIN_TRADING: 'ADMIN_TRADING',
 }
 
 module.exports = {
