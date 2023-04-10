@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './landing/landing.component';
-import { LuckyCardsComponent } from './lucky-cards/lucky-cards.component';
+import { MinesComponent } from './mines/mines.component';
 
 const routes: Routes = [
   {
@@ -9,8 +9,8 @@ const routes: Routes = [
     component: LandingComponent,
   },
   {
-    path: 'lucky-cards',
-    component: LuckyCardsComponent
+    path: 'mines',
+    component: MinesComponent,
   }
 ];
 

@@ -1,5 +1,5 @@
 const { Schema } = require("mongoose");
-const { publicMongoose } = require("../config/publicMongoose");
+const { publicMongoose } = require("../../config/publicMongoose");
 
 const GameSchema = new Schema({
     title: { type: String, require: true, index: true, },

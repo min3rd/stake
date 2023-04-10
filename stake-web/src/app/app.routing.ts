@@ -87,5 +87,6 @@ export const appRoutes: Route[] = [
                 loadChildren: () => import('app/modules/settings/settings.module').then(m => m.SettingsModule),
             }
         ]
-    }
+    },
+    { path: '**', redirectTo: '/' },
 ];
