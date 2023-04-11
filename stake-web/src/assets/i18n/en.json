@@ -45,5 +45,15 @@
   "change your password": "change your password",
   "current password": "current password",
   "new password": "new password",
-  "minimum 8 characters must include numbers letters and special characters": "minimum 8 characters. Must include numbers, letters and special characters."
+  "minimum 8 characters must include numbers letters and special characters": "minimum 8 characters. Must include numbers, letters and special characters.",
+  "bet": "bet",
+  "cashout": "cashout",
+  "mines": "mines",
+  "bet amount": "bet amount",
+  "profit": "profit",
+  "half": "1/2",
+  "x2": "x2",
+  "all": "all",
+  "gems": "gems",
+  "random choose": "random choose"
 }

@@ -96,6 +96,22 @@ export class ApiService {
     users_user_change_password() {
         return this._usersApi(`/user/changePassword`);
     }
+
+    users_mines_rounds() {
+        return this._usersApi(`/mines/rounds`);
+    }
+
+    users_mines_rounds_round(id: string) {
+        return this._usersApi(`/mines/rounds/${id}`);
+    }
+
+    users_mines_rounds_round_random_choose(id: string) {
+        return this._usersApi(`/mines/rounds/${id}/randomChoose`);
+    }
+
+    users_mines_rounds_round_choose(id: string) {
+        return this._usersApi(`/mines/rounds/${id}/choose`);
+    }
 }
 
 

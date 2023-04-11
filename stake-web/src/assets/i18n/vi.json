@@ -42,5 +42,15 @@
   "change your password": "Thay đổi mật khẩu của bạn",
   "current password": "mật khẩu hiện tại",
   "new password": "mật khẩu mới",
-  "minimum 8 characters must include numbers letters and special characters": "tối thiểu 8 ký tự. \nPhải bao gồm số, chữ cái và ký tự đặc biệt."
+  "minimum 8 characters must include numbers letters and special characters": "tối thiểu 8 ký tự. \nPhải bao gồm số, chữ cái và ký tự đặc biệt.",
+  "bet": "cá cược",
+  "cashout": "rút tiền",
+  "mines": "mìn",
+  "bet amount": "số tiền đặt cược",
+  "profit": "lợi nhuận",
+  "half": "1/2",
+  "x2": "x2",
+  "all": "tất cả",
+  "gems": "đá quý",
+  "random choose": "chọn ngẫu nhiên"
 }

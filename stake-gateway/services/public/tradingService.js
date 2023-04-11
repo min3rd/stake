@@ -81,6 +81,7 @@ const call = async function (req, res, next) {
         await session.startTransaction();
         if (now.getTime() >= new Date(req.body.closeTime).getTime()) {
             await session.abortTransaction();
+            await session.endSession();
             logger.error('call_TRADING_ROUND_CLOSED', `data=${req.body}`);
             return next(badRequestError.make(ErrorCode.TRADING_ROUND_CLOSED));
         }
@@ -92,11 +93,13 @@ const call = async function (req, res, next) {
 
         if (!tradingRound) {
             await session.abortTransaction();
+            await session.endSession();
             return next(badRequestError.make(ErrorCode.TRADING_ROUND_NOT_FOUND));
         }
 
         if (!tradingRound.canTrade) {
             await session.abortTransaction();
+            await session.endSession();
             return next(badRequestError.make(ErrorCode.TRADING_ROUND_CAN_NOT_TRADE));
         }
         let tradingCall = await TradingCall.findOne({
@@ -107,6 +110,7 @@ const call = async function (req, res, next) {
         });
         if (tradingCall) {
             await session.abortTransaction();
+            await session.endSession();
             return next(badRequestError.make(ErrorCode.TRADING_CALL_EXISTS));
         }
         let tradingRoom = await TradingRoom.findOne({
@@ -115,6 +119,7 @@ const call = async function (req, res, next) {
         let blockingTime = tradingRoom?.blockingTime ?? process.env.DEFAULT_BLOCKING_TIME ?? 5000;
         if (now.getTime() > (new Date(tradingRound.closeTime).getTime() - blockingTime)) {
             await session.abortTransaction();
+            await session.endSession();
             return next(badRequestError.make(ErrorCode.CAN_NOT_TRADE_IN_BLOCKING_TIME));
         }
         let benefitPercent = tradingRoom?.benefitPercent ?? process.env.TRADING_BENEFIT_PERCENT ?? 195;
@@ -122,16 +127,19 @@ const call = async function (req, res, next) {
         let user = await User.findById(req.user.id);
         if (!user) {
             await session.abortTransaction();
+            await session.endSession();
             return next(badRequestError.make(ErrorCode.USER_NOT_FOUND));
         }
         let betCash = parseFloat(req.body.betCash);
         if (betCash <= 0) {
             await session.abortTransaction();
+            await session.endSession();
             return next(badRequestError.make(ErrorCode.BET_CASH_MUST_MORE_THAN_ZERO));
         }
         let type = parseInt(req.body.type);
         if (!(Object.values(TradingCallType).indexOf(type) >= 0)) {
             await session.abortTransaction();
+            await session.endSession();
             next(ErrorCode.TRADING_CALL_TYPE_INVALID);
             return;
         }
@@ -139,12 +147,14 @@ const call = async function (req, res, next) {
         if (user.cashAccount === CashAccount.REAL) {
             if (user.cash < betCash) {
                 await session.abortTransaction();
+                await session.endSession();
                 return next(badRequestError.make(ErrorCode.CASH_NOT_ENOUGH));
             }
             user.cash -= betCash;
         } else {
             if (user.demoCash < betCash) {
                 await session.abortTransaction();
+                await session.endSession();
                 return next(badRequestError.make(ErrorCode.CASH_NOT_ENOUGH));
             }
             user.demoCash -= betCash;
@@ -154,6 +164,7 @@ const call = async function (req, res, next) {
         user = await user.save();
         if (!user) {
             await session.abortTransaction();
+            await session.endSession();
             return next(badRequestError.make(ErrorCode.CASH_NOT_ENOUGH));
         }
         tradingCall = new TradingCall({
@@ -173,6 +184,7 @@ const call = async function (req, res, next) {
         tradingCall = await tradingCall.save();
         if (!tradingCall) {
             await session.abortTransaction();
+            await session.endSession();
             return next(badRequestError.make(ErrorCode.SAVE_TRADING_CALL_FAIL));
         }
         let noti = await notificationService.createTradingCall(user, betCash, tradingCall.benefit);
@@ -206,6 +218,7 @@ const call = async function (req, res, next) {
     } catch (e) {
         logger.error('CREATE_TRADING_CALL', `error=${e}`);
         await session.abortTransaction();
+        await session.endSession();
         return next(badRequestError.make(ErrorCode.SAVE_TRADING_CALL_FAIL));
     }
 }

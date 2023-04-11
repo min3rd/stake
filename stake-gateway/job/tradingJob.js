@@ -87,7 +87,7 @@ async function updateRound(publicIo, adminIo) {
     } catch (e) {
         await session.abortTransaction()
     } finally {
-        session.endSession();
+        await session.endSession();
     }
     setTimeout(() => {
         updateRound(publicIo, adminIo);
@@ -198,7 +198,7 @@ const updateCallResult = async function (publicIo, userIo) {
         await session.abortTransaction();
         logger.error("updateCallResult_UPDATE_ROUND", `${e}`)
     } finally {
-        session.endSession();
+        await session.endSession();
     }
 
     setTimeout(() => {
