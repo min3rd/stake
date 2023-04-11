@@ -77,7 +77,7 @@
                         <span class="font-semibold">
                             {{'profit' | transloco | capitalize}}
                         </span>
-                        <span>({{minesRound?.profitPercent}}x)</span>
+                        <span>( x{{minesRound?.profitPercent.toFixed(2)}})</span>
                     </div>
                     <div class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
                         <span>{{minesRound?.profit | currency}}</span>
@@ -128,9 +128,6 @@
                         </div>
                     </div>
                 </ng-container>
-            </div>
-            <div class="w-full p-2 text-left">
-                {{minesRound?.resultHash}}
             </div>
         </div>
     </div>

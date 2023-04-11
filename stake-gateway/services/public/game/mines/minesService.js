@@ -14,6 +14,7 @@ const POSITION_TYPE = {
     GEM: 1,
     MINE: 2,
 }
+const MINES_TOTAL_PROFIT_PERCENT = process.env.MINES_TOTAL_PROFIT_PERCENT ?? 1;
 class ClientMinesRound {
     constructor(minesRound) {
         this._id = minesRound._id;
@@ -64,16 +65,14 @@ const createMinesRound = async function (req, res, next) {
         } else {
             user.demoCash -= betAmount;
         }
-
         user = await user.save();
-
-
         let minesCount = parseInt(req.body.mines) ?? 1;
         let gemsCount = 5 * 5 - minesCount;
         let privateKey = randToken.generate(256);
         let size = 5;
         let gems = [];
         let playerChoices = [];
+        let profitStep = MINES_TOTAL_PROFIT_PERCENT / gemsCount;
         for (i = 0; i < size * size; i++) {
             gems.push(Math.pow(2, i));
             playerChoices.push(POSITION_TYPE.UNKNOWN);
@@ -100,6 +99,7 @@ const createMinesRound = async function (req, res, next) {
             playerChoices: playerChoices.join(''),
             userPaid: true,
             started: true,
+            profitStep: profitStep,
         });
         minesRound = await minesRound.save();
         if (!minesRound) {
@@ -144,11 +144,11 @@ const choose = async function (req, res, next) {
     if (!minesRound) {
         return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
     }
-    if (minesRound.closed) {
-        return next(badRequestError.make(ErrorCode.MINES_ROUND_CLOSED));
-    }
     if (userId != minesRound.userId) {
         return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
+    }
+    if (minesRound.closed) {
+        return next(badRequestError.make(ErrorCode.MINES_ROUND_CLOSED));
     }
     let position = parseInt(req.body.position);
     if (position < 1 || position > (minesRound.size * minesRound.size)) {
@@ -162,12 +162,30 @@ const choose = async function (req, res, next) {
     if (!result) {
         chars[position - 1] = POSITION_TYPE.MINE;
         minesRound.closed = true;
+        minesRound.profitPercent = 0;
+        minesRound.profit = 0;
     } else {
         chars[position - 1] = POSITION_TYPE.GEM;
+        minesRound.profitPercent += minesRound.profitStep;
+        minesRound.profit = minesRound.betAmount * minesRound.profitPercent;
     }
     minesRound.playerChoices = chars.join("");
     minesRound = await minesRound.save();
     res.json(new ClientMinesRound(minesRound));
+}
+
+const cashout = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (userId != req.user.id) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
+    let minesRound = await MinesRound.findById(req.params.minesRoundId);
+    if (!minesRound) {
+        return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
+    }
+    if (userId != minesRound.userId) {
+        return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
+    }
 }
 
 module.exports = {
