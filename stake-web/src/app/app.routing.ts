@@ -85,6 +85,10 @@ export const appRoutes: Route[] = [
             {
                 path: 'settings',
                 loadChildren: () => import('app/modules/settings/settings.module').then(m => m.SettingsModule),
+            },
+            {
+                path: 'wallet',
+                loadChildren: () => import('app/modules/wallet/wallet.module').then(m => m.WalletModule),
             }
         ]
     },

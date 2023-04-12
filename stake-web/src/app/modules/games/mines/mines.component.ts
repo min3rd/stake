@@ -1,10 +1,10 @@
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MinesRound } from './mines.types';
 import { CashAccount, User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MinesService } from './mines.service';
 
 @Component({
@@ -20,6 +20,9 @@ export class MinesComponent implements OnInit, OnDestroy {
   minesRound: MinesRound;
   apiCalling: boolean = false;
   imageVersion: number = 0;
+  minesRounds$: Observable<MinesRound[] | null>;
+  offset: number = 0;
+  pageSize: number = 10;
   private _unsubscribeAll: Subject<any> = new Subject();
 
   constructor(
@@ -39,12 +42,15 @@ export class MinesComponent implements OnInit, OnDestroy {
       this.prepare();
       this.betForm.patchValue({
         betAmount: minesRound.betAmount,
-        mines: minesRound.mines,
+        // mines: minesRound.mines,
       });
-      if (this.minesRound.started) {
+      if (this.minesRound.started && !this.minesRound.masterPaid) {
         this.betForm.disable();
+      } else {
+        this.betForm.enable();
       }
     });
+    this.minesRounds$ = this._minesService.minesRounds$;
   }
   prepare() {
     this.betForm = this._formBuilder.group({
@@ -88,14 +94,33 @@ export class MinesComponent implements OnInit, OnDestroy {
     if (!this.minesRound || !this.minesRound.started || this.minesRound.closed) {
       return;
     }
+    this.apiCalling = true;
     this._minesService.choose(this.minesRound._id, index + 1).subscribe(minesRound => {
       this.minesRound = minesRound;
+      this.apiCalling = false;
     })
   }
 
+  cashout() {
+    if (!this.minesRound || !this.minesRound.started) {
+      return;
+    }
+    this.apiCalling = true;
+    this._minesService.cashout(this.minesRound._id).subscribe(minesRound => {
+      this.minesRound = minesRound;
+      this.apiCalling = false;
+    });
+    this._minesService.getMinesRounds(this.offset, this.pageSize).subscribe(minesRounds => {
+
+    });
+  }
+
   createMinesRound() {
+    this.apiCalling = true;
+    this.betForm.disable();
     this._minesService.createMinesRound(this.betForm.getRawValue()).subscribe((result: MinesRound) => {
       this._router.navigate([`/games/mines/${result._id}`]);
+      this.apiCalling = false;
     });
   }
 
@@ -104,5 +129,23 @@ export class MinesComponent implements OnInit, OnDestroy {
   }
   mineEffectImage(): string {
     return `/assets/images/mines/mineEffect.gif?v=` + this.imageVersion;
+  }
+
+  nextPage() {
+    this.offset += this.pageSize;
+    this._minesService.getMinesRounds(this.offset, this.pageSize).subscribe(minesRounds => {
+      if (!minesRounds) {
+        this.offset = 0;
+      }
+    });
+  }
+  prevPage() {
+    this.offset -= this.pageSize;
+    this.offset = this.offset < 0 ? 0 : this.offset;
+    this._minesService.getMinesRounds(this.offset, this.pageSize).subscribe(minesRounds => {
+      if (!minesRounds) {
+        this.offset = 0;
+      }
+    });
   }
 }

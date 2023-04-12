@@ -67,6 +67,11 @@ const createMinesRound = async function (req, res, next) {
         }
         user = await user.save();
         let minesCount = parseInt(req.body.mines) ?? 1;
+        if (minesCount < 1 || minesCount > 24) {
+            await session.abortTransaction();
+            await session.endSession();
+            return next(badRequestError.make(ErrorCode.MINES_ROUND_INVALID_MINES));
+        }
         let gemsCount = 5 * 5 - minesCount;
         let privateKey = randToken.generate(256);
         let size = 5;
@@ -90,6 +95,8 @@ const createMinesRound = async function (req, res, next) {
         let resultHash = AES.encrypt(resultBit.toString(), privateKey);
         minesRound = new MinesRound({
             userId: userId,
+            time: new Date(),
+            cashAccount: user.cashAccount,
             mines: minesCount,
             gems: gemsCount,
             betAmount: betAmount,
@@ -135,6 +142,21 @@ const getMinesRoundById = async function (req, res, next) {
     res.json(new ClientMinesRound(minesRound));
 }
 
+const getMinesRounds = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (userId != req.user.id) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
+    let minesRounds = await MinesRound.find({
+        userId: userId,
+    }).sort(JSON.parse(req.query.sort) ?? { time: -1 }).skip(req.query.offset).limit(req.query.size);
+    if (!minesRounds) {
+        return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
+    }
+    let mapped = minesRounds.map(e => new ClientMinesRound(e));
+    res.json(mapped);
+}
+
 const choose = async function (req, res, next) {
     let userId = req.params.userId;
     if (userId != req.user.id) {
@@ -164,10 +186,12 @@ const choose = async function (req, res, next) {
         minesRound.closed = true;
         minesRound.profitPercent = 0;
         minesRound.profit = 0;
+        minesRound.mines -= 1;
     } else {
         chars[position - 1] = POSITION_TYPE.GEM;
         minesRound.profitPercent += minesRound.profitStep;
         minesRound.profit = minesRound.betAmount * minesRound.profitPercent;
+        minesRound.gems -= 1;
     }
     minesRound.playerChoices = chars.join("");
     minesRound = await minesRound.save();
@@ -179,12 +203,59 @@ const cashout = async function (req, res, next) {
     if (userId != req.user.id) {
         return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
     }
-    let minesRound = await MinesRound.findById(req.params.minesRoundId);
-    if (!minesRound) {
-        return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
-    }
-    if (userId != minesRound.userId) {
-        return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
+    const session = await publicMongoose.startSession();
+    try {
+        await session.startTransaction();
+        let minesRound = await MinesRound.findById(req.params.minesRoundId);
+        if (!minesRound) {
+            await session.abortTransaction();
+            await session.endSession();
+            return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
+        }
+        if (minesRound.masterPaid) {
+            await session.abortTransaction();
+            await session.endSession();
+            return next(badRequestError.make(ErrorCode.MINES_MASTER_PAID));
+        }
+        if (userId != minesRound.userId) {
+            await session.abortTransaction();
+            await session.endSession();
+            return next(badRequestError.make(ErrorCode.MINES_ROUND_NOT_FOUND));
+        }
+        let user = await User.findById(minesRound.userId);
+        if (!user) {
+            await session.abortTransaction();
+            await session.endSession();
+            return next(badRequestError.make(ErrorCode.USER_NOT_FOUND));
+        }
+        if (minesRound.cashAccount === CashAccount.REAL) {
+            user.cash += minesRound.profit;
+        } else {
+            user.demoCash += minesRound.profit;
+        }
+        user = await user.save();
+        if (!user) {
+            await session.abortTransaction();
+            await session.endSession();
+            next(badRequestError.make(ErrorCode.MINES_COULD_NOT_CASHOUT));
+        }
+        minesRound.masterPaid = true;
+        minesRound.closed = true;
+        minesRound = await minesRound.save();
+        if (!minesRound) {
+            await session.abortTransaction();
+            await session.endSession();
+            next(badRequestError.make(ErrorCode.MINES_COULD_NOT_CASHOUT));
+        }
+        await session.commitTransaction();
+        await session.endSession();
+        engine.userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));
+        res.json(new ClientMinesRound(minesRound));
+    } catch (e) {
+        logger.error('minesService_cashout', `e=${e}`);
+        await session.abortTransaction();
+        await session.endSession();
+        next(badRequestError.make(ErrorCode.MINES_COULD_NOT_CASHOUT));
     }
 }
 
@@ -192,4 +263,6 @@ module.exports = {
     createMinesRound: createMinesRound,
     getMinesRoundById: getMinesRoundById,
     choose: choose,
+    cashout: cashout,
+    getMinesRounds: getMinesRounds,
 }

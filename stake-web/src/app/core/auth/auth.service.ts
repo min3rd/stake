@@ -43,6 +43,10 @@ export class AuthService {
         return localStorage.getItem('refreshToken') ?? '';
     }
 
+    get authenicated(): boolean {
+        return this._authenticated;
+    }
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------

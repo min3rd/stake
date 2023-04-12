@@ -181,6 +181,7 @@ const updateCallResult = async function (publicIo, userIo) {
                     }
                 }
                 logger.info("updateCallResult_PROCESS_PAID_TO_USER", `oldCash=${oldCash} user=${JSON.stringify(user)} tradingCall=${JSON.stringify(tradingCall)}`);
+                tradingCall.winType = winType;
                 tradingCall.masterPaid = true;
                 user = await user.save();
                 tradingCall = await tradingCall.save();

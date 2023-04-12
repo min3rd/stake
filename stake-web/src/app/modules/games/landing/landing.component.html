@@ -1,4 +1,11 @@
 <div class="w-full h-full">
-    <div class="h-full bg-card dark:bg-default">
+    <div class="h-full bg-card dark:bg-default p-6">
+        <div class="grid">
+            <div *ngFor="let game of games"
+                class="w-32 h-32 rounded-lg drop-shadow-md transition duration-150 ease-in-out hover:-translate-y-2 hover:cursor-pointer"
+                [routerLink]="[game?.link]" routerLinkActive="router-link-active">
+                <img [src]="game?.image" alt="game?.title" class="rounded-lg">
+            </div>
+        </div>
     </div>
 </div>

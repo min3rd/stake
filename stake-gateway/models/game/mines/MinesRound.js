@@ -3,6 +3,7 @@ const { publicMongoose } = require("../../../config/publicMongoose");
 
 const MinesRoundSchema = new Schema({
     userId: { type: String, require: true, index: true, },
+    cashAccount: { type: Number, require: true, default: 0, },
     size: { type: Number, default: 5, },
     mines: { type: Number, default: 3, },
     gems: { type: Number, default: 22 },

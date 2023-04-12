@@ -97,8 +97,8 @@ export class ApiService {
         return this._usersApi(`/user/changePassword`);
     }
 
-    users_mines_rounds() {
-        return this._usersApi(`/mines/rounds`);
+    users_mines_rounds(offset: number = 0, size: number = 10, sort: { time: -1 | 1 } = { time: -1 }) {
+        return this._usersApi(`/mines/rounds?offset=${offset}&size=${size}&sort=${JSON.stringify(sort)}`);
     }
 
     users_mines_rounds_round(id: string) {
@@ -112,6 +112,19 @@ export class ApiService {
     users_mines_rounds_round_choose(id: string) {
         return this._usersApi(`/mines/rounds/${id}/choose`);
     }
+
+    users_mines_rounds_round_cashout(id: string) {
+        return this._usersApi(`/mines/rounds/${id}/cashout`);
+    }
+
+    users_wallet_depositOrders(offset: number = 0, size: number = 10, sort: { time: -1 | 1 } = { time: -1 }) {
+        return this._usersApi(`/wallet/depositOrders?offset=${offset}&size=${size}&sort=${JSON.stringify(sort)}`);
+    }
+
+    users_wallet_depositOrders_depositOrder(id: string) {
+        return this._usersApi(`/wallet/depositOrders/${id}`);
+    }
+    
 }
 
 

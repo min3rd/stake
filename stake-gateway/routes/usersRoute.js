@@ -2,7 +2,8 @@ var express = require('express');
 const { authenticateToken } = require('../services/public/authentication');
 const { call, getTradingCalls } = require('../services/public/tradingService');
 const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification, updateUser, changePassword } = require('../services/public/userService');
-const { createMinesRound, getMinesRoundById, choose } = require('../services/public/game/mines/minesService');
+const { createMinesRound, getMinesRoundById, choose, cashout, getMinesRounds } = require('../services/public/game/mines/minesService');
+const { createDepositOrder, getDepositOrderById, getDepositOrders, cancelDepositOrders } = require('../services/public/wallet/depositService');
 var router = express.Router();
 
 /* GET users listing. */
@@ -17,9 +18,15 @@ router.post('/:userId/notifications/remove', authenticateToken, removeNotificati
 router.post('/:userId/user', authenticateToken, updateUser);
 router.post('/:userId/user/changePassword', authenticateToken, changePassword);
 router.post('/:userId/mines/rounds', authenticateToken, createMinesRound);
+router.get('/:userId/mines/rounds', authenticateToken, getMinesRounds);
 router.get('/:userId/mines/rounds/:minesRoundId', authenticateToken, getMinesRoundById);
 router.post('/:userId/mines/rounds/:minesRoundId/choose', authenticateToken, choose);
+router.post('/:userId/mines/rounds/:minesRoundId/cashout', authenticateToken, cashout);
 
+router.post('/:userId/wallet/depositOrders', authenticateToken, createDepositOrder);
+router.get('/:userId/wallet/depositOrders', authenticateToken, getDepositOrders);
+router.get('/:userId/wallet/depositOrders/:depositOrderId', authenticateToken, getDepositOrderById);
+router.patch('/:userId/wallet/depositOrders/:depositOrderId', authenticateToken, cancelDepositOrders);
 
 
 module.exports = router;

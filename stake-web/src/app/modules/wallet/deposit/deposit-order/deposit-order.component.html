@@ -1,0 +1,35 @@
+<div class="w-full md:px-6">
+    <ng-container *ngIf="depositOrder">
+        <div class="w-full mb-2 flex justify-end">
+            <button *ngIf="depositOrder.flag == DepositOrderStatus.PENDING" mat-flat-button
+                class="w-full md:max-w-24 rounded-md bg-red-500" (click)="cancel()">
+                {{'cancel' | transloco | capitalize}}
+            </button>
+        </div>
+        <div class="w-full my-2">
+            <div class="font-semibold">{{'wallet address' | transloco | capitalize}}</div>
+            <div
+                class="w-full bg-slate-500 rounded-md drop-shadow-md p-2 truncate flex flex-auto justify-between items-center">
+                <span class="truncate">{{depositOrder.masterAddress}}</span>
+                <button mat-icon-button (click)="copyAddress()">
+                    <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="w-full my-4">
+            <div class="font-semibold">{{'message' | transloco | capitalize}}</div>
+            <div
+                class="w-full bg-slate-500 rounded-md drop-shadow-md p-2 truncate flex flex-auto justify-between items-center">
+                <span class="truncate">{{depositOrder._id}}</span>
+                <button mat-icon-button (click)="copyMessage()">
+                    <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="w-full my-2 flex flex-auto justify-center">
+            <qrcode class="rounded-md" [qrdata]="depositOrder.masterAddress" [width]="256" [errorCorrectionLevel]="'M'">
+            </qrcode>
+        </div>
+    </ng-container>
+</div>

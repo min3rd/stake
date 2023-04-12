@@ -55,5 +55,13 @@
   "x2": "x2",
   "all": "all",
   "gems": "gems",
-  "random choose": "random choose"
+  "random choose": "random choose",
+  "id": "id",
+  "identity": "identity",
+  "time": "time",
+  "no record": "no record",
+  "there are no results": "there are no results!",
+  "add deposit order": "add deposit order",
+  "message": "message",
+  "wallet address": "wallet address"
 }

@@ -9,6 +9,7 @@ const TradingCallSchema = new Schema({
     openTime: { type: Date, require: true, index: true, },
     closeTime: { type: Date, require: true, index: true, },
     type: { type: Number, enum: Object.values(TradingCallType), require: true, },
+    winType: { type: Number, },
     betCash: { type: Number, require: true, default: 0 },
     benefitPercent: { type: Number, require: true },
     benefit: { type: Number, require: true, },

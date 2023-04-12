@@ -44,6 +44,7 @@ export class TradingComponent implements OnInit, OnDestroy {
       if (!this.tradingRoom) {
         this.tradingRoom = this.tradingRooms[0];
       }
+      this._changeDetectorRef.markForCheck();
     });
 
     this._tradingService.config$.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {
@@ -52,6 +53,7 @@ export class TradingComponent implements OnInit, OnDestroy {
       }
       this.tradingConfig = config;
       this.betCash = this.tradingConfig.sliderMin;
+      this._changeDetectorRef.markForCheck();
     })
 
     this._tradingService.tradingCalls$.pipe(takeUntil(this._unsubscribeAll)).subscribe(tradingCalls => {
@@ -59,6 +61,7 @@ export class TradingComponent implements OnInit, OnDestroy {
         return;
       }
       this.tradingCalls = tradingCalls;
+      this._changeDetectorRef.markForCheck();
     });
 
     this._tradingService.rounds$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rounds => {
@@ -73,6 +76,7 @@ export class TradingComponent implements OnInit, OnDestroy {
         });
       }
       this.klines.next(values.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime()).slice(0, 59));
+      this._changeDetectorRef.markForCheck();
     });
     this.klines.pipe(takeUntil(this._unsubscribeAll)).subscribe(klines => {
       if (!klines) {
@@ -82,12 +86,15 @@ export class TradingComponent implements OnInit, OnDestroy {
       this.btcChartComponent.updateSeries([{
         data: klines,
       }]);
+      this._changeDetectorRef.markForCheck();
     });
     this._socketService.socket.fromEvent(SocketEvent.NOW).subscribe(data => {
       this.currentTime = data;
+      this._changeDetectorRef.markForCheck();
     });
     this._socketService.socket.fromEvent(SocketEvent.ROOM_JOIN).subscribe(data => {
       this.tradingRoom = this.tradingRooms.find(e => e.symbol == data);
+      this._changeDetectorRef.markForCheck();
     });
 
     this._socketService.socket.fromEvent(SocketEvent.KLINE).subscribe((kline: Kline) => {
@@ -110,6 +117,7 @@ export class TradingComponent implements OnInit, OnDestroy {
         });
       }
       this.klines.next(klines.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime()).slice(0, 59));
+      this._changeDetectorRef.markForCheck();
     });
 
     this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
@@ -117,20 +125,27 @@ export class TradingComponent implements OnInit, OnDestroy {
       this._socketService.socket.emit(SocketEvent.ROOM_LEFT, old.symbol);
       this._socketService.socket.emit(SocketEvent.ROOM_JOIN, newValue.symbol);
       this.updateRounds(newValue);
+      this._changeDetectorRef.markForCheck();
     });
 
     this._socketService.socket.on(SocketEvent.disconnect, () => {
       this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
       this.updateRounds(this.tradingRoom);
+      this._changeDetectorRef.markForCheck();
     });
 
     this._socketService.socket.fromEvent(SocketEvent.TRADING_CONFIG).subscribe((tradingConfig: TradingConfig) => {
       this.tradingConfig = tradingConfig;
+      this._changeDetectorRef.markForCheck();
     })
 
     this._prepareChartData();
     this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
     this.updateRounds(this.tradingRoom);
+  }
+
+  deactive() {
+    this._socketService.socket.emit(SocketEvent.ROOM_LEFT, this.tradingRoom.symbol);
   }
 
   ngOnDestroy(): void {

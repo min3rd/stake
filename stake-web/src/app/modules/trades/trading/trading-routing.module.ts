@@ -2,6 +2,7 @@ import { TradingRoomResolver } from './trading.resolver';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TradingComponent } from './trading.component';
+import { TradingGuard } from './trading.guard';
 
 const routes: Routes = [
   {
@@ -10,6 +11,7 @@ const routes: Routes = [
     resolve: {
       TradingRoomResolver: TradingRoomResolver,
     },
+    canDeactivate: [TradingGuard],
   }
 ];
 

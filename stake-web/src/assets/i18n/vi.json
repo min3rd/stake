@@ -52,5 +52,12 @@
   "x2": "x2",
   "all": "tất cả",
   "gems": "đá quý",
-  "random choose": "chọn ngẫu nhiên"
+  "random choose": "chọn ngẫu nhiên",
+  "identity": "danh tính",
+  "time": "thời gian",
+  "no record": "không có hồ sơ",
+  "there are no results": "không có kết quả!",
+  "add deposit order": "thêm lệnh nạp tiền",
+  "message": "tin nhắn",
+  "wallet address": "địa chỉ ví"
 }

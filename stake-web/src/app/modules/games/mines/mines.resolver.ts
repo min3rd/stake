@@ -7,6 +7,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { MinesRound } from './mines.types';
 import { MinesService } from './mines.service';
+import { AuthService } from 'app/core/auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,18 @@ export class MinesRoundResolver implements Resolve<MinesRound> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MinesRound> {
     let minesRoundId = route.paramMap.get('id');
     return this._minesService.getMinesRound(minesRoundId);
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class MinesRoundsResolver implements Resolve<MinesRound[]> {
+  constructor(
+    private _minesService: MinesService,
+    private _authService: AuthService,
+  ) { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MinesRound[]> {
+    return this._minesService.getMinesRounds();
   }
 }

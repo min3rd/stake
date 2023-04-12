@@ -1,9 +1,11 @@
-<div class="w-full h-full p-6">
-    <div class="flex md:flex-auto w-fit p-6 rounded-lg bg-card dark:bg-slate-700 mx-auto gap-6">
+<div class="w-full h-full md:p-6">
+    <!-- Game Area -->
+    <div
+        class="md:flex md:flex-auto w-full h-full md:w-fit p-2 md:p-6 md:rounded-lg bg-card dark:bg-slate-700 mx-auto gap-6 transition duration-150 translate-x-0">
 
         <!-- Bet Cash Controller -->
         <div class="px-2 md:min-w-64">
-            <ng-container *ngIf="!minesRound || (minesRound?.closed && minesRound?.masterPaid)">
+            <ng-container *ngIf="!minesRound || minesRound.masterPaid">
                 <!-- Bet Area -->
                 <form [formGroup]="betForm" class="w-full">
                     <mat-form-field class="w-full drop-shadow-lg">
@@ -39,14 +41,15 @@
             </ng-container>
 
             <!-- Started Game Area -->
-            <ng-container *ngIf="minesRound?.started">
+            <ng-container *ngIf="minesRound?.started && !minesRound.masterPaid">
                 <div class="w-full">
                     <div class="flex flex-auto w-full gap-2">
                         <span class="font-semibold">
                             {{'bet amount' | transloco | capitalize}}
                         </span>
                     </div>
-                    <div class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
+                    <div
+                        class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
                         <span>{{minesRound?.betAmount | currency}}</span>
                     </div>
                 </div>
@@ -57,7 +60,8 @@
                                 {{'mines' | transloco | capitalize}}
                             </span>
                         </div>
-                        <div class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
+                        <div
+                            class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
                             <span>{{minesRound?.mines}}</span>
                         </div>
                     </div>
@@ -67,7 +71,8 @@
                                 {{'gems' | transloco | capitalize}}
                             </span>
                         </div>
-                        <div class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
+                        <div
+                            class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
                             <span>{{minesRound?.gems}}</span>
                         </div>
                     </div>
@@ -79,17 +84,18 @@
                         </span>
                         <span>( x{{minesRound?.profitPercent.toFixed(2)}})</span>
                     </div>
-                    <div class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
+                    <div
+                        class="flex flex-auto w-full rounded-md p-4 gap-2 mt-2 drop-shadow-lg bg-card default:bg-default">
                         <span>{{minesRound?.profit | currency}}</span>
                     </div>
                 </div>
-                <button *ngIf="minesRound.started && !minesRound.closed" mat-flat-button
+                <!-- <button *ngIf="minesRound.started && !minesRound.closed" mat-flat-button
                     class="w-full rounded-md bg-slate-900 mt-4 drop-shadow-lg">
                     <span *ngIf="!apiCalling">{{'random choose' | transloco | capitalize}}</span>
                     <mat-progress-spinner *ngIf="apiCalling" [diameter]="24"
                         [mode]="'indeterminate'"></mat-progress-spinner>
-                </button>
-                <button mat-flat-button class="w-full rounded-md bg-lime-500 mt-2 drop-shadow-lg">
+                </button> -->
+                <button mat-flat-button class="w-full rounded-md bg-lime-500 mt-2 drop-shadow-lg" (click)="cashout()">
                     <span *ngIf="!apiCalling">{{'cashout' | transloco | capitalize}}</span>
                     <mat-progress-spinner *ngIf="apiCalling" [diameter]="24"
                         [mode]="'indeterminate'"></mat-progress-spinner>
@@ -100,29 +106,29 @@
 
 
         <!-- Game Board -->
-        <div>
-            <div class="grid bg-card dark:bg-slate-900 rounded-lg p-6 gap-4 md:grid-cols-5">
+        <div class="mt-6 md:mt-0">
+            <div class="grid bg-card dark:bg-slate-900 rounded-lg p-6 gap-4 grid-cols-5">
                 <ng-container *ngIf="!minesRound">
                     <div *ngFor="let box of boxes; let i = index;"
-                        class="w-32 h-32 rounded-md bg-slate-500 drop-shadow-lg hover:-translate-y-2 hover:cursor-pointer">
+                        class="w-12 h-12 md:w-32 md:h-32 rounded-md bg-slate-500 drop-shadow-lg hover:-translate-y-2 hover:cursor-pointer">
                     </div>
                 </ng-container>
                 <ng-container *ngIf="minesRound">
                     <div *ngFor="let box of boxes; let i = index;"
-                        class="w-32 h-32 rounded-md bg-neutral-600 drop-shadow-md">
+                        class="w-12 h-12 md:w-32 md:h-32 rounded-md bg-neutral-600 drop-shadow-md">
                         <div *ngIf="charAt(i, minesRound?.playerChoices) == 0 && !minesRound?.closed"
-                            class="w-32 h-32 rounded-md bg-slate-500 drop-shadow-lg hover:-translate-y-2 hover:cursor-pointer"
+                            class="w-12 h-12 md:w-32 md:h-32 rounded-md bg-slate-500 drop-shadow-lg hover:-translate-y-2 hover:cursor-pointer"
                             (click)="choose(i)">
                         </div>
                         <div *ngIf="charAt(i, minesRound?.playerChoices) == 0 && minesRound?.closed"
-                            class="w-32 h-32 rounded-md bg-slate-500 drop-shadow-lg hover:-translate-y-2 hover:cursor-pointer">
+                            class="w-12 h-12 md:w-32 md:h-32 rounded-md bg-slate-500 drop-shadow-lg hover:-translate-y-2 hover:cursor-pointer">
                         </div>
                         <div *ngIf="charAt(i, minesRound?.playerChoices) == 1"
-                            class="flex w-32 h-32 rounded-md bg-transparent drop-shadow-lg items-center justify-center">
+                            class="flex w-12 h-12 md:w-32 md:h-32 rounded-md bg-transparent drop-shadow-lg items-center justify-center">
                             <img class="w-24 h-24" src="/assets/images/mines/gem.svg">
                         </div>
                         <div *ngIf="charAt(i, minesRound?.playerChoices) == 2"
-                            class="flex w-32 h-32 rounded-md bg-transparent drop-shadow-lg items-center justify-center">
+                            class="flex w-12 h-12 md:w-32 md:h-32 rounded-md bg-transparent drop-shadow-lg items-center justify-center">
                             <img class="absolute" [src]="mineEffectImage()">
                             <img class="w-24 h-24" src="/assets/images/mines/mine.svg">
                         </div>
@@ -130,5 +136,36 @@
                 </ng-container>
             </div>
         </div>
+        <ng-container *ngIf="(minesRounds$ | async) as minesRounds">
+            <div class="grid gap-2 h-fit bg-card dark:bg-slate-700 mt-4 md:mt-0 border-t py-2 md:border-t-0 md:py-0">
+                <div class="flex flex-auto justify-end w-full px-2 gap-2">
+                    <button mat-icon-button (click)="prevPage()">
+                        <mat-icon svgIcon="heroicons_outline:chevron-left"></mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="nextPage()">
+                        <mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon>
+                    </button>
+                </div>
+                <div *ngFor="let minesRound of minesRounds"
+                    class="flex flex-wrap items-center bg-card dark:bg-default rounded-md p-2 gap-2 hover:cursor-pointer transition duration-150 hover:-translate-x-2"
+                    [routerLink]="['/games/mines/' + minesRound._id]" routerLinkActive="router-link-active">
+                    <span>
+                        {{minesRound.time | date : 'MM/dd HH:mm:ss'}}
+                    </span>
+                    <div *ngIf="minesRound.profit > 0"
+                        [class]="'rounded-md bg-lime-500 p-1 text-sm' + (!minesRound.closed ? ' animate-bounce ' : '')">
+                        {{minesRound.profit | currency}}
+                    </div>
+                    <div *ngIf="minesRound.profit <= 0 && minesRound.betAmount > 0"
+                        [class]="'rounded-md bg-red-500 p-1 text-sm' + (!minesRound.closed ? ' animate-bounce ' : '')">
+                        {{minesRound.betAmount | currency}}
+                    </div>
+                    <div *ngIf="minesRound.profit == 0 && minesRound.betAmount == 0"
+                        [class]="'rounded-md bg-amber-500 p-1 text-sm' + (!minesRound.closed ? ' animate-bounce ' : '')">
+                        {{minesRound.betAmount | currency}}
+                    </div>
+                </div>
+            </div>
+        </ng-container>
     </div>
 </div>

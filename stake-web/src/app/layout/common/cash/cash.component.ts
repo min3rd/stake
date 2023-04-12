@@ -39,7 +39,7 @@ export class CashComponent implements OnInit {
           this._userService.user = user;
         });
     } else {
-      this._router.navigate(['/deposit'], {
+      this._router.navigate(['/wallet/deposit'], {
         queryParams: {
           redirectUrl: this._router.url,
         }
