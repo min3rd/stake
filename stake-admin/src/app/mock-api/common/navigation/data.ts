@@ -22,6 +22,28 @@ const navigations: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'gamepad',
         link: '/games'
+    },
+    {
+        id: 'management',
+        title: 'Management',
+        type: 'aside',
+        icon: 'heroicons_outline:cog',
+        children: [
+            {
+                id: 'users',
+                title: 'Users',
+                type: 'basic',
+                icon: 'heroicons_outline:users',
+                link: '/management/users'
+            },
+            {
+                id: 'depositOrders',
+                title: 'Deposit Orders',
+                type: 'basic',
+                icon: 'mat_outline:receipt',
+                link: '/management/depositOrders'
+            }
+        ],
     }
 ];
 

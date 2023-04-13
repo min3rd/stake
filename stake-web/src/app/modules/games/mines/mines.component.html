@@ -120,14 +120,14 @@
                             class="w-12 h-12 md:w-32 md:h-32 rounded-md bg-slate-500 drop-shadow-lg hover:-translate-y-2 hover:cursor-pointer"
                             (click)="choose(i)">
                         </div>
-                        <div *ngIf="charAt(i, minesRound?.playerChoices) == 0 && minesRound?.closed"
+                        <div *ngIf="charAt(i, minesRound?.playerChoices) == BOX_TYPE.UNKNOW && minesRound?.closed"
                             class="w-12 h-12 md:w-32 md:h-32 rounded-md bg-slate-500 drop-shadow-lg hover:-translate-y-2 hover:cursor-pointer">
                         </div>
-                        <div *ngIf="charAt(i, minesRound?.playerChoices) == 1"
+                        <div *ngIf="charAt(i, minesRound?.playerChoices) == BOX_TYPE.GEM"
                             class="flex w-12 h-12 md:w-32 md:h-32 rounded-md bg-transparent drop-shadow-lg items-center justify-center">
                             <img class="w-24 h-24" src="/assets/images/mines/gem.svg">
                         </div>
-                        <div *ngIf="charAt(i, minesRound?.playerChoices) == 2"
+                        <div *ngIf="charAt(i, minesRound?.playerChoices) == BOX_TYPE.MINE"
                             class="flex w-12 h-12 md:w-32 md:h-32 rounded-md bg-transparent drop-shadow-lg items-center justify-center">
                             <img class="absolute" [src]="mineEffectImage()">
                             <img class="w-24 h-24" src="/assets/images/mines/mine.svg">

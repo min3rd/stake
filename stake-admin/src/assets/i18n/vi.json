@@ -35,5 +35,17 @@
   "close price": "giá đóng cửa",
   "trading time": "thời gian giao dịch",
   "benefit in percent": "hưởng lợi theo phần trăm",
-  "delete": "xóa bỏ"
+  "delete": "xóa bỏ",
+  "users": "người dùng",
+  "there are no users": "Không có người dùng!",
+  "cash": "tiền mặt",
+  "demo cash": "tiền mặt demo",
+  "blocked": "bị chặn",
+  "block": "khóa",
+  "cancel": "Hủy bỏ",
+  "save": "Lưu",
+  "unblock": "mở khóa",
+  "search users": "người dùng tìm kiếm",
+  "deposit orders": "lệnh gửi tiền",
+  "search deposit orders": "tra cứu lệnh đặt cọc"
 }

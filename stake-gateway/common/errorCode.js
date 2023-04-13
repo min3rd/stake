@@ -37,5 +37,6 @@ const ErrorCode = {
     MINES_ROUND_INVALID_MINES: "00x0035",
     WALLET_COULD_NOT_DEPOSIT_ORDER: "00x0036",
     WALLET_DEPOSIT_ORDER_NOT_FOUND: "00x0037",
+    USER_BLOCKED: "00x0038",
 }
 module.exports = ErrorCode;

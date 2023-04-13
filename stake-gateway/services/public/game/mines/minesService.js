@@ -184,6 +184,7 @@ const choose = async function (req, res, next) {
     if (!result) {
         chars[position - 1] = POSITION_TYPE.MINE;
         minesRound.closed = true;
+        minesRound.masterPaid = true;
         minesRound.profitPercent = 0;
         minesRound.profit = 0;
         minesRound.mines -= 1;

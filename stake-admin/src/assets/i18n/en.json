@@ -44,5 +44,17 @@
   "close price": "close price",
   "trading time": "trading time",
   "benefit in percent": "benefit in percent",
-  "delete": "delete"
+  "delete": "delete",
+  "users": "users",
+  "there are no users": "There are no users!",
+  "cash": "cash",
+  "demo cash": "demo cash",
+  "blocked": "blocked",
+  "block": "block",
+  "cancel": "cancel",
+  "save": "save",
+  "unblock": "unblock",
+  "search users": "search users",
+  "deposit orders": "deposit orders",
+  "search deposit orders": "search deposit orders"
 }

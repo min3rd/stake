@@ -1,0 +1,97 @@
+<div class="flex flex-col w-full">
+
+
+    <!-- Header -->
+    <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+        <!-- Close button -->
+        <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
+            <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']">
+                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </a>
+        </div>
+    </div>
+
+    <!-- Contact form -->
+    <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+        <div class="w-full max-w-3xl">
+            <form [formGroup]="userForm">
+
+                <!-- Avatar -->
+                <div class="flex flex-auto -mt-16 gap-6 items-baseline">
+                    <div
+                        class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
+                        <!-- Image/Letter -->
+                        <img class="object-cover w-full h-full" *ngIf="user.avatar" [src]="user.avatar">
+                        <div class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                            *ngIf="!user.avatar">
+                            {{user.name.charAt(0)}}
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <div>
+                            {{user.name}}{{!user.phone ? '' : (' - ' + user.phone)}}
+                        </div>
+                        <div class="text-secondary">
+                            @{{user.username}}
+                        </div>
+                    </div>
+                </div>
+
+
+                <input type="hidden" [formControlName]="'id'">
+
+                <!-- Cash -->
+                <div class="mt-8">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>{{'cash' | transloco | capitalize}}</mat-label>
+                        <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                        <input matInput type="number" [formControlName]="'cash'"
+                            [placeholder]="'cash' | transloco | capitalize" [spellcheck]="false">
+                    </mat-form-field>
+                </div>
+
+                <!-- Demo Cash -->
+                <div class="mt-8">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>{{'demo cash' | transloco | capitalize}}</mat-label>
+                        <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                        <input matInput type="number" [formControlName]="'demoCash'"
+                            [placeholder]="'demo cash' | transloco | capitalize" [spellcheck]="false">
+                    </mat-form-field>
+                </div>
+
+                <!-- Block -->
+                <div class="mt-8 flex flex-auto items-center gap-6">
+                    <mat-label>{{'blocked' | transloco | capitalize}}</mat-label>
+                    <mat-checkbox disabled class="example-margin" [checked]="user.blocked">
+                    </mat-checkbox>
+                </div>
+
+                <!-- Actions -->
+                <div
+                    class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                    <button *ngIf="!user.blocked" mat-button [color]="'warn'"
+                        [matTooltip]="'block' | transloco | capitalize" (click)="blockUser()">
+                        {{'block' | transloco | capitalize}}
+                    </button>
+                    <button *ngIf="user.blocked" mat-button [color]="'warn'"
+                        [matTooltip]="'unblock' | transloco | capitalize" (click)="unblockUser()">
+                        {{'unblock' | transloco | capitalize}}
+                    </button>
+                    <!-- Cancel -->
+                    <button class="ml-auto" mat-button [matTooltip]="'cancel' | transloco | capitalize"
+                        [routerLink]="['../']">
+                        {{'cancel' | transloco | capitalize}}
+                    </button>
+                    <!-- Save -->
+                    <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="userForm.invalid"
+                        [matTooltip]="'save' | transloco | capitalize" (click)="updateUser()">
+                        {{'save' | transloco | capitalize}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

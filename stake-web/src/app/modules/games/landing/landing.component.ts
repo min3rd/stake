@@ -6,9 +6,9 @@ import { Game } from '../games.types';
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
-export class LandingComponent implements OnInit{
+export class LandingComponent implements OnInit {
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
   }
   games: Game[] = [
     {

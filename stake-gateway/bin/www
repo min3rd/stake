@@ -15,6 +15,7 @@ const userSocket = require('../socket/userSocket');
 const engine = require('../engine');
 const adminSocket = require('../socket/adminSocket');
 const adminTradingJob = require('../job/admin/adminTradingJob');
+const accountJob = require('../job/admin/accountJob');
 
 /**
  * Get port from environment and store in Express.
@@ -40,6 +41,7 @@ const userIo = userSocket(io);
 const adminIo = adminSocket(io);
 tradingJob(publicIo, userIo, adminIo);
 adminTradingJob(adminIo);
+accountJob();
 
 engine.init(app, io, publicIo, userIo, tradingJob, migration, adminIo);
 

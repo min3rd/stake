@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MinesRound } from './mines.types';
+import { BOX_TYPE, MinesRound } from './mines.types';
 import { CashAccount, User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { MinesService } from './mines.service';
   styleUrls: ['./mines.component.scss']
 })
 export class MinesComponent implements OnInit, OnDestroy {
+  BOX_TYPE = BOX_TYPE;
   size: number = 5;
   betForm: UntypedFormGroup;
   boxes: any[];
@@ -134,7 +135,7 @@ export class MinesComponent implements OnInit, OnDestroy {
   nextPage() {
     this.offset += this.pageSize;
     this._minesService.getMinesRounds(this.offset, this.pageSize).subscribe(minesRounds => {
-      if (!minesRounds) {
+      if (!minesRounds.length) {
         this.offset = 0;
       }
     });
@@ -143,7 +144,7 @@ export class MinesComponent implements OnInit, OnDestroy {
     this.offset -= this.pageSize;
     this.offset = this.offset < 0 ? 0 : this.offset;
     this._minesService.getMinesRounds(this.offset, this.pageSize).subscribe(minesRounds => {
-      if (!minesRounds) {
+      if (!minesRounds.length) {
         this.offset = 0;
       }
     });

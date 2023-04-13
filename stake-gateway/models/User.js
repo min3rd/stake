@@ -17,6 +17,7 @@ const UserSchema = new Schema({
     cash: { type: Number, default: 0, },
     demoCash: { type: Number, default: 0, },
     cashAccount: { type: Number, enum: Object.values(CashAccount) },
+    blocked: { type: Boolean, default: false, },
 });
 const User = publicMongoose.model('User', UserSchema);
 
@@ -34,6 +35,7 @@ class ClientUser {
         this.cash = user.cash;
         this.demoCash = user.demoCash;
         this.cashAccount = user.cashAccount;
+        this.blocked = user.blocked;
     }
 }
 

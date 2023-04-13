@@ -105,6 +105,14 @@ export class ApiService {
     admin_trading_rounds() {
         return this._adminApi('/trading/rounds');
     }
+
+    admin_users(query: string = '', offset: number = 0, size: number = 10) {
+        return this._adminApi(`/users?query=${query}&offset=${offset}&size=${size}`);
+    }
+
+    admin_users_user(id: string): string {
+        return this._adminApi(`/users/${id}`);
+    }
 }
 
 

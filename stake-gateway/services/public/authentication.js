@@ -6,12 +6,15 @@ const jwt = require('jsonwebtoken');
 const badRequestError = require("../../common/badRequestError");
 const randToken = require('rand-token');
 const logger = require("../../common/logger");
+
 function generateAccessToken(clientUser) {
     let clone = Object.assign({}, clientUser);
     let now = new Date().getTime();
     clone.exp = now + parseInt(process.env.TOKEN_LIFETIME);
     return jwt.sign(JSON.stringify(clone), process.env.TOKEN_SECRET);
-}const validate = (data) => {
+}
+
+const validate = (data) => {
     if (!data.username) {
         throw new Error(ErrorCode.USERNAME_NOT_BLANK);
     }
@@ -66,29 +69,32 @@ const signUp = async (req, res, next) => {
 
 const signIn = async (req, res, next) => {
     let body = req.body;
-    let exist = await User.findOne({
+    let exists = await User.findOne({
         username: body.username,
         password: security.hashPassword(body.password),
     });
-    if (!exist) {
+    if (!exists) {
         return next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
     }
-    let clientUser = new ClientUser(exist);
+    if (exists.blocked) {
+        return next(badRequestError.make(ErrorCode.USER_BLOCKED));
+    }
+    let clientUser = new ClientUser(exists);
     let accessToken = generateAccessToken(clientUser)
-    exist.refreshToken = randToken.generate(128);
+    exists.refreshToken = randToken.generate(128);
     let refreshExpiryAt = new Date().getTime() + parseInt(!req.body.remeberMe ? process.env.REFRESH_TOKEN_LIFETIME : process.env.REFRESH_TOKEN_LIFETIME_REMEMBER);
 
-    exist.refreshExpiryAt = new Date(refreshExpiryAt);
-    exist.accessToken = accessToken;
+    exists.refreshExpiryAt = new Date(refreshExpiryAt);
+    exists.accessToken = accessToken;
     try {
-        await exist.save();
+        await exists.save();
     } catch (e) {
         logger.error('signIn', `error=${e}`);
         return next(badRequestError.make(ErrorCode.TOKEN_GENERATION));
     }
     res.json({
         accessToken: accessToken,
-        refreshToken: exist.refreshToken,
+        refreshToken: exists.refreshToken,
         user: clientUser,
     });
 }
@@ -103,6 +109,9 @@ const signInByRefreshToken = async (req, res, next) => {
     });
     if (!exists) {
         return next(badRequestError.make(ErrorCode.USER_NOT_EXIST));
+    }
+    if (exists.blocked) {
+        return next(badRequestError.make(ErrorCode.USER_BLOCKED));
     }
     let clientUser = new ClientUser(exists);
 
@@ -127,9 +136,14 @@ function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403)
+        if (err) {
+            return res.sendStatus(403);
+        }
         if (user.exp < new Date().getTime()) {
             return res.sendStatus(401);
+        }
+        if (user.blocked) {
+            return res.sendStatus(403);
         }
         req.user = user
         next();

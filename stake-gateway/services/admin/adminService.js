@@ -10,7 +10,7 @@ function generateAdminAccessToken(clientUser, lifetime = parseInt(process.env.TO
     let clone = Object.assign({}, clientUser);
     let now = new Date().getTime();
     clone.exp = now + lifetime;
-    return jwt.sign(JSON.stringify(clone), process.env.TOKEN_SECRET);
+    return jwt.sign(JSON.stringify(clone), process.env.ADMIN_TOKEN_SECRET);
 }
 
 function verifyToken(socket) {
@@ -18,7 +18,7 @@ function verifyToken(socket) {
     if (token == null) {
         return false;
     }
-    return jwt.verify(token, process.env.TOKEN_SECRET, (err, adminUser) => {
+    return jwt.verify(token, process.env.ADMIN_TOKEN_SECRET, (err, adminUser) => {
         if (err) {
             return false;
         }
@@ -34,7 +34,7 @@ function adminAuthenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
-    jwt.verify(token, process.env.TOKEN_SECRET, async (err, adminUser) => {
+    jwt.verify(token, process.env.ADMIN_TOKEN_SECRET, async (err, adminUser) => {
         if (err) return res.sendStatus(403)
         if (adminUser.exp < new Date().getTime()) {
             return res.sendStatus(401);

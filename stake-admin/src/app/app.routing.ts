@@ -75,7 +75,10 @@ export const appRoutes: Route[] = [
                 path: 'games',
                 loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
             },
-
+            {
+                path: 'management',
+                loadChildren: () => import('app/modules/management/management.module').then(m => m.ManagementModule),
+            },
         ]
     }
 ];

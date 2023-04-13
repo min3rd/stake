@@ -3,13 +3,17 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     /**
      * Constructor
      */
-    constructor(private _authService: AuthService) {
+    constructor(
+        private _authService: AuthService,
+        private _router: Router,
+    ) {
     }
 
     /**
@@ -54,7 +58,11 @@ export class AuthInterceptor implements HttpInterceptor {
                         this._authService.signOut();
 
                         // Reload the app
-                        location.reload();
+                        this._router.navigate(['/sign-in'], {
+                            queryParams: {
+                                redirectUrl: this._router.url,
+                            }
+                        });
                     }
                 }
 

@@ -15,3 +15,9 @@ export interface MinesRound {
     userPaid?: boolean
     masterPaid?: boolean
 }
+
+export enum BOX_TYPE {
+    UNKNOW = 0,
+    GEM = 1,
+    MINE = 2,
+}
