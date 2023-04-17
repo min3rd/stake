@@ -59,5 +59,17 @@
   "there are no results": "không có kết quả!",
   "add deposit order": "thêm lệnh nạp tiền",
   "message": "tin nhắn",
-  "wallet address": "địa chỉ ví"
+  "wallet address": "địa chỉ ví",
+  "name": "tên",
+  "coin wallet addresses": "địa chỉ ví tiền ảo",
+  "manage your coin wallet addresses": "quản lý địa chỉ ví tiền ảo của bạn",
+  "coin wallet": "ví tiền ảo",
+  "wallet": "ví tiền ảo",
+  "manage your wallet": "quản lý ví của bạn",
+  "manage your coin wallet": "quản lý ví tiền ảo của bạn",
+  "add": "thêm vào",
+  "check coin transaction": "kiểm tra giao dịch tiền ảo",
+  "check": "kiểm tra",
+  "transaction identity": "danh tính giao dịch",
+  "transaction hash hint": "hàm băm giao dịch trông giống như: 0x64d71510fb98e6e79131da8eaf7fdc5041d2f3bcad2ed9e516a6cf893da7d927"
 }

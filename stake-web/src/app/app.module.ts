@@ -16,6 +16,7 @@ import { SocketIoModule } from 'ngx-socket-io';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ApiService } from './core/api/api.service';
 import { Observable, tap } from 'rxjs';
+import { HotToastModule } from '@ngneat/hot-toast';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
@@ -38,6 +39,7 @@ function initializeAppFactory(httpClient: HttpClient, apiService: ApiService): (
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
+        HotToastModule.forRoot(),
         SocketIoModule,
 
         // Fuse, FuseConfig & FuseMockAPI

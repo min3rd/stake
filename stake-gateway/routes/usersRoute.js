@@ -1,7 +1,7 @@
 var express = require('express');
 const { authenticateToken } = require('../services/public/authentication');
 const { call, getTradingCalls } = require('../services/public/tradingService');
-const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification, updateUser, changePassword } = require('../services/public/userService');
+const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification, updateUser, changePassword, addWalletAddress, removeWalletAddress } = require('../services/public/userService');
 const { createMinesRound, getMinesRoundById, choose, cashout, getMinesRounds } = require('../services/public/game/mines/minesService');
 const { createDepositOrder, getDepositOrderById, getDepositOrders, cancelDepositOrders } = require('../services/public/wallet/depositService');
 var router = express.Router();
@@ -27,6 +27,7 @@ router.post('/:userId/wallet/depositOrders', authenticateToken, createDepositOrd
 router.get('/:userId/wallet/depositOrders', authenticateToken, getDepositOrders);
 router.get('/:userId/wallet/depositOrders/:depositOrderId', authenticateToken, getDepositOrderById);
 router.patch('/:userId/wallet/depositOrders/:depositOrderId', authenticateToken, cancelDepositOrders);
-
+router.post('/:userId/wallets', authenticateToken, addWalletAddress);
+router.delete('/:userId/wallets/:address', authenticateToken, removeWalletAddress);
 
 module.exports = router;

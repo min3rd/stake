@@ -17,6 +17,6 @@ async function updateDepositOrder() {
 }
 
 const accountJob = async function () {
-    updateDepositOrder();
+    // updateDepositOrder();
 }
 module.exports = accountJob;

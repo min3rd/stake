@@ -110,6 +110,58 @@ const changePassword = async function (req, res, next) {
     }
     res.json(new ClientUser(user));
 }
+
+const addWalletAddress = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
+    let user = await User.findById(userId);
+    if (!user) {
+        return next(badRequestError.make(ErrorCode.USER_NOT_FOUND));
+    }
+    let address = req.body.address;
+    if (!address) {
+        return next(badRequestError.make(ErrorCode.WALLET_ADDRESS_NOT_EMPTY));
+    }
+    let exists = await User.findOne({
+        wallets: {
+            $in: [address]
+        }
+    });
+    if (exists) {
+        return next(badRequestError.make(ErrorCode.WALLET_ADDRESS_USED));
+    }
+
+    if (user.wallets.includes(address)) {
+        return res.json(new ClientUser(user));
+    }
+    user.wallets.push(address);
+    user = await user.save();
+    res.json(new ClientUser(user));
+}
+
+const removeWalletAddress = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
+    let user = await User.findById(userId);
+    if (!user) {
+        return next(badRequestError.make(ErrorCode.USER_NOT_FOUND));
+    }
+    let address = req.params.address;
+    if (!address) {
+        return next(badRequestError.make(ErrorCode.WALLET_ADDRESS_NOT_EMPTY));
+    }
+    if (!user.wallets.includes(address)) {
+        return res.json(new ClientUser(user));
+    }
+    let index = user.wallets.indexOf(address);
+    user.wallets.splice(index, 1);
+    user = await user.save();
+    res.json(new ClientUser(user));
+}
 module.exports = {
     switchAccount: switchAccount,
     addDemoCash: addDemoCash,
@@ -119,4 +171,6 @@ module.exports = {
     updateNotification: updateNotification,
     updateUser: updateUser,
     changePassword: changePassword,
+    addWalletAddress: addWalletAddress,
+    removeWalletAddress: removeWalletAddress,
 }

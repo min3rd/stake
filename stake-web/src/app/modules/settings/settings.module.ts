@@ -11,21 +11,17 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { SharedModule } from 'app/shared/shared.module';
 import { SettingsAccountComponent } from './account/account.component';
-import { SettingsNotificationsComponent } from './notifications/notifications.component';
-import { SettingsPlanBillingComponent } from './plan-billing/plan-billing.component';
 import { SettingsSecurityComponent } from './security/security.component';
 import { SettingsComponent } from './settings.component';
 import { settingsRoutes } from './settings.routing';
-import { SettingsTeamComponent } from './team/team.component';
+import { SettingsWalletComponent } from './settings-wallet/settings-wallet.component';
 
 @NgModule({
     declarations: [
         SettingsComponent,
         SettingsAccountComponent,
         SettingsSecurityComponent,
-        SettingsPlanBillingComponent,
-        SettingsNotificationsComponent,
-        SettingsTeamComponent
+        SettingsWalletComponent,
     ],
     imports     : [
         RouterModule.forChild(settingsRoutes),

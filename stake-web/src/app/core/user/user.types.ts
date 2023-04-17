@@ -15,4 +15,5 @@ export interface User {
     demoCash?: number;
     cashAccount?: CashAccount;
     verified?: boolean;
+    wallets?: string[];
 }

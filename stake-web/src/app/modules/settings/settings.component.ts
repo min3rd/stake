@@ -4,18 +4,16 @@ import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 
 @Component({
-    selector       : 'settings',
-    templateUrl    : './settings.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    selector: 'settings',
+    templateUrl: './settings.component.html',
+    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SettingsComponent implements OnInit, OnDestroy
-{
+export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('drawer') drawer: MatDrawer;
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = true;
     panels: any[] = [];
-    selectedPanel: string = 'account';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -24,8 +22,7 @@ export class SettingsComponent implements OnInit, OnDestroy
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseMediaWatcherService: FuseMediaWatcherService
-    )
-    {
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -35,55 +32,43 @@ export class SettingsComponent implements OnInit, OnDestroy
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         // Setup available panels
         this.panels = [
             {
-                id         : 'account',
-                icon       : 'heroicons_outline:user-circle',
-                title      : 'account',
-                description: 'manage your public profile and private information'
+                id: 'account',
+                icon: 'heroicons_outline:user-circle',
+                title: 'account',
+                description: 'manage your public profile and private information',
+                link: './account',
             },
             {
-                id         : 'security',
-                icon       : 'heroicons_outline:lock-closed',
-                title      : 'security',
-                description: 'manage your password'
+                id: 'security',
+                icon: 'heroicons_outline:lock-closed',
+                title: 'security',
+                description: 'manage your password',
+                link: './security',
             },
-            // {
-            //     id         : 'plan-billing',
-            //     icon       : 'heroicons_outline:credit-card',
-            //     title      : 'Plan & Billing',
-            //     description: 'Manage your subscription plan, payment method and billing information'
-            // },
-            // {
-            //     id         : 'notifications',
-            //     icon       : 'heroicons_outline:bell',
-            //     title      : 'Notifications',
-            //     description: 'Manage when you\'ll be notified on which channels'
-            // },
-            // {
-            //     id         : 'team',
-            //     icon       : 'heroicons_outline:user-group',
-            //     title      : 'Team',
-            //     description: 'Manage your existing team and change roles/permissions'
-            // }
+            {
+                id: 'wallet',
+                icon: 'heroicons_outline:currency-dollar',
+                title: 'wallet',
+                description: 'manage your coin wallet',
+                link: './wallet',
+            },
         ];
 
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(({matchingAliases}) => {
+            .subscribe(({ matchingAliases }) => {
 
                 // Set the drawerMode and drawerOpened
-                if ( matchingAliases.includes('lg') )
-                {
+                if (matchingAliases.includes('lg')) {
                     this.drawerMode = 'side';
                     this.drawerOpened = true;
                 }
-                else
-                {
+                else {
                     this.drawerMode = 'over';
                     this.drawerOpened = false;
                 }
@@ -96,8 +81,7 @@ export class SettingsComponent implements OnInit, OnDestroy
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
@@ -108,28 +92,11 @@ export class SettingsComponent implements OnInit, OnDestroy
     // -----------------------------------------------------------------------------------------------------
 
     /**
-     * Navigate to the panel
-     *
-     * @param panel
-     */
-    goToPanel(panel: string): void
-    {
-        this.selectedPanel = panel;
-
-        // Close the drawer on 'over' mode
-        if ( this.drawerMode === 'over' )
-        {
-            this.drawer.close();
-        }
-    }
-
-    /**
      * Get the details of the panel
      *
      * @param id
      */
-    getPanelInfo(id: string): any
-    {
+    getPanelInfo(id: string): any {
         return this.panels.find(panel => panel.id === id);
     }
 
@@ -139,8 +106,7 @@ export class SettingsComponent implements OnInit, OnDestroy
      * @param index
      * @param item
      */
-    trackByFn(index: number, item: any): any
-    {
+    trackByFn(index: number, item: any): any {
         return item.id || index;
     }
 }

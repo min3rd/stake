@@ -124,7 +124,14 @@ export class ApiService {
     users_wallet_depositOrders_depositOrder(id: string) {
         return this._usersApi(`/wallet/depositOrders/${id}`);
     }
-    
+
+    users_wallets() {
+        return this._usersApi(`/wallets`);
+    }
+
+    users_wallets_wallet(address: string) {
+        return this._usersApi(`/wallets/${address}`);
+    }
 }
 
 

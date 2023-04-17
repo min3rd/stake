@@ -63,5 +63,17 @@
   "there are no results": "there are no results!",
   "add deposit order": "add deposit order",
   "message": "message",
-  "wallet address": "wallet address"
+  "wallet address": "wallet address",
+  "name": "name",
+  "coin wallet addresses": "coin wallet addresses",
+  "manage your coin wallet addresses": "manage your coin wallet addresses",
+  "coin wallet": "coin wallet",
+  "wallet": "wallet",
+  "manage your wallet": "manage your wallet",
+  "manage your coin wallet": "manage your coin wallet",
+  "add": "add",
+  "check coin transaction": "check coin transaction",
+  "check": "check",
+  "transaction identity": "transaction identity",
+  "transaction hash hint": "transaction hash look like: 0x64d71510fb98e6e79131da8eaf7fdc5041d2f3bcad2ed9e516a6cf893da7d927"
 }

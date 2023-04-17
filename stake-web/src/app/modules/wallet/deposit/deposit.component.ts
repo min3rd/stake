@@ -13,6 +13,7 @@ export class DepositComponent implements OnInit {
   DepositOrderStatus: DepositOrderStatus;
   depositOrders$: Observable<DepositOrder[]>;
   apiCalling: boolean = false;
+  transactionId: string = '';
   offset: number = 0;
   size: number = 10;
   constructor(
@@ -31,6 +32,10 @@ export class DepositComponent implements OnInit {
     }, e => { }, () => {
       this.apiCalling = false;
     });
+  }
+
+  checkTransaction() {
+
   }
   nextPage() {
     this.offset += this.size;

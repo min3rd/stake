@@ -4,6 +4,8 @@ import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { Router } from '@angular/router';
+import { HotToastService } from '@ngneat/hot-toast';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -13,6 +15,8 @@ export class AuthInterceptor implements HttpInterceptor {
     constructor(
         private _authService: AuthService,
         private _router: Router,
+        private _toastService: HotToastService,
+        private _transloco: TranslocoService
     ) {
     }
 
@@ -64,6 +68,13 @@ export class AuthInterceptor implements HttpInterceptor {
                             }
                         });
                     }
+                } else {
+                    this._toastService.error(this._transloco.translate(error.error.code), {
+                        position: 'top-right',
+                        theme: 'toast',
+                        dismissible: true,
+
+                    });
                 }
 
                 return throwError(error);

@@ -2,7 +2,7 @@ const { Schema } = require("mongoose");
 const { publicMongoose } = require("../config/publicMongoose");
 const { CashAccount } = require("../common/constants");
 const UserSchema = new Schema({
-    username: { type: String, require: true, index: true, },
+    username: { type: String, require: true, index: true, lowercase: true, unique: true, },
     password: { type: String, require: true, },
     name: { type: String, },
     avatar: { type: String, },
@@ -18,6 +18,11 @@ const UserSchema = new Schema({
     demoCash: { type: Number, default: 0, },
     cashAccount: { type: Number, enum: Object.values(CashAccount) },
     blocked: { type: Boolean, default: false, },
+    wallets: [
+        {
+            type: String,
+        }
+    ]
 });
 const User = publicMongoose.model('User', UserSchema);
 
@@ -36,6 +41,7 @@ class ClientUser {
         this.demoCash = user.demoCash;
         this.cashAccount = user.cashAccount;
         this.blocked = user.blocked;
+        this.wallets = user.wallets;
     }
 }
 
