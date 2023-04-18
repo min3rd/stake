@@ -1,4 +1,5 @@
 const ErrorCode = require("../common/errorCode");
+const logger = require("../common/logger");
 const Migration = require("../models/Migration");
 
 class BaseMigration {
@@ -24,7 +25,7 @@ class BaseMigration {
         if (!this.canRun) {
             return;
         }
-        console.log(this.version);
+        logger.info('migrations', `-----${this.version}-----`);
         await this.migration();
         await this.post();
     }
@@ -37,7 +38,7 @@ class BaseMigration {
         });
         version = await version.save();
         if (!version) {
-            throw new Error(ErrorCode.MIGRATION_UPDATE_VERSION);
+            logger.error('migrations', `-----${this.version}-----`);
         }
     }
 }
