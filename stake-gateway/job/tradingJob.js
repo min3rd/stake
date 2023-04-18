@@ -32,17 +32,21 @@ async function updateRound(publicIo, adminIo) {
                     openTime: preOpenTime,
                     closeTime: preCloseTime,
                 });
-                let openPrice = 0;
-                if (!previousRound) {
-                    try {
-                        let apiUrl = "/api/v3/ticker/price?symbol=" + `${tradingRoom.symbol}`;
-                        let response = await binanceApi.get(apiUrl);
-                        openPrice = parseFloat(response.data.price);
-                    } catch (e) {
-                        console.error(`-----updateRound: ${tradingRoom.symbol} ${e}`);
-                        continue;
-                    }
-                } else {
+
+                let realExchange = 0;
+
+                try {
+                    let apiUrl = "/api/v3/ticker/price?symbol=" + `${tradingRoom.symbol}`;
+                    let response = await binanceApi.get(apiUrl);
+                    realExchange = parseFloat(response.data.price);
+                } catch (e) {
+                    logger.error(`-----updateRound: ${tradingRoom.symbol} ${e}`);
+                    continue;
+                }
+
+                let openPrice = realExchange;
+
+                if (previousRound) {
                     openPrice = previousRound.closePrice;
                     previousRound.closed = now.getTime() > previousRound.closeTime.getTime();
                     previousRound = await previousRound.save();
@@ -59,14 +63,34 @@ async function updateRound(publicIo, adminIo) {
                         canTrade: previousRound.canTrade,
                     });
                 }
-                let random = Math.random();
-                let priceRange = openPrice * (tradingRoom.priceRangePercent || process.env.PRICE_RANGE_PERCENT || 0.5) / 100;
+
+
+                let priceRange = realExchange * (tradingRoom.priceRangePercent ?? 0.5) / 100;
+
                 let highPrice = openPrice + priceRange * Math.random();
                 let lowPrice = openPrice - priceRange * Math.random();
-                let closePrice = openPrice + priceRange * Math.random();
+
+                let closePrice = realExchange;
+
+                let random = Math.random();
                 if (random >= 0.5) {
-                    closePrice = openPrice - priceRange * Math.random();
+                    // down trend
+
+                    if (openPrice > realExchange) {
+                        closePrice = realExchange;
+                    } else {
+                        closePrice = openPrice - (Math.random() * priceRange + 0.1);
+                    }
+                } else {
+                    // up trend
+
+                    if (openPrice < realExchange) {
+                        closePrice = realExchange;
+                    } else {
+                        closePrice = openPrice + (Math.random() * priceRange + 0.1);
+                    }
                 }
+
                 tradingRound = new TradingRound({
                     symbol: tradingRoom.symbol,
                     openTime: openTime,
