@@ -1,86 +1,83 @@
-<div class="w-full h-full">
-    <div class="h-full bg-card dark:bg-default">
-        <div class="items-center pl-4 pr-6 py-3 md:pl-6 border-b">
-            <div class="md:flex md:flex-auto items-center justify-between">
-                <div class="flex flex-wrap items-center">
-                    <mat-form-field class="min-w-32" subscriptSizing="dynamic">
-                        <mat-select [(value)]="tradingRoom" class="w-full" (valueChange)="onRoomChange($event)">
-                            <mat-option *ngFor="let room of tradingRooms" [value]="room">
-                                {{room.symbol | transloco | capitalize}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
-        <div class="md:flex md:flex-auto items-start">
-            <div class="relative flex flex-auto h-auto md:h-160 bg-gray-50 dark:bg-transparent">
-                <apx-chart class="relative w-full h-100 md:inset-0 md:h-full overflow-hidden" [chart]="btcOptions.chart"
-                    [colors]="btcOptions.colors" [dataLabels]="btcOptions.dataLabels" [grid]="btcOptions.grid"
-                    [legend]="btcOptions.legend" [series]="btcOptions.series" [stroke]="btcOptions.stroke"
-                    [tooltip]="btcOptions.tooltip" [xaxis]="btcOptions.xaxis" [yaxis]="btcOptions.yaxis"
-                    #btcChartComponent>
-                </apx-chart>
-            </div>
-            <div class="absolute md:relative bottom-0 border-t md:border-0 text-center w-full py-2 md:w-80">
-                <div class="flex flex-wrap w-full mb-2 items-center justify-center text-center">
-                    <div class="mr-2 font-medium">{{'benefit'| transloco | capitalize}}</div>
-                    <div class="mr-2 text-xl font-medium text-violet-600">{{tradingConfig?.benefitPercent ?? 0}}%</div>
-                    <div class="text-xl font-semibold text-teal-500">
-                        {{(betCash * (tradingConfig?.benefitPercent ?? 0) / 100) ?? 0 | currency}}
-                    </div>
-                </div>
-                <div class="text-left font-medium px-2 pb-2">
-                    {{'value' | transloco | capitalize}}
-                </div>
-
-                <mat-form-field class="px-2 w-full">
-                    <button mat-icon-button (click)="addBetCash(-tradingConfig.sliderStep)">
-                        <mat-icon svgIcon="heroicons_outline:minus-circle"></mat-icon>
-                    </button>
-                    <span class="mx-2">{{'$' | transloco | capitalize}}</span>
-                    <input class="h-8" matInput type="number" [(ngModel)]="betCash">
-                    <button mat-icon-button (click)="addBetCash(tradingConfig.sliderStep)">
-                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
-                    </button>
+<div class="w-full h-full bg-card dark:bg-default overflow-hidden">
+    <div class="items-center pl-4 pr-6 py-3 md:pl-6 border-b">
+        <div class="md:flex md:flex-auto items-center justify-between">
+            <div class="flex flex-wrap items-center">
+                <mat-form-field class="min-w-32" subscriptSizing="dynamic">
+                    <mat-select [(value)]="tradingRoom" class="w-full" (valueChange)="onRoomChange($event)">
+                        <mat-option *ngFor="let room of tradingRooms" [value]="room">
+                            {{room.symbol | transloco | capitalize}}</mat-option>
+                    </mat-select>
                 </mat-form-field>
-                <div class="relative flex flex-auto items-center justify-center px-2 mb-2">
-                    <mat-slider class="w-full" [showTickMarks]="true" [min]="tradingConfig?.sliderMin ?? 0"
-                        [max]="tradingConfig?.sliderMax ?? 0" [step]="tradingConfig?.sliderStep ?? 0">
-                        <input matSliderThumb [(ngModel)]="betCash">
-                    </mat-slider>
-                </div>
-                <div class="flex flex-auto md:flex-col px-2 justify-between items-center">
-                    <button mat-flat-button [disabled]="!checkCanTrade()"
-                        [class]="(checkCanTrade() ? 'bg-lime-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'"
-                        (click)="call(1)">
-                        <span class="md:font-bold md:text-2xl mx-2">
-                            {{'buy' | transloco | capitalize}}
-                        </span>
-                        <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
-                        <mat-progress-spinner *ngIf="calling" [diameter]="24"
-                            [mode]="'indeterminate'"></mat-progress-spinner>
-                    </button>
-                    <div
-                        class="flex flex-auto rounded-m w-full mx-2 bg-transparent items-center justify-center md:mx-0 md:my-2 md:p-6 md:text-2xl">
-                        <mat-icon svgIcon="heroicons_outline:clock"></mat-icon>
-                        <span *ngIf="!!countdown" class="pl-2 md:text-2xl">
-                            {{countdown | countdown}}
-                        </span>
-                    </div>
-                    <button mat-flat-button [disabled]="!checkCanTrade()"
-                        [class]="(checkCanTrade() ? 'bg-red-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'"
-                        (click)="call(2)">
-                        <span class="md:font-bold md:text-2xl mx-2">
-                            {{'sell' | transloco | capitalize}}
-                        </span>
-                        <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
-                        <mat-progress-spinner *ngIf="calling" [diameter]="24"
-                            [mode]="'indeterminate'"></mat-progress-spinner>
-                    </button>
-                </div>
             </div>
         </div>
-
-
     </div>
+    <div class="md:flex md:flex-auto items-start">
+        <div class="relative flex flex-auto h-auto md:h-160 bg-gray-50 dark:bg-transparent">
+            <apx-chart class="relative w-full h-100 md:inset-0 md:h-full overflow-hidden" [chart]="btcOptions.chart"
+                [colors]="btcOptions.colors" [dataLabels]="btcOptions.dataLabels" [grid]="btcOptions.grid"
+                [legend]="btcOptions.legend" [series]="btcOptions.series" [stroke]="btcOptions.stroke"
+                [tooltip]="btcOptions.tooltip" [xaxis]="btcOptions.xaxis" [yaxis]="btcOptions.yaxis" #btcChartComponent>
+            </apx-chart>
+        </div>
+        <div class="absolute md:relative bottom-0 border-t md:border-0 text-center w-full py-2 md:w-80">
+            <div class="flex flex-wrap w-full mb-2 items-center justify-center text-center">
+                <div class="mr-2 font-medium">{{'benefit'| transloco | capitalize}}</div>
+                <div class="mr-2 text-xl font-medium text-violet-600">{{tradingConfig?.benefitPercent ?? 0}}%</div>
+                <div class="text-xl font-semibold text-teal-500">
+                    {{(betCash * (tradingConfig?.benefitPercent ?? 0) / 100) ?? 0 | currency}}
+                </div>
+            </div>
+            <div class="text-left font-medium px-2 pb-2">
+                {{'value' | transloco | capitalize}}
+            </div>
+
+            <mat-form-field class="px-2 w-full">
+                <button mat-icon-button (click)="addBetCash(-tradingConfig.sliderStep)">
+                    <mat-icon svgIcon="heroicons_outline:minus-circle"></mat-icon>
+                </button>
+                <span class="mx-2">{{'$' | transloco | capitalize}}</span>
+                <input class="h-8" matInput type="number" [(ngModel)]="betCash">
+                <button mat-icon-button (click)="addBetCash(tradingConfig.sliderStep)">
+                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
+                </button>
+            </mat-form-field>
+            <div class="relative flex flex-auto items-center justify-center px-2 mb-2">
+                <mat-slider class="w-full" [showTickMarks]="true" [min]="tradingConfig?.sliderMin ?? 0"
+                    [max]="tradingConfig?.sliderMax ?? 0" [step]="tradingConfig?.sliderStep ?? 0">
+                    <input matSliderThumb [(ngModel)]="betCash">
+                </mat-slider>
+            </div>
+            <div class="flex flex-auto md:flex-col px-2 justify-between items-center">
+                <button mat-flat-button [disabled]="!checkCanTrade()"
+                    [class]="(checkCanTrade() ? 'bg-lime-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'"
+                    (click)="call(1)">
+                    <span class="md:font-bold md:text-2xl mx-2">
+                        {{'buy' | transloco | capitalize}}
+                    </span>
+                    <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
+                    <mat-progress-spinner *ngIf="calling" [diameter]="24"
+                        [mode]="'indeterminate'"></mat-progress-spinner>
+                </button>
+                <div
+                    class="flex flex-auto rounded-m w-full mx-2 bg-transparent items-center justify-center md:mx-0 md:my-2 md:p-6 md:text-2xl">
+                    <mat-icon svgIcon="heroicons_outline:clock"></mat-icon>
+                    <span *ngIf="!!countdown" class="pl-2 md:text-2xl">
+                        {{countdown | countdown}}
+                    </span>
+                </div>
+                <button mat-flat-button [disabled]="!checkCanTrade()"
+                    [class]="(checkCanTrade() ? 'bg-red-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'"
+                    (click)="call(2)">
+                    <span class="md:font-bold md:text-2xl mx-2">
+                        {{'sell' | transloco | capitalize}}
+                    </span>
+                    <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
+                    <mat-progress-spinner *ngIf="calling" [diameter]="24"
+                        [mode]="'indeterminate'"></mat-progress-spinner>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
 </div>
