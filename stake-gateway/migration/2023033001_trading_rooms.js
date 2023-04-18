@@ -9,8 +9,12 @@ const trading_room_2023033001 = baseMigration.create('2023033001_trading_rooms',
         let tradingRoom = new TradingRoom({
             symbol: roomSymbol,
         });
-        tradingRoom = await tradingRoom.save();
-        logger.debug('migrations', `${JSON.stringify(tradingRoom)}`);
+        try {
+            tradingRoom = await tradingRoom.save();
+            logger.debug('migrations', `${JSON.stringify(tradingRoom)}`);
+        } catch (e) {
+            logger.error('migrations', `${e}`);
+        }
     }
 });
 module.exports = trading_room_2023033001;
