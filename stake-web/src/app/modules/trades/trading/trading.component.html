@@ -1,26 +1,25 @@
 <div class="w-full h-full bg-card dark:bg-default overflow-hidden">
-    <div class="items-center pl-4 pr-6 py-3 md:pl-6 border-b">
-        <div class="md:flex md:flex-auto items-center justify-between">
-            <div class="flex flex-wrap items-center">
-                <mat-form-field class="min-w-32" subscriptSizing="dynamic">
-                    <mat-select [(value)]="tradingRoom" class="w-full" (valueChange)="onRoomChange($event)">
-                        <mat-option *ngFor="let room of tradingRooms" [value]="room">
-                            {{room.symbol | transloco | capitalize}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
-    </div>
     <div class="md:flex md:flex-auto items-start">
-        <div class="relative flex flex-auto h-auto md:h-160 bg-gray-50 dark:bg-transparent">
-            <apx-chart class="relative w-full h-100 md:inset-0 md:h-full overflow-hidden" [chart]="btcOptions.chart"
+        <div class="relative flex w-full h-auto md:h-160 bg-gray-50 dark:bg-transparent">
+            <!-- <apx-chart class="relative w-full h-100 md:inset-0 md:h-full overflow-hidden" [chart]="btcOptions.chart"
                 [colors]="btcOptions.colors" [dataLabels]="btcOptions.dataLabels" [grid]="btcOptions.grid"
                 [legend]="btcOptions.legend" [series]="btcOptions.series" [stroke]="btcOptions.stroke"
                 [tooltip]="btcOptions.tooltip" [xaxis]="btcOptions.xaxis" [yaxis]="btcOptions.yaxis" #btcChartComponent>
-            </apx-chart>
+            </apx-chart> -->
+            <ng-container *ngIf="tradingRooms?.length">
+                <div class="absolute top-2 left-2 z-10">
+                    <mat-form-field class="min-w-32 rounded-md bg-slate-700" subscriptSizing="dynamic">
+                        <mat-select [(value)]="tradingRoom" class="w-full" (valueChange)="onRoomChange($event)">
+                            <mat-option *ngFor="let room of tradingRooms" [value]="room">
+                                {{room.symbol | transloco | capitalize}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </ng-container>
         </div>
-        <div class="absolute md:relative bottom-0 border-t md:border-0 text-center w-full py-2 md:w-80">
-            <div class="flex flex-wrap w-full mb-2 items-center justify-center text-center">
+        <div
+            class="absolute md:relative bottom-0 border-t md:border-0 text-center w-full md:py-2 md:w-80 bg-card dark:bg-default">
+            <div class="flex flex-wrap w-full md:mb-2 items-center justify-center text-center">
                 <div class="mr-2 font-medium">{{'benefit'| transloco | capitalize}}</div>
                 <div class="mr-2 text-xl font-medium text-violet-600">{{tradingConfig?.benefitPercent ?? 0}}%</div>
                 <div class="text-xl font-semibold text-teal-500">
@@ -41,6 +40,32 @@
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
                 </button>
             </mat-form-field>
+            <div class="hidden md:grid grid-cols-3 gap-2 px-2">
+                <button mat-flat-button class="flex justify-start" (click)="addBetCash(5)">
+                    <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
+                    5
+                </button>
+                <button mat-flat-button class="flex justify-start" (click)="addBetCash(10)">
+                    <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
+                    10
+                </button>
+                <button mat-flat-button class="flex justify-start" (click)="addBetCash(20)">
+                    <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
+                    20
+                </button>
+                <button mat-flat-button class="flex justify-start" (click)="addBetCash(50)">
+                    <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
+                    50
+                </button>
+                <button mat-flat-button class="flex justify-start" (click)="addBetCash(100)">
+                    <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
+                    100
+                </button>
+                <button mat-flat-button class="flex justify-start" (click)="addBetCash(userCash)">
+                    <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
+                    {{'all' | transloco | capitalize}}
+                </button>
+            </div>
             <div class="relative flex flex-auto items-center justify-center px-2 mb-2">
                 <mat-slider class="w-full" [showTickMarks]="true" [min]="tradingConfig?.sliderMin ?? 0"
                     [max]="tradingConfig?.sliderMax ?? 0" [step]="tradingConfig?.sliderStep ?? 0">
@@ -54,16 +79,34 @@
                     <span class="md:font-bold md:text-2xl mx-2">
                         {{'buy' | transloco | capitalize}}
                     </span>
-                    <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
+                    <mat-icon matIconSuffix svgIcon="heroicons_outline:trending-up"></mat-icon>
                     <mat-progress-spinner *ngIf="calling" [diameter]="24"
                         [mode]="'indeterminate'"></mat-progress-spinner>
                 </button>
                 <div
-                    class="flex flex-auto rounded-m w-full mx-2 bg-transparent items-center justify-center md:mx-0 md:my-2 md:p-6 md:text-2xl">
-                    <mat-icon svgIcon="heroicons_outline:clock"></mat-icon>
-                    <span *ngIf="!!countdown" class="pl-2 md:text-2xl">
-                        {{countdown | countdown}}
-                    </span>
+                    class="flex flex-auto rounded-m w-full mx-2 bg-transparent items-center justify-center md:mx-0 md:my-2 md:p-6 ">
+                    <ng-container *ngIf="!!countdown; else tradingRoundLoading">
+                        <div>
+                            <div *ngIf="checkCanTrade()" class="text-secondary text-xs md:text-sm">
+                                {{'trading time' | transloco | capitalize}}
+                            </div>
+                            <div *ngIf="!checkCanTrade()" class="text-secondary text-xs md:text-sm">
+                                {{'wait for result' | transloco | capitalize}}
+                            </div>
+                            <div class="md:w-32 rounded-full bg-card p1 md:p-2 dark:bg-slate-800 md:text-xl">
+                                <span>
+                                    {{countdown | countdown}}
+                                </span>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #tradingRoundLoading>
+                        <div class="rounded-full bg-card p1 md:p-2 text-xs md:text-sm text-secondary dark:bg-slate-800">
+                            <span>
+                                {{'wait for processing' | transloco | capitalize}}
+                            </span>
+                        </div>
+                    </ng-template>
                 </div>
                 <button mat-flat-button [disabled]="!checkCanTrade()"
                     [class]="(checkCanTrade() ? 'bg-red-500' : 'bg-gray-300') + ' rounded-md min-w-32 md:w-full md:p-8'"
@@ -71,13 +114,125 @@
                     <span class="md:font-bold md:text-2xl mx-2">
                         {{'sell' | transloco | capitalize}}
                     </span>
-                    <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
+                    <mat-icon matIconSuffix svgIcon="heroicons_outline:trending-down"></mat-icon>
                     <mat-progress-spinner *ngIf="calling" [diameter]="24"
                         [mode]="'indeterminate'"></mat-progress-spinner>
                 </button>
             </div>
         </div>
     </div>
+    <div class="relative">
+        <!-- Tabs -->
+        <div class="flex flex-auto px-2 items-center justify-between">
+            <div class="flex gap-4">
+                <div mat-flat-button (click)="switchTab(TabType.INDICATORS)"
+                    [class]="'text-sm md:text-md p-1 md:p-2 hover:cursor-pointer hover:bg-default ' + (tab == TabType.INDICATORS ? 'border-b-2 border-b-purple-500 md:font-bold' : '')">
+                    {{'indicators' | transloco | capitalize}}
+                </div>
+                <div mat-flat-button (click)="switchTab(TabType.LAST_RESULTS)"
+                    [class]="'text-sm md:text-md p-1 md:p-2 hover:cursor-pointer hover:bg-default ' + (tab == TabType.LAST_RESULTS ? 'border-b-2 border-b-purple-500 md:font-bold' : '')">
+                    {{'last results' | transloco | capitalize}}
+                </div>
+            </div>
+            <ng-container *ngIf="tab === TabType.LAST_RESULTS">
+                <div></div>
+            </ng-container>
+        </div>
 
+        <!-- Content -->
+        <ng-container *ngIf="tab === TabType.INDICATORS; else lastResults">
+            <div class="flex flex-auto items-center justify-between p-1 md:p-4 w-full md:max-w-3xl">
 
+                <!-- oscillators -->
+                <div class="w-24 md:w-48 justify-center">
+                    <div class="relative w-full text-center md:font-bold text-xs md:text-md">
+                        {{'oscillators' | transloco | capitalize}}
+                    </div>
+                    <div class="relative w-24 h-12 md:w-32 md:h-16 overflow-hidden mx-auto">
+                        <img src="/assets/images/trades/gauge_bg.svg" alt="gauge_bg.svg" class="absolute w-24 md:w-32">
+                        <img src="/assets/images/trades/gauge_border.svg" alt="gauge_border.svg"
+                            class="absolute w-24 md:w-32">
+                        <div
+                            [class]="'absolute w-24 h-24 md:w-32 md:h-32 flex items-center justify-start px-2 transition ease-linear duration-150 ' + gaugeRotate(analysisSell, analysisBuy)">
+                            <div class="bg-gradient-to-r from-cyan-500 to-blue-500 w-16 h-1 rounded-lg"></div>
+                        </div>
+                    </div>
+                    <div class="relative flex flex-auto items-center justify-between">
+                        <div class="text-center">
+                            <div class="text-sm font-semibold text-red-500">{{analysisSell}}</div>
+                            <div class="text-secondary text-sm">{{'sell' | transloco | capitalize}}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm font-semibold text-lime-500">{{analysisBuy}}</div>
+                            <div class="text-secondary text-sm">{{'buy' | transloco | capitalize}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- trading amount -->
+                <div class="w-24 md:w-48 justify-center">
+                    <div class="relative w-full text-center md:font-bold text-xs md:text-md">
+                        {{'trading amount' | transloco | capitalize}}
+                    </div>
+                    <div class="relative w-24 h-12 md:w-32 md:h-16 overflow-hidden mx-auto">
+                        <img src="/assets/images/trades/gauge_bg.svg" alt="gauge_bg.svg" class="absolute w-24 md:w-32">
+                        <img src="/assets/images/trades/gauge_border.svg" alt="gauge_border.svg"
+                            class="absolute w-24 md:w-32">
+                        <div
+                            [class]="'absolute w-24 h-24 md:w-32 md:h-32 flex items-center justify-start px-2 transition ease-linear duration-150 ' + gaugeRotate(analysisSellAmount, analysisBuyAmount)">
+                            <div class="bg-gradient-to-r from-cyan-500 to-blue-500 w-16 h-1 rounded-lg"></div>
+                        </div>
+                    </div>
+                    <div class="relative flex flex-auto items-center justify-between">
+                        <div class="text-center">
+                            <div class="text-sm font-semibold text-red-500">{{analysisSellAmount | currency}}</div>
+                            <div class="text-secondary text-sm">{{'sell' | transloco | capitalize}}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm font-semibold text-lime-500">{{analysisBuyAmount | currency}}</div>
+                            <div class="text-secondary text-sm">{{'buy' | transloco | capitalize}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- trading counter -->
+                <div class="w-24 md:w-48 justify-center">
+                    <div class="relative w-full text-center md:font-bold text-xs md:text-md">
+                        {{'trading counter' | transloco | capitalize}}
+                    </div>
+                    <div class="relative w-24 h-12 md:w-32 md:h-16 overflow-hidden mx-auto">
+                        <img src="/assets/images/trades/gauge_bg.svg" alt="gauge_bg.svg" class="absolute w-24 md:w-32">
+                        <img src="/assets/images/trades/gauge_border.svg" alt="gauge_border.svg"
+                            class="absolute w-24 md:w-32">
+                        <div
+                            [class]="'absolute w-24 h-24 md:w-32 md:h-32 flex items-center justify-start px-2 transition ease-linear duration-150 ' + gaugeRotate(analysisSellCount, analysisBuyCount)">
+                            <div class="bg-gradient-to-r from-cyan-500 to-blue-500 w-16 h-1 rounded-lg"></div>
+                        </div>
+                    </div>
+                    <div class="relative flex flex-auto items-center justify-between">
+                        <div class="text-center">
+                            <div class="text-sm font-semibold text-red-500">{{analysisSellCount}}</div>
+                            <div class="text-secondary text-sm">{{'sell' | transloco | capitalize}}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm font-semibold text-lime-500">{{analysisBuyCount}}</div>
+                            <div class="text-secondary text-sm">{{'buy' | transloco | capitalize}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #lastResults>
+            <div class="flex justify-start p-6 gap-6">
+                <div *ngFor="let group of getLastResults" class="grid gap-1 grid-cols-5">
+                    <div *ngFor="let round of group">
+                        <div *ngIf="round == 0" class="icon-size-6 rounded-full bg-slate-700"></div>
+                        <div *ngIf="round == 1" class="icon-size-6 rounded-full bg-lime-500"></div>
+                        <div *ngIf="round == 2" class="icon-size-6 rounded-full bg-red-500"></div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
 </div>

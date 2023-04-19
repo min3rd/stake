@@ -41,6 +41,13 @@ const latestRounds = async function (req, res, next) {
             highPrice: e.highPrice,
             lowPrice: e.lowPrice,
             closePrice: e.closePrice,
+
+            analysisBuyAmount: e.analysisBuyAmount,
+            analysisSellAmount: e.analysisSellAmount,
+            analysisBuyCount: e.analysisBuyCount,
+            analysisSellCount: e.analysisSellCount,
+            analysisBuy: e.analysisBuy,
+            analysisSell: e.analysisSell,
         };
     }));
 }
@@ -199,6 +206,21 @@ const call = async function (req, res, next) {
                 tradingRound.sellCount += 1;
             }
         }
+
+        if (type == TradingCallType.BUY) {
+            tradingRound.analysisBuyAmount += betCash;
+            tradingRound.analysisBuyCount += 1;
+
+            tradingRound.analysisSellAmount += Math.random() * betCash;
+            tradingRound.analysisSellCount += 1;
+        } else {
+            tradingRound.analysisBuyAmount += Math.random() * betCash;
+            tradingRound.analysisBuyCount += 1;
+
+            tradingRound.analysisSellAmount += betCash;
+            tradingRound.analysisSellCount += 1;
+        }
+
         await tradingRound.save();
         await session.commitTransaction();
         engine.userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));

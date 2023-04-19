@@ -2,12 +2,11 @@ import currency from 'currency.js';
 import moment from 'moment';
 import { ApexOptions } from 'ng-apexcharts';
 export const chartOptions: ApexOptions = {
+    annotations: {
+    },
     chart: {
         animations: {
             enabled: true,
-            dynamicAnimation: {
-                enabled: true,
-            },
         },
         fontFamily: 'inherit',
         foreColor: 'inherit',
@@ -20,6 +19,10 @@ export const chartOptions: ApexOptions = {
         zoom: {
             enabled: false
         },
+        background: 'url("/assets/images/trades/world_map_dot.svg")',
+        selection: {
+            enabled: true,
+        }
     },
     colors: ['#5A67D8'],
     dataLabels: {
@@ -29,7 +32,6 @@ export const chartOptions: ApexOptions = {
         borderColor: 'var(--fuse-border)',
         position: 'back',
         show: true,
-        strokeDashArray: 6,
         xaxis: {
             lines: {
                 show: false
@@ -37,8 +39,8 @@ export const chartOptions: ApexOptions = {
         },
         yaxis: {
             lines: {
-                show: true
-            }
+                show: true,
+            },
         },
     },
     legend: {
@@ -51,37 +53,28 @@ export const chartOptions: ApexOptions = {
             data: [
             ]
         },
-        {
-            name: 'line',
-            type: 'line',
-            data: [
-            ]
-        }
     ],
     stroke: {
         width: 2,
         curve: 'smooth',
     },
     tooltip: {
-        enabled: false,
-        shared: true,
+        enabled: true,
         theme: 'dark',
         y: {
-            formatter: (value: number): string => '$' + currency(value)
+            formatter: (value: number): string => '$' + currency(value),
         },
         x: {
-            formatter: (value: number): string => moment(value).format("mm"),
+            formatter: (value: number): string => moment(value).format("HH:mm"),
+        },
+        custom(options) {
+            return '';
         },
     },
     xaxis: {
         type: 'datetime',
         crosshairs: {
-            show: true,
-            position: 'back',
-            fill: {
-                type: 'color',
-                color: 'var(--fuse-border)'
-            },
+            show: false,
         },
         tickAmount: "dataPoints",
         axisTicks: {
@@ -90,9 +83,6 @@ export const chartOptions: ApexOptions = {
         },
         axisBorder: {
             show: false
-        },
-        tooltip: {
-            enabled: false,
         },
         labels: {
             show: true,
@@ -104,6 +94,9 @@ export const chartOptions: ApexOptions = {
             style: {
                 colors: 'currentColor'
             },
+        },
+        tooltip: {
+            enabled: false,
         }
     },
     yaxis: {
@@ -115,6 +108,7 @@ export const chartOptions: ApexOptions = {
         },
         axisBorder: {
             show: true,
+            color: 'var(--fuse-border)',
         },
         forceNiceScale: true,
         labels: {
@@ -127,8 +121,5 @@ export const chartOptions: ApexOptions = {
         tooltip: {
             enabled: true,
         },
-        crosshairs: {
-            show: true,
-        }
     },
 };

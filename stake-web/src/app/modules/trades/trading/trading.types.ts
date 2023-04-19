@@ -6,16 +6,22 @@ export interface TradingRoom {
 }
 
 export interface Kline {
-    symbol?: string;
-    time?: Date;
-    openTime?: Date;
-    closeTime?: Date;
-    openPrice?: number;
-    highPrice?: number;
-    lowPrice?: number;
-    closePrice?: number;
-    closed?: boolean;
-    canTrade?: boolean;
+    symbol?: string
+    time?: string
+    openTime?: string
+    closeTime?: string
+    openPrice?: number
+    highPrice?: number
+    lowPrice?: number
+    closePrice?: number
+    closed?: boolean
+    canTrade?: boolean
+    analysisBuyAmount?: number
+    analysisSellAmount?: number
+    analysisBuyCount?: number
+    analysisSellCount?: number
+    analysisBuy?: number
+    analysisSell?: number
 }
 
 export interface TradingRound {

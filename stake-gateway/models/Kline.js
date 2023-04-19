@@ -11,6 +11,13 @@ const KlineSchema = new Schema({
     closePrice: { type: Number, require: true, default: 0, },
     canTrade: { type: Boolean, require: true, default: false, },
     closed: { type: Boolean, default: false, },
+
+    analysisBuyAmount: { type: Number, default: 0 },
+    analysisSellAmount: { type: Number, default: 0 },
+    analysisBuyCount: { type: Number, default: 0 },
+    analysisSellCount: { type: Number, default: 0 },
+    analysisBuy: { type: Number, default: 0 },
+    analysisSell: { type: Number, default: 0 },
 });
 const Kline = publicMongoose.model('Kline', KlineSchema);
 module.exports = Kline;

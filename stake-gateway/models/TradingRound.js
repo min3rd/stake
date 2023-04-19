@@ -16,6 +16,13 @@ const TradingRoundSchema = new Schema({
     sellAmount: { type: Number, default: 0 },
     buyCount: { type: Number, default: 0 },
     sellCount: { type: Number, default: 0 },
+
+    analysisBuyAmount: { type: Number, default: 0 },
+    analysisSellAmount: { type: Number, default: 0 },
+    analysisBuyCount: { type: Number, default: 0 },
+    analysisSellCount: { type: Number, default: 0 },
+    analysisBuy: { type: Number, default: 0 },
+    analysisSell: { type: Number, default: 0 },
 });
 const TradingRound = publicMongoose.model('TradingRound', TradingRoundSchema);
 module.exports = TradingRound;

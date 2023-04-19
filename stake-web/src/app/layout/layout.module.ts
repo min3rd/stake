@@ -5,11 +5,13 @@ import { SettingsModule } from 'app/layout/common/settings/settings.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { EmptyLayoutModule } from './empty/empty.module';
 import { ThinLayoutModule } from './thin/thin.module';
+import { CompactLayoutModule } from './compact/compact.module';
 
 const layoutModules = [
     EmptyLayoutModule,
     DenseLayoutModule,
     ThinLayoutModule,
+    CompactLayoutModule
 ];
 
 @NgModule({

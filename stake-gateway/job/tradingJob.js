@@ -132,6 +132,22 @@ async function updateKline(publicIo) {
             continue;
         }
         let priceRange = tradingRound.openPrice * (tradingRoom.priceRangePercent || process.env.PRICE_RANGE_PERCENT || 0.5) / 100;
+
+
+        let analysisBuyAmount = tradingRound.analysisBuyAmount + Math.random() * (process.env.FAKE_TRADING_AMOUNT_SEED ?? 100000);
+        let analysisSellAmount = tradingRound.analysisSellAmount + Math.random() * (process.env.FAKE_TRADING_AMOUNT_SEED ?? 100000);
+        let analysisBuyCount = tradingRound.analysisBuyCount + parseInt(Math.random() * (process.env.FAKE_TRADING_COUNT_SEED ?? 10));
+        let analysisSellCount = tradingRound.analysisSellCount + parseInt(Math.random() * (process.env.FAKE_TRADING_COUNT_SEED ?? 10));
+        let analysisBuy = analysisBuyCount + parseInt(Math.random() * (process.env.FAKE_TRADING_COUNT_SEED ?? 10));
+        let analysisSell = analysisSellCount + parseInt(Math.random() * (process.env.FAKE_TRADING_COUNT_SEED ?? 10));
+
+        tradingRound.analysisBuyAmount = analysisBuyAmount;
+        tradingRound.analysisSellAmount = analysisSellAmount;
+        tradingRound.analysisBuyCount = analysisBuyCount;
+        tradingRound.analysisSellCount = analysisSellCount;
+        tradingRound.analysisBuy = analysisBuy;
+        tradingRound.analysisSell = analysisSell;
+        tradingRound = await tradingRound.save();
         let kline = new Kline({
             symbol: tradingRound.symbol,
             openTime: tradingRound.openTime,
@@ -142,6 +158,13 @@ async function updateKline(publicIo) {
             closePrice: tradingRound.closePrice + ((Math.random() >= 0.5) ? Math.random() * priceRange : - Math.random() * priceRange),
             canTrade: tradingRound.canTrade,
             time: new Date(),
+
+            analysisBuyAmount: analysisBuyAmount,
+            analysisSellAmount: analysisSellAmount,
+            analysisBuyCount: analysisBuyCount,
+            analysisSellCount: analysisSellCount,
+            analysisBuy: analysisBuy,
+            analysisSell: analysisSell,
         });
         kline = await kline.save();
         publicIo.to(tradingRoom.symbol).emit(SocketEvent.KLINE, {
@@ -155,6 +178,13 @@ async function updateKline(publicIo) {
             closePrice: kline.closePrice,
             closed: kline.closed,
             canTrade: kline.canTrade,
+
+            analysisBuyAmount: analysisBuyAmount,
+            analysisSellAmount: analysisSellAmount,
+            analysisBuyCount: analysisBuyCount,
+            analysisSellCount: analysisSellCount,
+            analysisBuy: analysisBuy,
+            analysisSell: analysisSell,
         });
     }
     setTimeout(() => {

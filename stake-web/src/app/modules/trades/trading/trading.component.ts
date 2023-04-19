@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { Subject, takeUntil, pairwise, BehaviorSubject } from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Subject, takeUntil, pairwise, BehaviorSubject, switchMap } from 'rxjs';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { SocketService } from 'app/core/socket/socket.service';
 import { SocketEvent } from 'app/core/config/socket.config';
@@ -10,6 +10,11 @@ import moment from 'moment';
 import { UserService } from 'app/core/user/user.service';
 import { Router } from '@angular/router';
 import { TimeUtils } from 'app/common/timeutils';
+import { CashAccount, User } from 'app/core/user/user.types';
+enum TabType {
+  INDICATORS = 1,
+  LAST_RESULTS = 2,
+}
 @Component({
   selector: 'app-trading',
   templateUrl: './trading.component.html',
@@ -31,6 +36,17 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
   tradingCalls: TradingCall[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private klines: BehaviorSubject<ApexChartSeriesData[] | null> = new BehaviorSubject(null);
+  TabType = TabType;
+  tab: number = TabType.INDICATORS;
+
+  analysisBuy: number;
+  analysisBuyAmount: number;
+  analysisBuyCount: number;
+  analysisSell: number;
+  analysisSellAmount: number;
+  analysisSellCount: number;
+  user: User;
+
   constructor(
     private _socketService: SocketService,
     private _tradingService: TradingService,
@@ -38,6 +54,9 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     private _router: Router,
   ) { }
   prepare() {
+    this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
+      this.user = user
+    });
     this._tradingService.rooms$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rooms => {
       this.tradingRooms = rooms;
       if (!this.tradingRoom) {
@@ -77,14 +96,33 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
       this.klines.next(values.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime()).slice(0, 59));
 
     });
-    this.klines.pipe(takeUntil(this._unsubscribeAll)).subscribe(klines => {
+    this.klines.pipe(takeUntil(this._unsubscribeAll)).subscribe((klines) => {
       if (!klines) {
         return;
       }
-      klines = klines.filter(e => parseFloat(this.currentTime) - new Date(e.x).getTime() <= 60 * 60 * 1000);
-      this.btcChartComponent.updateSeries([{
-        data: klines,
-      }]);
+      let _klines = Array.from(klines);
+      _klines = _klines.filter(e => parseFloat(this.currentTime) - new Date(e.x).getTime() <= 60 * 60 * 1000);
+      let openLine = _klines.map(e => {
+        return {
+          x: e.x,
+          y: e.y[0],
+        }
+      });
+      let closeLine = _klines.map(e => {
+        return {
+          x: e.x,
+          y: e.y[3],
+        }
+      });
+      if (!this.btcChartComponent) {
+        return;
+      }
+      this.btcChartComponent.updateSeries([
+        {
+          type: 'candlestick',
+          data: _klines,
+        },
+      ]);
 
     });
     this._socketService.socket.fromEvent(SocketEvent.NOW).subscribe(data => {
@@ -97,6 +135,14 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this._socketService.socket.fromEvent(SocketEvent.KLINE).subscribe((kline: Kline) => {
+
+      this.analysisBuy = kline.analysisBuy;
+      this.analysisSell = kline.analysisSell;
+      this.analysisBuyAmount = kline.analysisBuyAmount;
+      this.analysisSellAmount = kline.analysisSellAmount;
+      this.analysisBuyCount = kline.analysisBuyCount;
+      this.analysisSellCount = kline.analysisSellCount;
+
       this.canTrade = kline.canTrade;
       this.countdown = moment(kline.closeTime).diff(moment(kline.time), 'seconds');
       let key = kline.openTime;
@@ -121,7 +167,9 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
       this.klines.next([]);
-      this._socketService.socket.emit(SocketEvent.ROOM_LEFT, old.symbol);
+      if (old) {
+        this._socketService.socket.emit(SocketEvent.ROOM_LEFT, old.symbol);
+      }
       this._socketService.socket.emit(SocketEvent.ROOM_JOIN, newValue.symbol);
       this.updateRounds(newValue);
 
@@ -175,7 +223,7 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   addBetCash(value: number) {
-    this.betCash += value;
+    this.betCash = (this.betCash + value) > this.userCash ? this.userCash : this.betCash + value;
   }
   call(type: TradingCallType) {
     if (!this._userService.user) {
@@ -188,17 +236,12 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.betCash <= 0) {
       return;
     }
-    this.calling = true;
     this._tradingService.call({
       userId: this._userService.user.id,
       symbol: this.tradingRoom.symbol,
       betCash: this.betCash,
       type: type,
-    }).subscribe(response => {
-      this.calling = false;
-    }, error => {
-      this.calling = false;
-    })
+    }).subscribe()
   }
   checkCanTrade() {
     if (!this.canTrade) {
@@ -231,5 +274,40 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
       return false;
     }
     return true;
+  }
+  switchTab(tab: TabType) {
+    this.tab = tab;
+  }
+
+  gaugeRotate(left: number, right: number): string {
+    if (left > right) {
+      return 'rotate-30';
+    } else if (left < right) {
+      return 'rotate-[120deg]'
+    } else {
+      return 'rotate-90'
+    }
+  }
+  get userCash(): number {
+    return this.user.cashAccount === CashAccount.REAL ? this.user.cash : this.user.demoCash ?? 0;
+  }
+
+  get getLastResults(): any {
+    let klines = this.klines.getValue().sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime());
+    let results = [];
+    for (let i = 0; i < 3; i++) {
+      results[i] = [];
+      for (let j = 0; j < 20; j++) {
+        let kline = klines[i * 20 + j];
+        if (!kline) {
+          results[i].push(0);
+        } else if (kline.y[3] - kline.y[0] > 0) {
+          results[i].push(1);
+        } else {
+          results[i].push(2);
+        }
+      }
+    }
+    return results;
   }
 }

@@ -71,5 +71,16 @@
   "check coin transaction": "kiểm tra giao dịch tiền ảo",
   "check": "kiểm tra",
   "transaction identity": "danh tính giao dịch",
-  "transaction hash hint": "hàm băm giao dịch trông giống như: 0x64d71510fb98e6e79131da8eaf7fdc5041d2f3bcad2ed9e516a6cf893da7d927"
+  "transaction hash hint": "hàm băm giao dịch trông giống như: 0x64d71510fb98e6e79131da8eaf7fdc5041d2f3bcad2ed9e516a6cf893da7d927",
+  "indicators": "chỉ số",
+  "last results": "kết quả cuối cùng",
+  "oscillators": "dao động",
+  "summary": "bản tóm tắt",
+  "count": "đếm",
+  "trading amount": "số tiền giao dịch",
+  "trading counter": "quầy giao dịch",
+  "wait time": "thời gian chờ đợi",
+  "wait for result": "chờ kết quả",
+  "trading time": "thời gian giao dịch",
+  "wait for processing": "chờ xử lý"
 }
