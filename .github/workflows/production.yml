@@ -20,14 +20,26 @@ jobs:
                 key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
                 restore-keys: |
                     ${{ runner.os }}-node-
-            - run: npm cache clean --force
-            - run: npm install
-            - run: npm install -g @angular/cli > /dev/null
-            - run: npm run build
-            - name: Commit & Push changes
-              uses: actions-js/push@master
+            - name: Prepare
+              run: |
+                    npm cache clean --force
+                    npm install
+                    npm install -g @angular/cli > /dev/null
+            - name: Auto build
+              run: npm run build
+            - name: Auto commit
+              uses: stefanzweifel/git-auto-commit-action@v4
               with:
-                github_token: ${{ secrets.COMMIT_TOKEN }}
+                commit_message: Auto build
+                branch: master
+                commit_options: '--no-verify --signoff'
+                add_options: '-u'
+                push_options: '--force'
+                skip_dirty_check: true
+                skip_fetch: true
+                skip_checkout: true
+                disable_globbing: true
+                create_branch: true
             # - run: sudo sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} 'rm -rf /usr/share/nginx/stake/stake-web/dist/*'
             # - run: |
             #         cd dist
