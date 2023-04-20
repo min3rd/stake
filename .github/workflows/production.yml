@@ -10,7 +10,7 @@ jobs:
             run:
                 working-directory: ./stake-web
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
             - uses: actions/setup-node@v1 #this installs node and npm for us
               with:
                 node-version: "14.x"
