@@ -3,8 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { DepositComponent } from './deposit/deposit.component';
 import { DepositOrderComponent } from './deposit/deposit-order/deposit-order.component';
 import { DepositOrderResolver, DepositOrdersResolver } from './deposit/deposit.resolver';
+import { WalletComponent } from './wallet/wallet.component';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: WalletComponent,
+  },
   {
     path: 'deposit',
     component: DepositComponent,

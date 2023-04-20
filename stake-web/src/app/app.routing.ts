@@ -1,3 +1,4 @@
+import { AppConfigResolver } from './app.resolvers';
 import { settings } from './mock-api/apps/mailbox/data';
 import { Route } from '@angular/router';
 import { AuthGuard } from 'app/core/auth/guards/auth.guard';
@@ -26,6 +27,7 @@ export const appRoutes: Route[] = [
         component: LayoutComponent,
         resolve: {
             initialData: InitialDataResolver,
+            AppConfigResolver: AppConfigResolver,
         },
         children: [
             { path: '', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule) },
@@ -41,6 +43,12 @@ export const appRoutes: Route[] = [
                 path: 'games',
                 loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
             },
+
+            // Wallet
+            {
+                path: 'wallet',
+                loadChildren: () => import('app/modules/wallet/wallet.module').then(m => m.WalletModule),
+            }
 
         ]
     },

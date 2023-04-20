@@ -22,7 +22,36 @@ const navigations: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'gamepad',
         link: '/games'
-    }
+    },
+    {
+        id: 'wallet',
+        title: 'Wallet',
+        type: 'aside',
+        icon: 'heroicons_outline:credit-card',
+        children: [
+            {
+                id: 'wallet',
+                title: 'Wallet',
+                type: 'basic',
+                icon: 'heroicons_outline:credit-card',
+                link: '/wallet'
+            },
+            {
+                id: 'deposit',
+                title: 'Deposit',
+                type: 'basic',
+                icon: 'heroicons_outline:currency-dollar',
+                link: '/wallet/deposit'
+            },
+            {
+                id: 'withdraw',
+                title: 'Withdraw',
+                type: 'basic',
+                icon: 'heroicons_outline:cash',
+                link: '/wallet/withdraw'
+            },
+        ]
+    },
 ];
 
 export const defaultNavigation: FuseNavigationItem[] = navigations;

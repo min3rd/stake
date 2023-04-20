@@ -56,6 +56,10 @@ export class ApiService {
         return `${this.API_URL}/public`;
     }
 
+    public_appConfig(): string {
+        return this._publicApi(`/appConfig`);
+    }
+
     user_socket(): string {
         return `${this.API_URL}/user`;
     }
@@ -131,6 +135,10 @@ export class ApiService {
 
     users_wallets_wallet(address: string) {
         return this._usersApi(`/wallets/${address}`);
+    }
+
+    users_wallets_checkTransaction() {
+        return this._usersApi(`/wallets/checkTransaction`);
     }
 }
 

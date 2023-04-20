@@ -6,6 +6,8 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
 import { UserService } from './core/user/user.service';
 import { SocketService } from './core/socket/socket.service';
 import { SocketEvent } from './core/config/socket.config';
+import { AppConfig } from './app.types';
+import { AppService } from './app.service';
 
 @Injectable({
     providedIn: 'root'
@@ -45,5 +47,19 @@ export class InitialDataResolver implements Resolve<any>
             this._navigationService.get(),
             this._notificationsService.getAll(),
         ]);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AppConfigResolver implements Resolve<AppConfig>{
+    constructor(
+        private _appService: AppService
+    ) {
+
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): AppConfig | Observable<AppConfig> | Promise<AppConfig> {
+        return this._appService.getAppConfig();
     }
 }

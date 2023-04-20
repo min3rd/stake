@@ -2,14 +2,20 @@
     <div class="w-full h-full md:rounded-lg bg-card dark:bg-slate-700 p-4">
         <!-- Header -->
 
-        <div class="w-full my-2">
-            <div class="font-semibold">{{'wallet address' | transloco | capitalize}}</div>
-            <div
-                class="w-full bg-slate-500 rounded-md drop-shadow-md p-2 truncate flex flex-auto justify-between items-center">
-                <span class="truncate"></span>
-                <button mat-icon-button>
-                    <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
-                </button>
+        <div class="md:flex w-full my-2">
+            <div>
+                <div class="font-semibold">{{'wallet address' | transloco | capitalize}}</div>
+                <div
+                    class="w-full bg-slate-500 rounded-md drop-shadow-md p-2 truncate flex flex-auto justify-between items-center">
+                    <span class="truncate">{{appConfig.MASTER_ADDRESS}}</span>
+                    <button mat-icon-button>
+                        <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="relative rounded-md mx-auto md:ml-2 mt-2 md:mt-3">
+                <qrcode [qrdata]="appConfig.MASTER_ADDRESS" [width]="64" [errorCorrectionLevel]="'M'">
+                </qrcode>
             </div>
         </div>
 
@@ -18,7 +24,6 @@
                 <mat-label>
                     {{'transaction identity' | transloco | capitalize}}
                 </mat-label>
-                <mat-hint>{{'transaction hash hint' | transloco | capitalize}}</mat-hint>
                 <input [(ngModel)]="transactionId" matInput type="text">
             </mat-form-field>
             <button mat-flat-button class="rounded-md w-full md:w-fit bg-lime-500" (click)="checkTransaction()">
@@ -26,15 +31,12 @@
                 {{'check' | transloco | capitalize}}
             </button>
         </div>
-
-        <div class="w-full border-b mt-6"></div>
+        <div class="text-secondary truncate">
+            {{'transaction hash hint' | transloco | capitalize}}
+        </div>
 
         <!-- Main -->
         <div class="md:flex md:flex-auto w-full md:p-4 rounded-lg gap-6">
-            <div class="w-full md:border-r md:px-6">
-                <router-outlet></router-outlet>
-            </div>
-
             <ng-container *ngIf="(depositOrders$ | async) as depositOrders">
                 <div class="w-full h-fit grid py-2 md:p-2 border-t mt-6 md:mt-0 md:border-t-0 grid-cols-1 gap-4">
                     <div class="flex flex-auto justify-end gap-4">
@@ -68,6 +70,10 @@
                     <ng-template #noResult></ng-template>
                 </div>
             </ng-container>
+            <div class="w-full md:px-6">
+                <router-outlet></router-outlet>
+            </div>
+
         </div>
     </div>
 </div>

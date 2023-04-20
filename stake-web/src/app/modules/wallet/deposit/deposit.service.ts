@@ -79,4 +79,27 @@ export class DepositService {
       })
     );
   }
+
+  checkTransaction(transactionId: string): Observable<DepositOrder> {
+    return this._depositOrders.pipe(
+      take(1),
+      switchMap(depositOrders => {
+        return this._httpClient.post<DepositOrder>(this._apiService.users_wallets_checkTransaction(), {
+          transactionId: transactionId,
+        }).pipe(
+          tap(depositOrder => {
+            let index = depositOrders.findIndex(e => e._id == depositOrder._id);
+            if (index >= 0) {
+              depositOrders[index] = depositOrder;
+            } else {
+              depositOrders.push(depositOrder);
+            }
+            depositOrders = depositOrders.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+            this._depositOrders.next(depositOrders);
+            this._depositOrder.next(depositOrder);
+          })
+        );
+      })
+    );
+  }
 }

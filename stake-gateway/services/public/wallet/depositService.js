@@ -1,4 +1,6 @@
 const badRequestError = require("../../../common/badRequestError");
+const binanceApi = require("../../../common/binanceApi");
+const bscApi = require("../../../common/bscApi");
 const ErrorCode = require("../../../common/errorCode");
 const logger = require("../../../common/logger");
 const { publicMongoose } = require("../../../config/publicMongoose");
@@ -8,6 +10,42 @@ const DepositOrderStatus = {
     SUCCESS: 1,
     CANCELED: 2,
 }
+
+async function getBNBUSDPrice() {
+    const response = await binanceApi.get('/api/v3/ticker/price?symbol=BNBUSDT');
+    if (response.status === 200) {
+        const price = parseFloat(response.data.price);
+        return price;
+    } else {
+        return null;
+    }
+}
+
+async function getTransactionValueInUSD(apiKey, txHash) {
+    const url = `/api?module=transaction&action=gettxreceiptstatus&txhash=${txHash}&apikey=${apiKey}`;
+    try {
+        const response = await bscApi.get(url);
+        if (response.status === 200) {
+            const data = response.data.result;
+            logger.debug('deposit', `transaction=${JSON.stringify(response.data)}`)
+            const valueBNB = parseFloat(data.value) / 10 ** 18;
+            const bnbUSDPrice = await getBNBUSDPrice();
+            if (bnbUSDPrice !== null) {
+                const valueUSD = valueBNB * bnbUSDPrice;
+                return valueUSD;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+
 const createDepositOrder = async function (req, res, next) {
     let userId = req.params.userId;
     if (req.user.id != userId) {
@@ -79,9 +117,21 @@ const cancelDepositOrders = async function (req, res, next) {
     res.json(depositOrder);
 }
 
+const checkTransaction = async (req, res, next) => {
+    let transactionId = req.body.transactionId;
+    const API_KEY = process.env.BSCSCAN_API_KEY ?? "HDK7QXXBDQQ2FAFDYRI47TCIEZPMTVIWVW";
+
+    let value = await getTransactionValueInUSD(API_KEY, transactionId);
+    res.json({
+        value: value
+    });
+    // let response = await bscApi.get(`/api?module=account&action=txlist&txhash=${transactionId}&apikey=${API_KEY}`)
+}
+
 module.exports = {
     createDepositOrder: createDepositOrder,
     getDepositOrderById: getDepositOrderById,
     getDepositOrders: getDepositOrders,
     cancelDepositOrders: cancelDepositOrders,
+    checkTransaction: checkTransaction,
 };

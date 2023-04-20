@@ -19,12 +19,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { FuseCardModule } from '@fuse/components/card';
+import { WalletComponent } from './wallet/wallet.component';
 
 
 @NgModule({
   declarations: [
     DepositComponent,
     DepositOrderComponent,
+    WalletComponent,
   ],
   imports: [
     CommonModule,

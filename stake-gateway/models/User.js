@@ -18,6 +18,7 @@ const UserSchema = new Schema({
     demoCash: { type: Number, default: 0, },
     cashAccount: { type: Number, enum: Object.values(CashAccount) },
     blocked: { type: Boolean, default: false, },
+    walletAddress: { type: String },
     wallets: [
         {
             type: String,

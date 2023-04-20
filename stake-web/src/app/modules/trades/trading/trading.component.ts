@@ -297,14 +297,17 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     let results = [];
     for (let i = 0; i < 3; i++) {
       results[i] = [];
-      for (let j = 0; j < 20; j++) {
-        let kline = klines[i * 20 + j];
-        if (!kline) {
-          results[i].push(0);
-        } else if (kline.y[3] - kline.y[0] > 0) {
-          results[i].push(1);
-        } else {
-          results[i].push(2);
+      for (let j = 0; j < 5; j++) {
+        results[i][j] = []
+        for (let k = 0; k < 4; k++) {
+          let kline = klines[i * 5 + j * 4 + k];
+          if (!kline) {
+            results[i][j].push(0);
+          } else if (kline.y[3] - kline.y[0] > 0) {
+            results[i][j].push(1);
+          } else {
+            results[i][j].push(2);
+          }
         }
       }
     }
