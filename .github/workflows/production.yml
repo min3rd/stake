@@ -24,10 +24,11 @@ jobs:
             - run: npm install
             - run: npm install -g @angular/cli > /dev/null
             - run: npm run build
-            - run: sudo sshpass -p ${{ secrets.SERVER_PASSWORD }} -v ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} 'rm -rf /usr/share/nginx/stake/stake-web/dist/*'
+            - run: sudo sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} 'rm -rf /usr/share/nginx/stake/stake-web/dist/*'
             - run: |
                     cd dist
                     tar -czvf ../dist.tar.gz ./
                     cd ..
-                    sudo sshpass -p ${{ secrets.SERVER_PASSWORD }} scp -v -o StrictHostKeyChecking=no -r dist.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }}:/usr/share/nginx/stake/stake-web/dist
-            - run : sudo sshpass -p ${{ secrets.SERVER_PASSWORD }} -v ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} 'cd /usr/share/nginx/stake/stake-web/dist && tar -xzvf dist.tar.gz && rm -rf dist.tar.gz && cp -f /usr/share/nginx/stake/stake-web/dist/assets/json/config.pg.json /usr/share/nginx/stake/stake-web/dist/assets/json/config.json'
+                    sudo sshpass -p ${{ secrets.SERVER_PASSWORD }} scp -r dist.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }}:/usr/share/nginx/stake/stake-web/dist
+            - run : sudo sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} 'cd /usr/share/nginx/stake/stake-web/dist && tar -xzvf dist.tar.gz && rm -rf dist.tar.gz'
+            - run : sudo sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} 'cp -f /usr/share/nginx/stake/stake-web/dist/assets/json/config.pg.json /usr/share/nginx/stake/stake-web/dist/assets/json/config.json'
