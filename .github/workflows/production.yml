@@ -97,6 +97,7 @@ jobs:
               disable_globbing: true
               create_branch: true
     update-production:
+      needs: [build-web, build-admin]
       runs-on: ubuntu-latest
       steps:
       - name: Update production and restart gateway
@@ -112,3 +113,4 @@ jobs:
                   cd stake-gateway
                   npm i
                   pm2 restart 0
+                  systemctl restart nginx
