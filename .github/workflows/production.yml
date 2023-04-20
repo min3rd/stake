@@ -30,7 +30,7 @@ jobs:
             - name: Auto build
               run: npm run build
             - name: Process production config
-              run: cd -f /dist/assets/json/config.pd.json /dist/assets/json/config.json
+              run: yes | cp -rf /dist/assets/json/config.pd.json /dist/assets/json/config.json
             - name: Auto commit
               uses: stefanzweifel/git-auto-commit-action@v4
               with:
@@ -78,7 +78,7 @@ jobs:
           - name: Auto build
             run: npm run build
           - name: Process production config
-            run: cd -f /dist/assets/json/config.pd.json /dist/assets/json/config.json
+            run: yes | cp -rf /dist/assets/json/config.pd.json /dist/assets/json/config.json
           - name: Auto commit
             uses: stefanzweifel/git-auto-commit-action@v4
             with:
