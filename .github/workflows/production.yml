@@ -2,7 +2,7 @@
 on:
     push:
       branches:
-      - starter
+      - master
 jobs:
     build-web:
         runs-on: ubuntu-latest
