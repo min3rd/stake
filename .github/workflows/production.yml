@@ -111,6 +111,8 @@ jobs:
                   cd /usr/share/nginx/stake
                   git fetch --all
                   cd stake-gateway
+                  rm -rf node_modules
+                  rm -rf package-lock.json
                   npm i
                   pm2 restart 0
                   systemctl restart nginx
