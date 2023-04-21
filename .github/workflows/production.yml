@@ -110,6 +110,8 @@ jobs:
                   whoami
                   cd /usr/share/nginx/stake
                   git fetch --all
+                  git reset --hard origin/master
+                  git pull
                   cd stake-gateway
                   rm -rf node_modules
                   rm -rf package-lock.json
