@@ -75,7 +75,7 @@
   "check coin transaction": "check coin transaction",
   "check": "check",
   "transaction identity": "transaction identity",
-  "transaction hash hint": "transaction hash look like: 0x64d71510fb98e6e79131da8eaf7fdc5041d2f3bcad2ed9e516a6cf893da7d927",
+  "transaction hash hint": "0x64d71510fb98e6e79131da8eaf7fdc5041d2f3bcad2ed9e516a6cf893da7d927",
   "indicators": "indicators",
   "last results": "last results",
   "oscillators": "oscillators",
@@ -86,5 +86,9 @@
   "wait time": "wait time",
   "wait for result": "wait for result",
   "trading time": "trading time",
-  "wait for processing": "wait for processing"
+  "wait for processing": "wait for processing",
+  "account cash": "account cash",
+  "deposit": "deposit",
+  "withdraw": "withdraw",
+  "transaction hash": "transaction hash"
 }

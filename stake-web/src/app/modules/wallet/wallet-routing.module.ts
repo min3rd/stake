@@ -2,34 +2,40 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepositComponent } from './deposit/deposit.component';
 import { DepositOrderComponent } from './deposit/deposit-order/deposit-order.component';
-import { DepositOrderResolver, DepositOrdersResolver } from './deposit/deposit.resolver';
 import { WalletComponent } from './wallet/wallet.component';
+import { DepositGuard } from './deposit.guard';
+import { DepositOrdersResolver } from './wallet.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: WalletComponent,
-  },
-  {
-    path: 'deposit',
-    component: DepositComponent,
     resolve: {
       DepositOrdersResolver: DepositOrdersResolver,
     },
     children: [
       {
-        path: '',
-        component: DepositOrderComponent,
-      },
-      {
-        path: ':depositOrderId',
-        component: DepositOrderComponent,
+        path: 'deposit',
+        component: DepositComponent,
+        canDeactivate: [DepositGuard],
         resolve: {
-          DepositOrderResolver: DepositOrderResolver,
-        }
+        },
+        children: [
+          {
+            path: '',
+            component: DepositOrderComponent,
+          },
+          {
+            path: ':depositOrderId',
+            component: DepositOrderComponent,
+            resolve: {
+            }
+          }
+        ]
       }
     ]
-  }
+  },
+  { path: '**', redirectTo: '/wallet' }
 ];
 
 @NgModule({

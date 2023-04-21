@@ -1,79 +1,45 @@
-<div class="w-full h-full md:p-6">
-    <div class="w-full h-full md:rounded-lg bg-card dark:bg-slate-700 p-4">
-        <!-- Header -->
-
-        <div class="md:flex w-full my-2">
-            <div>
-                <div class="font-semibold">{{'wallet address' | transloco | capitalize}}</div>
-                <div
-                    class="w-full bg-slate-500 rounded-md drop-shadow-md p-2 truncate flex flex-auto justify-between items-center">
-                    <span class="truncate">{{appConfig.MASTER_ADDRESS}}</span>
+<div class="flex flex-col w-full">
+    <!-- Header -->
+    <div class="relative w-full px-8 sm:px-12 bg-transparent">
+        <!-- Close button -->
+        <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6 pb-2">
+            <button mat-icon-button [routerLink]="['../']">
+                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+        <div class="w-full max-w-3xl">
+            <div class="pb-4 border-b justify-center">
+                <div class="flex items-center justify-between bg-slate-800 shadow-md rounded-md p-2">
+                    <div class="truncate">
+                        {{appConfig.MASTER_ADDRESS}}
+                    </div>
                     <button mat-icon-button>
                         <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
                     </button>
                 </div>
-            </div>
-            <div class="relative rounded-md mx-auto md:ml-2 mt-2 md:mt-3">
-                <qrcode [qrdata]="appConfig.MASTER_ADDRESS" [width]="64" [errorCorrectionLevel]="'M'">
-                </qrcode>
-            </div>
-        </div>
-
-        <div class="flex flex-auto items-center gap-6">
-            <mat-form-field class="w-full">
-                <mat-label>
-                    {{'transaction identity' | transloco | capitalize}}
-                </mat-label>
-                <input [(ngModel)]="transactionId" matInput type="text">
-            </mat-form-field>
-            <button mat-flat-button class="rounded-md w-full md:w-fit bg-lime-500" (click)="checkTransaction()">
-                <mat-icon svgIcon="heroicons_outline:check-circle"></mat-icon>
-                {{'check' | transloco | capitalize}}
-            </button>
-        </div>
-        <div class="text-secondary truncate">
-            {{'transaction hash hint' | transloco | capitalize}}
-        </div>
-
-        <!-- Main -->
-        <div class="md:flex md:flex-auto w-full md:p-4 rounded-lg gap-6">
-            <ng-container *ngIf="(depositOrders$ | async) as depositOrders">
-                <div class="w-full h-fit grid py-2 md:p-2 border-t mt-6 md:mt-0 md:border-t-0 grid-cols-1 gap-4">
-                    <div class="flex flex-auto justify-end gap-4">
-                        <button mat-icon-button (click)="prevPage()">
-                            <mat-icon svgIcon="heroicons_outline:chevron-left"></mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="nextPage()">
-                            <mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon>
-                        </button>
-                    </div>
-                    <ng-container *ngIf="depositOrders.length > 0;else noResult">
-                        <div *ngFor="let order of depositOrders"
-                            class="flex flex-auto items-center justify-between rounded-md bg-card dark:bg-default p-4 gap-6 hover:cursor-pointer transition duration-150 hover:translate-x-2"
-                            [routerLink]="['/wallet/deposit/' + order._id]" routerLinkActive="router-link-active">
-                            <div>
-                                <div>{{order._id}}</div>
-                                <div class="text-sm text-secondary">{{order.time | date: 'YYYY/MM/dd HH:mm:ss'}}</div>
-                            </div>
-                            <div *ngIf="order.flag == 0">
-                                <div class="absolute icon-size-3 rounded-md bg-amber-500 animate-ping"></div>
-                                <div class="icon-size-3 rounded-md bg-amber-500"></div>
-                            </div>
-                            <div *ngIf="order.flag == 1">
-                                <div class="icon-size-3 rounded-md bg-lime-500"></div>
-                            </div>
-                            <div *ngIf="order.flag == 2">
-                                <div class="icon-size-3 rounded-md bg-red-500"></div>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-template #noResult></ng-template>
+                <div class="w-36 h-36 my-2 mx-auto">
+                    <qrcode [qrdata]="appConfig.MASTER_ADDRESS" [errorCorrectionLevel]="'M'" class="w-36"></qrcode>
                 </div>
-            </ng-container>
-            <div class="w-full md:px-6">
-                <router-outlet></router-outlet>
             </div>
+            <div class="flex w-full my-2 justify-between items-center gap-2 pb-2 border-b">
+                <mat-form-field class="w-full">
+                    <mat-label>
+                        {{'transaction hash' | transloco |capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [placeholder]="'transaction hash hint' | transloco | capitalize">
+                </mat-form-field>
+                <button mat-flat-button class="bg-lime-500">
+                    <mat-icon svgIcon="heroicons_outline:check-circle"></mat-icon>
+                    <span>{{'check' | transloco | capitalize}}</span>
+                </button>
+            </div>
+            <ng-container *ngIf="editMode; else viewPanel">
+            </ng-container>
+            <ng-template #viewPanel>
 
+            </ng-template>
         </div>
     </div>
 </div>

@@ -3,9 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "swagger-dev": "node swagger.js dev",
+    "swagger-prod": "node swagger.js prod"
   },
   "dependencies": {
+    "and": "0.0.3",
     "axios": "^1.3.4",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
@@ -22,6 +25,8 @@
     "morgan": "~1.9.1",
     "rand-token": "^1.0.1",
     "socket.io": "^4.6.1",
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.6.2",
     "uuid": "^9.0.0",
     "ws": "^8.13.0"
   }

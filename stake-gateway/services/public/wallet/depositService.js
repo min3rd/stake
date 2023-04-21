@@ -45,38 +45,6 @@ async function getTransactionValueInUSD(apiKey, txHash) {
     }
 }
 
-
-const createDepositOrder = async function (req, res, next) {
-    let userId = req.params.userId;
-    if (req.user.id != userId) {
-        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
-    }
-    const session = await publicMongoose.startSession();
-    const masterAddress = process.env.MASTER_ADDRESS ?? '0x92b325Fa6e701f46EA66B262BBaC4E1596CDA2Cc';
-    try {
-        await session.startTransaction();
-        let depositOrder = new DepositOrder({
-            userId: userId,
-            masterAddress: masterAddress,
-            time: new Date(),
-        });
-        depositOrder = await depositOrder.save();
-        if (!depositOrder) {
-            await session.abortTransaction();
-            await session.endSession();
-            return next(badRequestError.make(ErrorCode.WALLET_COULD_NOT_DEPOSIT_ORDER));
-        }
-        await session.commitTransaction();
-        await session.endSession();
-        res.json(depositOrder);
-    } catch (e) {
-        await session.abortTransaction();
-        await session.endSession();
-        logger.error('depositService_createDepositOrder', `e=${e}`);
-        return next(badRequestError.make(ErrorCode.WALLET_COULD_NOT_DEPOSIT_ORDER));
-    }
-}
-
 const getDepositOrderById = async function (req, res, next) {
     let userId = req.params.userId;
     if (req.user.id != userId) {
@@ -118,18 +86,39 @@ const cancelDepositOrders = async function (req, res, next) {
 }
 
 const checkTransaction = async (req, res, next) => {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
     let transactionId = req.body.transactionId;
     const API_KEY = process.env.BSCSCAN_API_KEY ?? "HDK7QXXBDQQ2FAFDYRI47TCIEZPMTVIWVW";
-
-    let value = await getTransactionValueInUSD(API_KEY, transactionId);
-    res.json({
-        value: value
-    });
-    // let response = await bscApi.get(`/api?module=account&action=txlist&txhash=${transactionId}&apikey=${API_KEY}`)
+    const session = await publicMongoose.startSession();
+    const masterAddress = process.env.MASTER_ADDRESS ?? '0x92b325Fa6e701f46EA66B262BBaC4E1596CDA2Cc';
+    try {
+        await session.startTransaction();
+        let depositOrder = new DepositOrder({
+            userId: userId,
+            masterAddress: masterAddress,
+            time: new Date(),
+        });
+        depositOrder = await depositOrder.save();
+        if (!depositOrder) {
+            await session.abortTransaction();
+            await session.endSession();
+            return next(badRequestError.make(ErrorCode.WALLET_COULD_NOT_DEPOSIT_ORDER));
+        }
+        await session.commitTransaction();
+        await session.endSession();
+        res.json(depositOrder);
+    } catch (e) {
+        await session.abortTransaction();
+        await session.endSession();
+        logger.error('depositService_createDepositOrder', `e=${e}`);
+        return next(badRequestError.make(ErrorCode.WALLET_COULD_NOT_DEPOSIT_ORDER));
+    }
 }
 
 module.exports = {
-    createDepositOrder: createDepositOrder,
     getDepositOrderById: getDepositOrderById,
     getDepositOrders: getDepositOrders,
     cancelDepositOrders: cancelDepositOrders,

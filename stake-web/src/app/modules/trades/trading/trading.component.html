@@ -1,11 +1,11 @@
 <div class="w-full h-full bg-card dark:bg-default overflow-hidden">
     <div class="md:flex md:flex-auto items-start">
         <div class="relative flex w-full h-auto md:h-160 bg-gray-50 dark:bg-transparent">
-            <!-- <apx-chart class="relative w-full h-100 md:inset-0 md:h-full overflow-hidden" [chart]="btcOptions.chart"
+            <apx-chart class="relative w-full h-100 md:inset-0 md:h-full overflow-hidden" [chart]="btcOptions.chart"
                 [colors]="btcOptions.colors" [dataLabels]="btcOptions.dataLabels" [grid]="btcOptions.grid"
                 [legend]="btcOptions.legend" [series]="btcOptions.series" [stroke]="btcOptions.stroke"
                 [tooltip]="btcOptions.tooltip" [xaxis]="btcOptions.xaxis" [yaxis]="btcOptions.yaxis" #btcChartComponent>
-            </apx-chart> -->
+            </apx-chart>
             <ng-container *ngIf="tradingRooms?.length">
                 <div class="absolute top-2 left-2 z-10">
                     <mat-form-field class="min-w-32 rounded-md bg-slate-700" subscriptSizing="dynamic">

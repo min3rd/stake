@@ -26,31 +26,9 @@ const navigations: FuseNavigationItem[] = [
     {
         id: 'wallet',
         title: 'Wallet',
-        type: 'aside',
+        type: 'basic',
         icon: 'heroicons_outline:credit-card',
-        children: [
-            {
-                id: 'wallet',
-                title: 'Wallet',
-                type: 'basic',
-                icon: 'heroicons_outline:credit-card',
-                link: '/wallet'
-            },
-            {
-                id: 'deposit',
-                title: 'Deposit',
-                type: 'basic',
-                icon: 'heroicons_outline:currency-dollar',
-                link: '/wallet/deposit'
-            },
-            {
-                id: 'withdraw',
-                title: 'Withdraw',
-                type: 'basic',
-                icon: 'heroicons_outline:cash',
-                link: '/wallet/withdraw'
-            },
-        ]
+        link: '/wallet',
     },
 ];
 

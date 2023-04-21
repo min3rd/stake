@@ -1,1 +1,67 @@
-<p>wallet works!</p>
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <!-- Main -->
+            <div class="flex-auto">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between p-0 md:p-6 border-b">
+                    <div class="w-full md:w-fit md:rounded-md bg-card shadow p-2 items-end">
+                        <div class="text-secondary text-xl">
+                            {{'account cash' | transloco | capitalize}}
+                        </div>
+                        <div class="text-3xl mt-2 mb-6">
+                            {{user.cash | currency}}
+                        </div>
+                        <div class="flex justify-between gap-6">
+                            <button mat-flat-button routerLink="./deposit" class="bg-transparent p-1">
+                                <div class="flex items-center gap-2 hover:cursor-pointer">
+                                    <span class="text-lime-500">
+                                        <mat-icon svgIcon="heroicons_outline:arrow-circle-down"></mat-icon>
+                                    </span>
+                                    <span class="text-sm">
+                                        {{'deposit' | transloco | capitalize}}
+                                    </span>
+                                </div>
+                            </button>
+                            <button mat-flat-button routerLink="./withdraw" class="bg-transparent p-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-red-500">
+                                        <mat-icon svgIcon="heroicons_outline:arrow-circle-down"></mat-icon>
+                                    </span>
+                                    <span class="text-sm">
+                                        {{'withdraw' | transloco | capitalize}}
+                                    </span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative p-6">
+                    <!-- Main actions -->
+                    <div class="hidden md:flex items-center mt-4 sm:mt-0 md:mt-4">
+                        <!-- Search -->
+                        <div class="flex-auto">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full min-w-50"
+                                subscriptSizing="dynamic">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
+                                    [placeholder]="'Search contacts'">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

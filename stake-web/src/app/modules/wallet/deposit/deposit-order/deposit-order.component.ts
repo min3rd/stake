@@ -1,8 +1,8 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DepositService } from '../deposit.service';
-import { DepositOrder, DepositOrderStatus } from '../deposit.types';
+import { WalletService } from '../../wallet.service';
+import { DepositOrder, DepositOrderStatus } from '../../wallet.types';
 @Component({
   selector: 'app-deposit-order',
   templateUrl: './deposit-order.component.html',
@@ -16,7 +16,7 @@ export class DepositOrderComponent implements OnInit, OnDestroy {
   apiCalling: boolean = false;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
-    private _depositService: DepositService,
+    private _walletService: WalletService,
     private _clipboard: Clipboard
   ) {
 
@@ -27,8 +27,8 @@ export class DepositOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.depositOrders$ = this._depositService.depositOrders$;
-    this._depositService.depositOrder$.pipe(takeUntil(this._unsubscribeAll)).subscribe(depositOrder => this.depositOrder = depositOrder);
+    this.depositOrders$ = this._walletService.depositOrders$;
+    this._walletService.depositOrder$.pipe(takeUntil(this._unsubscribeAll)).subscribe(depositOrder => this.depositOrder = depositOrder);
   }
   copyAddress() {
     this._clipboard.copy(this.depositOrder.masterAddress);
@@ -40,7 +40,7 @@ export class DepositOrderComponent implements OnInit, OnDestroy {
   cancel() {
     this.depositOrder.flag = DepositOrderStatus.CANCELED;
     this.apiCalling = true;
-    this._depositService.cancel(this.depositOrder).subscribe(depositOrder => {
+    this._walletService.cancel(this.depositOrder).subscribe(depositOrder => {
       this.depositOrder = depositOrder;
     }, e => { },
       () => {

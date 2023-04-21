@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DepositService } from './deposit.service';
-import { DepositOrder, DepositOrderStatus } from './deposit.types';
+import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { AppService } from 'app/app.service';
 import { AppConfig } from 'app/app.types';
+import { DepositOrder, DepositOrderStatus } from '../wallet.types';
+import { WalletService } from '../wallet.service';
+import { WalletComponent } from '../wallet/wallet.component';
 
 @Component({
   selector: 'app-deposit',
@@ -19,16 +21,20 @@ export class DepositComponent implements OnInit, OnDestroy {
   offset: number = 0;
   size: number = 10;
   appConfig: AppConfig;
+  editMode: boolean = false;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
-    private _depositService: DepositService,
+    private _walletService: WalletService,
     private _router: Router,
     private _appService: AppService,
+    private _walletComponent: WalletComponent,
   ) {
 
   }
   ngOnInit(): void {
-    this.depositOrders$ = this._depositService.depositOrders$;
+    this._walletComponent.matDrawer.open();
+
+    this.depositOrders$ = this._walletService.depositOrders$;
     this._appService.appConfig$.pipe(takeUntil(this._unsubscribeAll)).subscribe((appConfig: AppConfig) => {
       this.appConfig = appConfig;
     });
@@ -37,17 +43,13 @@ export class DepositComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-  createOrder() {
-    this.apiCalling = true;
-    this._depositService.createOrder().subscribe(depositOrder => {
-      this._router.navigate(['/wallet/deposit/' + depositOrder._id]);
-    }, e => { }, () => {
-      this.apiCalling = false;
-    });
+
+  closeDrawer(): Promise<MatDrawerToggleResult> {
+    return this._walletComponent.matDrawer.close();
   }
   nextPage() {
     this.offset += this.size;
-    this._depositService.getDepositOrders(this.offset, this.size).subscribe((depositOrders: DepositOrder[]) => {
+    this._walletService.getDepositOrders(this.offset, this.size).subscribe((depositOrders: DepositOrder[]) => {
       if (!depositOrders.length) {
         this.offset = 0;
       }
@@ -59,7 +61,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   prevPage() {
     this.offset -= this.size;
     this.offset = this.offset < 0 ? 0 : this.offset;
-    this._depositService.getDepositOrders(this.offset, this.size).subscribe((depositOrders: DepositOrder[]) => {
+    this._walletService.getDepositOrders(this.offset, this.size).subscribe((depositOrders: DepositOrder[]) => {
       if (!depositOrders.length) {
         this.offset = 0;
       }
@@ -68,6 +70,6 @@ export class DepositComponent implements OnInit, OnDestroy {
     });
   }
   checkTransaction() {
-    this._depositService.checkTransaction(this.transactionId).subscribe();
+    this._walletService.checkTransaction(this.transactionId).subscribe();
   }
 }

@@ -43,13 +43,6 @@ export const appRoutes: Route[] = [
                 path: 'games',
                 loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
             },
-
-            // Wallet
-            {
-                path: 'wallet',
-                loadChildren: () => import('app/modules/wallet/wallet.module').then(m => m.WalletModule),
-            }
-
         ]
     },
     // Auth routes for guests
@@ -88,12 +81,15 @@ export const appRoutes: Route[] = [
         component: LayoutComponent,
         resolve: {
             initialData: InitialDataResolver,
+            AppConfigResolver: AppConfigResolver,
         },
         children: [
             {
                 path: 'settings',
                 loadChildren: () => import('app/modules/settings/settings.module').then(m => m.SettingsModule),
             },
+            
+            // Wallet
             {
                 path: 'wallet',
                 loadChildren: () => import('app/modules/wallet/wallet.module').then(m => m.WalletModule),
