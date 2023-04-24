@@ -9,6 +9,7 @@ const DepositOrderSchema = new Schema({
     transactionId: { type: String, },
     amount: { type: Number, },
     flag: { type: Number, default: 0, },
+    status: { type: Number, default: 0, },
 });
 
 const DepositOrder = publicMongoose.model('DepositOrder', DepositOrderSchema);

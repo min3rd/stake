@@ -7,7 +7,7 @@ import { AppConfig } from 'app/app.types';
 import { DepositOrder, DepositOrderStatus } from '../wallet.types';
 import { WalletService } from '../wallet.service';
 import { WalletComponent } from '../wallet/wallet.component';
-
+import { Clipboard } from '@angular/cdk/clipboard';
 @Component({
   selector: 'app-deposit',
   templateUrl: './deposit.component.html',
@@ -28,6 +28,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _appService: AppService,
     private _walletComponent: WalletComponent,
+    private _clipboard: Clipboard,
   ) {
 
   }
@@ -71,5 +72,8 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
   checkTransaction() {
     this._walletService.checkTransaction(this.transactionId).subscribe();
+  }
+  copyMasterAddress() {
+    this._clipboard.copy(this.appConfig.MASTER_ADDRESS);
   }
 }

@@ -3,7 +3,7 @@
     <div class="relative w-full px-8 sm:px-12 bg-transparent">
         <!-- Close button -->
         <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6 pb-2">
-            <button mat-icon-button [routerLink]="['../']">
+            <button mat-icon-button [routerLink]="['../']" [cdkCopyToClipboard]="appConfig.MASTER_ADDRESS">
                 <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
             </button>
         </div>

@@ -1,7 +1,12 @@
 {
+  "": "unexpected",
+  "00x0000": "unexpected",
+  "00x0001": "username could not be blank",
+  "00x0002": "name could not be blank",
+  "00x0003": "password could not be blank",
+  "00x0004": "username must be between 6 and 32 characters",
+  "00x0005": "username was not correct format",
   "welcome-back": "Welcome back",
-  "Project": "Project",
-  "Analytics": "Analytics",
   "profile": "profile",
   "settings": "settings",
   "sign out": "sign out",
@@ -56,7 +61,6 @@
   "all": "all",
   "gems": "gems",
   "random choose": "random choose",
-  "id": "id",
   "identity": "identity",
   "time": "time",
   "no record": "no record",
@@ -90,5 +94,8 @@
   "account cash": "account cash",
   "deposit": "deposit",
   "withdraw": "withdraw",
-  "transaction hash": "transaction hash"
+  "transaction hash": "transaction hash",
+  "analytics": "Analytics",
+  "project": "Project",
+  "account": "account"
 }

@@ -20,7 +20,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { FuseCardModule } from '@fuse/components/card';
 import { WalletComponent } from './wallet/wallet.component';
-
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [
@@ -47,6 +47,7 @@ import { WalletComponent } from './wallet/wallet.component';
     FuseCardModule,
     FuseAlertModule,
     SharedModule,
+    ClipboardModule,
   ]
 })
 export class WalletModule { }

@@ -1,4 +1,5 @@
 {
+  "": "Không xác định",
   "signed in as": "đăng nhập với",
   "profile": "hồ sơ",
   "settings": "cài đặt",
@@ -86,5 +87,19 @@
   "account cash": "tài khoản tiền mặt",
   "deposit": "tiền gửi",
   "withdraw": "rút",
-  "transaction hash": "băm giao dịch"
+  "transaction hash": "băm giao dịch",
+  "analytics": "phân tích",
+  "full name is required": "Tên đầy đủ là bắt buộc",
+  "full name": "Họ và tên",
+  "wrong username format": "định dạng tên người dùng sai",
+  "welcome-back": "Chào mừng trở lại",
+  "project": "Dự án",
+  "password": "mật khẩu",
+  "password is required": "mật khẩu là bắt buộc",
+  "00x0000": "không ngờ tới",
+  "00x0001": "tên người dùng không được để trống",
+  "00x0002": "tên không thể để trống",
+  "00x0003": "mật khẩu không thể để trống",
+  "00x0004": "tên người dùng phải từ 6 đến 32 ký tự",
+  "00x0005": "tên người dùng không đúng định dạng"
 }

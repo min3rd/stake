@@ -73,7 +73,6 @@ export class AuthInterceptor implements HttpInterceptor {
                         position: 'top-right',
                         theme: 'toast',
                         dismissible: true,
-
                     });
                 }
 
