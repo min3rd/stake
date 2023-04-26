@@ -97,5 +97,8 @@
   "transaction hash": "transaction hash",
   "analytics": "Analytics",
   "project": "Project",
-  "account": "account"
+  "account": "account",
+  "search orders": "search orders",
+  "unknow": "unknow",
+  "delete": "delete"
 }

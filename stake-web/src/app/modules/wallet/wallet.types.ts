@@ -9,6 +9,8 @@ export interface DepositOrder {
     userId?: string
     time?: string
     masterAddress?: string
-    flag?: DepositOrderStatus
+    transactionId?: string
+    flag?: number
+    status?: DepositOrderStatus
     __v?: number
 }

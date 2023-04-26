@@ -24,6 +24,7 @@ export class WalletService {
   getDepositOrders(offset: number = 0, size: number = 10, sort: { time: -1 | 1 } = { time: -1 }): Observable<DepositOrder[]> {
     return this._httpClient.get<DepositOrder[]>(this._apiService.users_wallet_depositOrders(offset, size, sort)).pipe(
       tap(depositOrders => {
+        depositOrders = depositOrders.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
         this._depositOrders.next(depositOrders);
       })
     );
@@ -37,22 +38,16 @@ export class WalletService {
     );
   }
 
-  cancel(depositOrder: DepositOrder): Observable<DepositOrder> {
-    depositOrder.flag = DepositOrderStatus.CANCELED;
+  delete(depositOrder: DepositOrder): Observable<any> {
     return this._depositOrders.pipe(
       take(1),
       switchMap(depositOrders => {
-        return this._httpClient.patch<DepositOrder>(this._apiService.users_wallet_depositOrders_depositOrder(depositOrder._id), depositOrder).pipe(
-          tap(depositOrder => {
+        return this._httpClient.delete<any>(this._apiService.users_wallet_depositOrders_depositOrder(depositOrder._id)).pipe(
+          tap(result => {
             let index = depositOrders.findIndex(e => e._id == depositOrder._id);
-            if (index >= 0) {
-              depositOrders[index] = depositOrder;
-            } else {
-              depositOrders.push(depositOrder);
-            }
+            depositOrders.splice(index, 1);
             depositOrders = depositOrders.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
             this._depositOrders.next(depositOrders);
-            this._depositOrder.next(depositOrder);
           })
         );
       })

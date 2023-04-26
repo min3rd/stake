@@ -1,0 +1,28 @@
+<div class="flex flex-col w-full">
+    <!-- Header -->
+    <div class="relative w-full px-8 sm:px-12 bg-transparent">
+        <!-- Close button -->
+        <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6 pb-2">
+            <button mat-icon-button [routerLink]="['../']">
+                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+        <div class="w-full max-w-3xl">
+            <ng-container *ngIf="editMode">
+                <div class="flex w-full my-2 justify-between items-center gap-2 pb-4">
+                    <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full" subscriptSizing="dynamic">
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:hashtag'"></mat-icon>
+                        <input matInput type="text" [autocomplete]="'off'"
+                            [placeholder]="'transaction hash' | transloco | capitalize">
+                    </mat-form-field>
+                    <button mat-flat-button class="bg-lime-500" (click)="checkTransaction()">
+                        <mat-icon svgIcon="heroicons_outline:check-circle"></mat-icon>
+                        <span>{{'check' | transloco | capitalize}}</span>
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

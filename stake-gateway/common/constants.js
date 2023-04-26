@@ -8,7 +8,14 @@ const CashAccount = {
     REAL: 2,
 }
 
+const Status = {
+    PENDING: 0,
+    SUCCESS: 1,
+    CANCELED: 2,
+}
+
 module.exports = {
     TradingCallType: TradingCallType,
     CashAccount: CashAccount,
+    Status: Status,
 }

@@ -1,26 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { DepositComponent } from './deposit/deposit.component';
-import { WalletService } from './wallet.service';
+import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { WithdrawComponent } from './withdraw/withdraw.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DepositGuard implements CanDeactivate<DepositComponent>, CanActivate {
-  constructor(
-    private _walletService: WalletService
-  ) {
-
-  }
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    if (!route.paramMap.get('depositOrderId')) {
-      this._walletService._depositOrder.next(null);
-    }
-    return of(true);
-  }
+export class WithdrawGuard implements CanDeactivate<WithdrawComponent> {
   canDeactivate(
-    component: DepositComponent,
+    component: WithdrawComponent,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

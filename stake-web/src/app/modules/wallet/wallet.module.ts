@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { DepositComponent } from './deposit/deposit.component';
-import { DepositOrderComponent } from './deposit/deposit-order/deposit-order.component';
 import { SharedModule } from 'app/shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -21,12 +20,13 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { FuseCardModule } from '@fuse/components/card';
 import { WalletComponent } from './wallet/wallet.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { WithdrawComponent } from './withdraw/withdraw.component';
 
 @NgModule({
   declarations: [
-    DepositComponent,
-    DepositOrderComponent,
     WalletComponent,
+    DepositComponent,
+    WithdrawComponent,
   ],
   imports: [
     CommonModule,

@@ -58,6 +58,24 @@ class NotificationService {
         exists = await exists.save();
         return exists;
     }
+
+    /**
+     * 
+     * @param {DepositOrder} depositOrder 
+     */
+    async createDepositOrder(userId, depositOrder) {
+        let noti = new Notification({
+            userId: userId,
+            icon: 'heroicons_outline:currency-dollar',
+            title: 'got new deposit order',
+            description: ``,
+            time: new Date(),
+            read: false,
+            link: `/management/depositOrder/${depositOrder.id}`,
+        });
+        noti = await noti.save();
+        return noti;
+    }
 }
 const notificationService = new NotificationService();
 module.exports = notificationService;

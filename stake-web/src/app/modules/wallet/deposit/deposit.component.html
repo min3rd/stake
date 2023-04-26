@@ -3,19 +3,19 @@
     <div class="relative w-full px-8 sm:px-12 bg-transparent">
         <!-- Close button -->
         <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6 pb-2">
-            <button mat-icon-button [routerLink]="['../']" [cdkCopyToClipboard]="appConfig.MASTER_ADDRESS">
+            <button mat-icon-button [routerLink]="['../']">
                 <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
             </button>
         </div>
     </div>
     <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
         <div class="w-full max-w-3xl">
-            <div class="pb-4 border-b justify-center">
+            <div class="pb-4 justify-center">
                 <div class="flex items-center justify-between bg-slate-800 shadow-md rounded-md p-2">
                     <div class="truncate">
                         {{appConfig.MASTER_ADDRESS}}
                     </div>
-                    <button mat-icon-button>
+                    <button mat-icon-button [cdkCopyToClipboard]="appConfig.MASTER_ADDRESS">
                         <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
                     </button>
                 </div>
@@ -23,23 +23,95 @@
                     <qrcode [qrdata]="appConfig.MASTER_ADDRESS" [errorCorrectionLevel]="'M'" class="w-36"></qrcode>
                 </div>
             </div>
-            <div class="flex w-full my-2 justify-between items-center gap-2 pb-2 border-b">
-                <mat-form-field class="w-full">
-                    <mat-label>
-                        {{'transaction hash' | transloco |capitalize}}
-                    </mat-label>
-                    <input matInput type="text" [placeholder]="'transaction hash hint' | transloco | capitalize">
+            <div class="flex w-full my-2 justify-between items-center gap-2 pb-4">
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full" subscriptSizing="dynamic">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:hashtag'"></mat-icon>
+                    <input [(ngModel)]="transactionId" matInput type="text" [autocomplete]="'off'"
+                        [placeholder]="'transaction hash' | transloco | capitalize">
                 </mat-form-field>
-                <button mat-flat-button class="bg-lime-500">
+                <button mat-flat-button class="bg-lime-500" (click)="checkTransaction()">
                     <mat-icon svgIcon="heroicons_outline:check-circle"></mat-icon>
                     <span>{{'check' | transloco | capitalize}}</span>
                 </button>
             </div>
-            <ng-container *ngIf="editMode; else viewPanel">
+            <ng-container *ngIf="depositOrder">
+                <div
+                    class="flex flex-col mt-4 pt-6 space-y-8 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                    <ng-container *ngIf="depositOrder.time">
+                        <div class="flex sm:items-center">
+                            <mat-icon svgIcon="heroicons_outline:calendar"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">{{depositOrder.time | date: 'YYYY/MM/dd HH:mm:ss'}}
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="depositOrder.transactionId">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:hashtag'"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">{{depositOrder.transactionId}}</div>
+                            <button mat-icon-button [cdkCopyToClipboard]="depositOrder.transactionId">
+                                <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="depositOrder.masterAddress">
+                        <div class="flex sm:items-center">
+                            <mat-icon svgIcon="heroicons_outline:arrow-circle-down"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">{{depositOrder.masterAddress}}</div>
+                            <button mat-icon-button [cdkCopyToClipboard]="depositOrder.masterAddress">
+                                <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="depositOrder.userAddress">
+                        <div class="flex sm:items-center">
+                            <mat-icon svgIcon="heroicons_outline:arrow-circle-up"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">{{depositOrder.userAddress}}</div>
+                            <button mat-icon-button [cdkCopyToClipboard]="depositOrder.userAddress">
+                                <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="depositOrder.amount >= 0">
+                        <div class="flex sm:items-center">
+                            <mat-icon svgIcon="heroicons_outline:currency-dollar"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">{{depositOrder.amount}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="depositOrder.status >= 0">
+                        <div class="flex sm:items-center">
+                            <mat-icon svgIcon="heroicons_outline:fire"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">
+                                <div *ngIf="!depositOrder.status || depositOrder.status === DepositOrderStatus.PENDING">
+                                    <div
+                                        class="absolute rounded-full icon-size-3 transition duration-150 animate-ping bg-amber-500">
+                                    </div>
+                                    <div class="icon-size-3 rounded-full bg-amber-500"></div>
+                                </div>
+                                <div *ngIf="depositOrder.status === DepositOrderStatus.SUCCESS">
+                                    <div class="icon-size-3 rounded-full bg-lime-500"></div>
+                                </div>
+                                <div *ngIf="depositOrder.status === DepositOrderStatus.CANCELED">
+                                    <div class="icon-size-3 rounded-full bg-red-500"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <!-- Actions -->
+                <div
+                    class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                    <!-- Delete -->
+                    <button mat-button [color]="'warn'" [matTooltip]="'delete' | transloco | capitalize"
+                        (click)="delete()"
+                        *ngIf="depositOrder.status != DepositOrderStatus.SUCCESS && depositOrder.status != DepositOrderStatus.CANCELED">
+                        {{'delete' | transloco | capitalize}}
+                    </button>
+                    <!-- Cancel -->
+                    <button class="ml-auto" mat-button [matTooltip]="'cancel' | transloco | capitalize">
+                        {{'cancel' | transloco | capitalize}}
+                    </button>
+                </div>
             </ng-container>
-            <ng-template #viewPanel>
-
-            </ng-template>
         </div>
     </div>
 </div>

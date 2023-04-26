@@ -101,5 +101,8 @@
   "00x0002": "tên không thể để trống",
   "00x0003": "mật khẩu không thể để trống",
   "00x0004": "tên người dùng phải từ 6 đến 32 ký tự",
-  "00x0005": "tên người dùng không đúng định dạng"
+  "00x0005": "tên người dùng không đúng định dạng",
+  "search orders": "đơn hàng tìm kiếm",
+  "unknow": "không biết",
+  "delete": "xóa bỏ"
 }

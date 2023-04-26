@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepositComponent } from './deposit/deposit.component';
-import { DepositOrderComponent } from './deposit/deposit-order/deposit-order.component';
 import { WalletComponent } from './wallet/wallet.component';
 import { DepositGuard } from './deposit.guard';
-import { DepositOrdersResolver } from './wallet.resolver';
+import { DepositOrderResolver, DepositOrdersResolver } from './wallet.resolver';
+import { WithdrawComponent } from './withdraw/withdraw.component';
+import { WithdrawGuard } from './withdraw.guard';
 
 const routes: Routes = [
   {
@@ -18,20 +19,25 @@ const routes: Routes = [
         path: 'deposit',
         component: DepositComponent,
         canDeactivate: [DepositGuard],
+        canActivate: [DepositGuard],
         resolve: {
+          DepositOrdersResolver: DepositOrdersResolver,
         },
         children: [
           {
-            path: '',
-            component: DepositOrderComponent,
-          },
-          {
             path: ':depositOrderId',
-            component: DepositOrderComponent,
+            component: DepositComponent,
             resolve: {
-            }
+              DepositOrderResolver: DepositOrderResolver,
+            },
           }
         ]
+      },
+      {
+        path: 'withdraw',
+        component: WithdrawComponent,
+        canDeactivate: [WithdrawGuard],
+        children: [],
       }
     ]
   },

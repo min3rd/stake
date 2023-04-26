@@ -3,7 +3,7 @@ const { authenticateToken } = require('../services/public/authentication');
 const { call, getTradingCalls } = require('../services/public/tradingService');
 const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification, updateUser, changePassword, addWalletAddress, removeWalletAddress } = require('../services/public/userService');
 const { createMinesRound, getMinesRoundById, choose, cashout, getMinesRounds } = require('../services/public/game/mines/minesService');
-const { getDepositOrderById, getDepositOrders, cancelDepositOrders, checkTransaction } = require('../services/public/wallet/depositService');
+const { getDepositOrderById, getDepositOrders, deleteDepositOrder, checkTransaction } = require('../services/public/wallet/depositService');
 var router = express.Router();
 
 /* GET users listing. */
@@ -25,7 +25,7 @@ router.post('/:userId/mines/rounds/:minesRoundId/cashout', authenticateToken, ca
 
 router.get('/:userId/wallet/depositOrders', authenticateToken, getDepositOrders);
 router.get('/:userId/wallet/depositOrders/:depositOrderId', authenticateToken, getDepositOrderById);
-router.patch('/:userId/wallet/depositOrders/:depositOrderId', authenticateToken, cancelDepositOrders);
+router.delete('/:userId/wallet/depositOrders/:depositOrderId', authenticateToken, deleteDepositOrder);
 router.post('/:userId/wallets', authenticateToken, addWalletAddress);
 router.delete('/:userId/wallets/:address', authenticateToken, removeWalletAddress);
 router.post('/:userId/wallets/checkTransaction', authenticateToken, checkTransaction);

@@ -9,6 +9,7 @@ const WithdrawOrderSchema = new Schema({
     transactionId: { type: String, },
     amount: { type: Number, },
     flag: { type: Number, default: 0, },
+    status: { type: Number, default: 0, },
 });
 const WithdrawOrder = publicMongoose.model('WithdrawOrder', WithdrawOrderSchema);
 module.exports = WithdrawOrder;
