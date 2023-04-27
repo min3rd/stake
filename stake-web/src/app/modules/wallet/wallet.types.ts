@@ -14,3 +14,12 @@ export interface DepositOrder {
     status?: DepositOrderStatus
     __v?: number
 }
+
+export interface WithdrawOrder {
+    _id?: string;
+    time?: Date;
+}
+export interface CashTransfer {
+    _id?: string;
+    time?: Date;
+}

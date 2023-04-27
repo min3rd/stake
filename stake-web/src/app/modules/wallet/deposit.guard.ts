@@ -7,23 +7,18 @@ import { WalletService } from './wallet.service';
 @Injectable({
   providedIn: 'root'
 })
-export class DepositGuard implements CanDeactivate<DepositComponent>, CanActivate {
+export class DepositGuard implements CanDeactivate<DepositComponent> {
   constructor(
     private _walletService: WalletService
   ) {
 
-  }
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    if (!route.paramMap.get('depositOrderId')) {
-      this._walletService._depositOrder.next(null);
-    }
-    return of(true);
   }
   canDeactivate(
     component: DepositComponent,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      this._walletService._depositOrder.next(null);
     // Get the next route
     let nextRoute: ActivatedRouteSnapshot = nextState.root;
     while (nextRoute.firstChild) {

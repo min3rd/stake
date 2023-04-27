@@ -31,6 +31,16 @@
                                     </span>
                                 </div>
                             </button>
+                            <button mat-flat-button routerLink="./cashTransfer" class="bg-transparent p-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-red-500">
+                                        <mat-icon svgIcon="heroicons_outline:arrow-circle-down"></mat-icon>
+                                    </span>
+                                    <span class="text-sm">
+                                        {{'cash transfer' | transloco | capitalize}}
+                                    </span>
+                                </div>
+                            </button>
                             <button mat-flat-button routerLink="./withdraw" class="bg-transparent p-1">
                                 <div class="flex items-center gap-2">
                                     <span class="text-red-500">

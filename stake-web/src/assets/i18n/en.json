@@ -100,5 +100,12 @@
   "account": "account",
   "search orders": "search orders",
   "unknow": "unknow",
-  "delete": "delete"
+  "delete": "delete",
+  "cash transfer": "cash transfer",
+  "receiving address": "receiving address",
+  "enter receiving address": "enter receiving address",
+  "amount": "amount",
+  "enter amount": "enter amount",
+  "enter your message": "enter your message",
+  "memo optional": "memo (optional)"
 }

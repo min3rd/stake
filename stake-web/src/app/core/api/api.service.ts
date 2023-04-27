@@ -137,8 +137,24 @@ export class ApiService {
         return this._usersApi(`/wallets/${address}`);
     }
 
-    users_wallets_checkTransaction() {
-        return this._usersApi(`/wallets/checkTransaction`);
+    users_wallet_checkTransaction() {
+        return this._usersApi(`/wallet/checkTransaction`);
+    }
+
+    users_wallet_withdrawOrders() {
+        return this._usersApi(`/wallet/withdrawOrders`);
+    }
+
+    users_wallet_withdrawOrders_withdrawOrder(id: string) {
+        return this._usersApi(`/wallet/withdrawOrders/${id}`);
+    }
+
+    users_wallet_cashTransfers() {
+        return this._usersApi(`/wallet/cashTransfers`);
+    }
+
+    users_wallet_cashTransfers_cashTransfer(id: string) {
+        return this._usersApi(`/wallet/cashTransfers/${id}`);
     }
 }
 

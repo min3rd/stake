@@ -65,7 +65,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     if (!this.depositOrder) {
       return;
     }
-    this._walletService.delete(this.depositOrder).subscribe(result => {
+    this._walletService.deleteDepositOrder(this.depositOrder).subscribe(result => {
       this._router.navigate(['/wallet']);
     });
   }

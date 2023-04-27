@@ -85,7 +85,7 @@
   "trading time": "thời gian giao dịch",
   "wait for processing": "chờ xử lý",
   "account cash": "tài khoản tiền mặt",
-  "deposit": "tiền gửi",
+  "deposit": "nạp tiền",
   "withdraw": "rút",
   "transaction hash": "băm giao dịch",
   "analytics": "phân tích",
@@ -104,5 +104,12 @@
   "00x0005": "tên người dùng không đúng định dạng",
   "search orders": "đơn hàng tìm kiếm",
   "unknow": "không biết",
-  "delete": "xóa bỏ"
+  "delete": "xóa bỏ",
+  "cash transfer": "chuyển tiền",
+  "receiving address": "địa chỉ nhận",
+  "enter receiving address": "nhập địa chỉ nhận",
+  "amount": "số lượng",
+  "enter amount": "nhập số tiền",
+  "enter your message": "Nhập tin nhắn của bạn",
+  "memo optional": "ghi nhớ (tùy chọn)"
 }
