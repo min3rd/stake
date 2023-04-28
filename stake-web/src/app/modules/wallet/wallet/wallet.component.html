@@ -64,43 +64,50 @@
                                 [placeholder]="'search orders' | transloco | capitalize">
                         </mat-form-field>
                     </div> -->
-                    <ng-container *ngIf="depositOrders$ | async as depositOrders">
-                        <ng-container *ngIf="depositOrders?.length">
-                            <ng-container *ngFor="let depositOrder of depositOrders; let i = index; trackBy: trackByFn">
+                    <ng-container *ngIf="orderHistories$ | async as orderHistories">
+                        <ng-container *ngIf="orderHistories?.length">
+                            <ng-container
+                                *ngFor="let orderHistory of orderHistories; let i = index; trackBy: trackByFn">
                                 <!-- Group -->
                                 <ng-container
-                                    *ngIf="i === 0 || moment(depositOrder.time).format('YYYY/MM/dd') !== moment(depositOrders[i - 1].time).format('YYYY/MM/dd')">
+                                    *ngIf="i === 0 || moment(orderHistory.time).format('YYYY/MM/dd') !== moment(orderHistories[i - 1].time).format('YYYY/MM/dd')">
                                     <div class="flex z-10 sticky my-2 gap-2 items-center bg-card dark:bg-default">
                                         <div class="flex-auto mt-px border-t min-w-6 md:min-w-8"></div>
                                         <div class="rounded-full p-2 bg-card shadow-md">
-                                            {{depositOrder.time | date: 'YYYY/MM/dd'}}
+                                            {{orderHistory.time | date: 'YYYY/MM/dd'}}
                                         </div>
                                         <div class="flex-auto mt-px border-t w-full"></div>
                                     </div>
                                 </ng-container>
                                 <a class="z-20 flex items-center px-6 py-2 md:px-8 cursor-pointer"
-                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedOrder || selectedOrder._id !== depositOrder._id,
-                                                'bg-primary-50 dark:bg-hover': selectedOrder && selectedOrder._id === depositOrder._id}"
-                                    [routerLink]="['./deposit', depositOrder._id]">
+                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedOrder || selectedOrder._id !== orderHistory._id,
+                                                'bg-primary-50 dark:bg-hover': selectedOrder && selectedOrder._id === orderHistory._id}" [routerLink]="orderHistory.type == 'deposit' ? ['./deposit', orderHistory._id] 
+                                    : orderHistory.type == 'withdraw' ? ['./withdraw', orderHistory._id] 
+                                    : ['./transfer', orderHistory._id]">
                                     <div
-                                        *ngIf="!depositOrder.status || depositOrder.status === DepositOrderStatus.PENDING">
+                                        *ngIf="!orderHistory.status || orderHistory.status === DepositOrderStatus.PENDING">
                                         <div
                                             class="absolute rounded-full icon-size-3 transition duration-150 animate-ping bg-amber-500">
                                         </div>
                                         <div class="icon-size-3 rounded-full bg-amber-500"></div>
                                     </div>
-                                    <div *ngIf="depositOrder.status === DepositOrderStatus.SUCCESS">
+                                    <div *ngIf="orderHistory.status === DepositOrderStatus.SUCCESS">
                                         <div class="icon-size-3 rounded-full bg-lime-500"></div>
                                     </div>
-                                    <div *ngIf="depositOrder.status === DepositOrderStatus.CANCELED">
+                                    <div *ngIf="orderHistory.status === DepositOrderStatus.CANCELED">
                                         <div class="icon-size-3 rounded-full bg-red-500"></div>
                                     </div>
                                     <div class="min-w-0 ml-2">
-                                        <div class="font-medium leading-5 truncate">
-                                            {{depositOrder.transactionId ?? 'unknow' | transloco | capitalize}}
+                                        <div *ngIf="orderHistory.type == 'withdraw' || orderHistory.type == 'transfer'"
+                                            class="font-medium leading-5 truncate text-red-500">
+                                            -{{orderHistory.amount | currency}}
+                                        </div>
+                                        <div *ngIf="orderHistory.type == 'deposit'"
+                                            class="font-medium leading-5 truncate text-lime-500">
+                                            +{{orderHistory.amount | currency}}
                                         </div>
                                         <div class="leading-5 truncate text-secondary">
-                                            {{depositOrder.time | date : 'YYYY/MM/dd HH:mm:ss'}}
+                                            {{orderHistory.time | date : 'YYYY/MM/dd HH:mm:ss'}}
                                         </div>
                                     </div>
                                 </a>

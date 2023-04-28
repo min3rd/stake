@@ -21,12 +21,14 @@ import { FuseCardModule } from '@fuse/components/card';
 import { WalletComponent } from './wallet/wallet.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { WithdrawComponent } from './withdraw/withdraw.component';
+import { TransferComponent } from './transfer/transfer.component';
 
 @NgModule({
   declarations: [
     WalletComponent,
     DepositComponent,
     WithdrawComponent,
+    TransferComponent,
   ],
   imports: [
     CommonModule,

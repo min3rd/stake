@@ -1,16 +1,17 @@
 <div class="flex flex-col w-full">
     <!-- Header -->
-    <div class="relative w-full px-8 sm:px-12 bg-transparent">
-        <!-- Close button -->
-        <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6 pb-2">
-            <button mat-icon-button [routerLink]="['../']">
-                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
-            </button>
+    <div class="relative w-full px-8 sm:px-12 py-4 md:py-6 bg-transparent flex items-center"
+        [ngClass]="{'justify-between': depositOrder, 'justify-end': !depositOrder}">
+        <div *ngIf="depositOrder" class="text-3xl text-lime-500 font-bold">
+            +{{depositOrder.amount | currency}}
         </div>
+        <button mat-icon-button [routerLink]="['../']">
+            <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
     </div>
-    <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 border-t">
+    <div class="relative flex flex-col flex-auto items-center p-6 pt-4 sm:p-12 border-t">
         <div class="w-full max-w-3xl">
-            <div class="pb-4 justify-center">
+            <div class="justify-center">
                 <div class="flex items-center justify-between bg-slate-800 shadow-md rounded-md p-2">
                     <div class="truncate">
                         {{appConfig.MASTER_ADDRESS}}
@@ -23,7 +24,7 @@
                     <qrcode [qrdata]="appConfig.MASTER_ADDRESS" [errorCorrectionLevel]="'M'" class="w-36"></qrcode>
                 </div>
             </div>
-            <div class="flex w-full my-2 justify-between items-center gap-2 pb-4">
+            <div class="flex w-full my-2 justify-between items-center gap-2 pt-4">
                 <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full" subscriptSizing="dynamic">
                     <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:hashtag'"></mat-icon>
                     <input [(ngModel)]="transactionId" matInput type="text" [autocomplete]="'off'"
@@ -37,6 +38,12 @@
             <ng-container *ngIf="depositOrder">
                 <div
                     class="flex flex-col mt-4 pt-6 space-y-8 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                    <ng-container *ngIf="depositOrder.amount >= 0">
+                        <div class="flex sm:items-center">
+                            <mat-icon svgIcon="heroicons_outline:currency-dollar"></mat-icon>
+                            <div class="ml-6 leading-6 truncate text-lime-500">+{{depositOrder.amount}}</div>
+                        </div>
+                    </ng-container>
                     <ng-container *ngIf="depositOrder.time">
                         <div class="flex sm:items-center">
                             <mat-icon svgIcon="heroicons_outline:calendar"></mat-icon>
@@ -71,26 +78,20 @@
                             </button>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="depositOrder.amount >= 0">
-                        <div class="flex sm:items-center">
-                            <mat-icon svgIcon="heroicons_outline:currency-dollar"></mat-icon>
-                            <div class="ml-6 leading-6 truncate">{{depositOrder.amount}}</div>
-                        </div>
-                    </ng-container>
                     <ng-container *ngIf="depositOrder.status >= 0">
                         <div class="flex sm:items-center">
                             <mat-icon svgIcon="heroicons_outline:fire"></mat-icon>
                             <div class="ml-6 leading-6 truncate">
-                                <div *ngIf="!depositOrder.status || depositOrder.status === DepositOrderStatus.PENDING">
+                                <div *ngIf="!depositOrder.status || depositOrder.status === OrderStatus.PENDING">
                                     <div
                                         class="absolute rounded-full icon-size-3 transition duration-150 animate-ping bg-amber-500">
                                     </div>
                                     <div class="icon-size-3 rounded-full bg-amber-500"></div>
                                 </div>
-                                <div *ngIf="depositOrder.status === DepositOrderStatus.SUCCESS">
+                                <div *ngIf="depositOrder.status === OrderStatus.SUCCESS">
                                     <div class="icon-size-3 rounded-full bg-lime-500"></div>
                                 </div>
-                                <div *ngIf="depositOrder.status === DepositOrderStatus.CANCELED">
+                                <div *ngIf="depositOrder.status === OrderStatus.CANCELED">
                                     <div class="icon-size-3 rounded-full bg-red-500"></div>
                                 </div>
                             </div>
@@ -103,11 +104,12 @@
                     <!-- Delete -->
                     <button mat-button [color]="'warn'" [matTooltip]="'delete' | transloco | capitalize"
                         (click)="delete()"
-                        *ngIf="depositOrder.status != DepositOrderStatus.SUCCESS && depositOrder.status != DepositOrderStatus.CANCELED">
+                        *ngIf="depositOrder.status != OrderStatus.SUCCESS && depositOrder.status != OrderStatus.CANCELED">
                         {{'delete' | transloco | capitalize}}
                     </button>
                     <!-- Cancel -->
-                    <button class="ml-auto" mat-button [matTooltip]="'cancel' | transloco | capitalize">
+                    <button class="ml-auto" mat-button [matTooltip]="'cancel' | transloco | capitalize"
+                        [routerLink]="['../']">
                         {{'cancel' | transloco | capitalize}}
                     </button>
                 </div>

@@ -141,16 +141,16 @@ export class ApiService {
         return this._usersApi(`/wallet/checkTransaction`);
     }
 
-    users_wallet_withdrawOrders() {
-        return this._usersApi(`/wallet/withdrawOrders`);
+    users_wallet_withdrawOrders(offset: number = 0, size: number = 10, sort: { time: -1 | 1 } = { time: -1 }) {
+        return this._usersApi(`/wallet/withdrawOrders?offset=${offset}&size=${size}&sort=${JSON.stringify(sort)}`);
     }
 
     users_wallet_withdrawOrders_withdrawOrder(id: string) {
         return this._usersApi(`/wallet/withdrawOrders/${id}`);
     }
 
-    users_wallet_cashTransfers() {
-        return this._usersApi(`/wallet/cashTransfers`);
+    users_wallet_cashTransfers(offset: number = 0, size: number = 10, sort: { time: -1 | 1 } = { time: -1 }) {
+        return this._usersApi(`/wallet/cashTransfers?offset=${offset}&size=${size}&sort=${JSON.stringify(sort)}`);
     }
 
     users_wallet_cashTransfers_cashTransfer(id: string) {

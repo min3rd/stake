@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { AppService } from 'app/app.service';
 import { AppConfig } from 'app/app.types';
-import { DepositOrder, DepositOrderStatus } from '../wallet.types';
+import { DepositOrder, OrderStatus } from '../wallet.types';
 import { WalletService } from '../wallet.service';
 import { WalletComponent } from '../wallet/wallet.component';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -14,8 +14,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
   styleUrls: ['./deposit.component.scss']
 })
 export class DepositComponent implements OnInit, OnDestroy {
-  DepositOrderStatus = DepositOrderStatus;
-  apiCalling: boolean = false;
+  OrderStatus = OrderStatus;
   transactionId: string = '';
   offset: number = 0;
   size: number = 10;

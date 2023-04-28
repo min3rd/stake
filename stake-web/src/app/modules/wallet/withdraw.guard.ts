@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { WithdrawComponent } from './withdraw/withdraw.component';
+import { WalletService } from './wallet.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WithdrawGuard implements CanDeactivate<WithdrawComponent> {
+export class WithdrawGuard implements CanDeactivate<WithdrawComponent>, CanActivate {
+  constructor(private _walletService: WalletService) {
+
+  }
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+    this._walletService._withdrawOrder.next(null);
+    return of(true);
+  }
   canDeactivate(
     component: WithdrawComponent,
     currentRoute: ActivatedRouteSnapshot,

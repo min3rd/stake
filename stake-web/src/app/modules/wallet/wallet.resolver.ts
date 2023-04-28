@@ -49,3 +49,17 @@ export class WithdrawOrdersResolver implements Resolve<WithdrawOrder[]> {
     return this._walletService.getWithdrawOrders();
   }
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WithdrawOrderResolver implements Resolve<WithdrawOrder> {
+  constructor(
+    private _walletService: WalletService,
+  ) {
+
+  }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<WithdrawOrder> {
+    return this._walletService.getWithdrawOrder(route.paramMap.get('withdrawOrderId'));
+  }
+}

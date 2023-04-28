@@ -59,7 +59,7 @@
                 </div>
                 <!-- Actions -->
                 <div
-                    class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                    class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-5 sm:pr-12 sm:pl-5 border-t bg-gray-50 dark:bg-transparent">
                     <!-- Cancel -->
                     <button color="primary" class="ml-auto" mat-button (click)="createWithdrawOrder()">
                         <span *ngIf="!form.disabled">
@@ -97,7 +97,7 @@
                         </div>
                     </ng-container>
                     <div
-                        class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-5 sm:pr-12 sm:pl-5 border-t bg-gray-50 dark:bg-transparent">
+                        class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <!-- Delete -->
                         <button mat-button [color]="'warn'" [matTooltip]="'delete' | transloco | capitalize"
                             (click)="deleteWithdrawOrder()"

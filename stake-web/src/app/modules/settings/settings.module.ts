@@ -14,16 +14,14 @@ import { SettingsAccountComponent } from './account/account.component';
 import { SettingsSecurityComponent } from './security/security.component';
 import { SettingsComponent } from './settings.component';
 import { settingsRoutes } from './settings.routing';
-import { SettingsWalletComponent } from './settings-wallet/settings-wallet.component';
 
 @NgModule({
     declarations: [
         SettingsComponent,
         SettingsAccountComponent,
         SettingsSecurityComponent,
-        SettingsWalletComponent,
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(settingsRoutes),
         MatButtonModule,
         MatFormFieldModule,
@@ -37,6 +35,5 @@ import { SettingsWalletComponent } from './settings-wallet/settings-wallet.compo
         SharedModule
     ]
 })
-export class SettingsModule
-{
+export class SettingsModule {
 }

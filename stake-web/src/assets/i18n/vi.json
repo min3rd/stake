@@ -111,5 +111,7 @@
   "amount": "số lượng",
   "enter amount": "nhập số tiền",
   "enter your message": "Nhập tin nhắn của bạn",
-  "memo optional": "ghi nhớ (tùy chọn)"
+  "memo optional": "ghi nhớ (tùy chọn)",
+  "receiving address is required": "địa chỉ nhận là bắt buộc",
+  "amount is required": "số tiền được yêu cầu"
 }

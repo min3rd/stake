@@ -18,7 +18,6 @@ export class DepositGuard implements CanDeactivate<DepositComponent> {
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      this._walletService._depositOrder.next(null);
     // Get the next route
     let nextRoute: ActivatedRouteSnapshot = nextState.root;
     while (nextRoute.firstChild) {

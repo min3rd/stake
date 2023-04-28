@@ -207,24 +207,33 @@ const call = async function (req, res, next) {
             }
         }
 
-        if (type == TradingCallType.BUY) {
-            tradingRound.analysisBuyAmount += betCash;
-            tradingRound.analysisBuyCount += 1;
+        try {
+            if (type == TradingCallType.BUY) {
+                tradingRound.analysisBuyAmount += betCash;
+                tradingRound.analysisBuyCount += 1;
 
-            tradingRound.analysisSellAmount += Math.random() * betCash;
-            tradingRound.analysisSellCount += 1;
-        } else {
-            tradingRound.analysisBuyAmount += Math.random() * betCash;
-            tradingRound.analysisBuyCount += 1;
+                tradingRound.analysisSellAmount += Math.random() * betCash;
+                tradingRound.analysisSellCount += 1;
+            } else {
+                tradingRound.analysisBuyAmount += Math.random() * betCash;
+                tradingRound.analysisBuyCount += 1;
 
-            tradingRound.analysisSellAmount += betCash;
-            tradingRound.analysisSellCount += 1;
+                tradingRound.analysisSellAmount += betCash;
+                tradingRound.analysisSellCount += 1;
+            }
+
+            await tradingRound.save();
+        } catch (e) {
+            logger.error(`tradingService_call`, `could not add fake data e=${e}`);
         }
-
-        await tradingRound.save();
         await session.commitTransaction();
-        engine.userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));
-        engine.userIo.to(user.id).emit(SocketEvent.NOTIFICATION, noti);
+        try {
+            engine.userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));
+            engine.userIo.to(user.id).emit(SocketEvent.NOTIFICATION, noti);
+        } catch (e) {
+            logger.error(`tradingService_call`, `could not send notification to user e=${e}`);
+
+        }
         await session.endSession();
         res.json({
             userId: tradingCall.userId,

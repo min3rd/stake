@@ -3,9 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { DepositComponent } from './deposit/deposit.component';
 import { WalletComponent } from './wallet/wallet.component';
 import { DepositGuard } from './deposit.guard';
-import { DepositOrderResolver, DepositOrdersResolver, WithdrawOrdersResolver } from './wallet.resolver';
+import { DepositOrderResolver, DepositOrdersResolver, WithdrawOrderResolver, WithdrawOrdersResolver } from './wallet.resolver';
 import { WithdrawComponent } from './withdraw/withdraw.component';
 import { WithdrawGuard } from './withdraw.guard';
+import { TransferComponent } from './transfer/transfer.component';
 
 const routes: Routes = [
   {
@@ -37,8 +38,40 @@ const routes: Routes = [
       {
         path: 'withdraw',
         component: WithdrawComponent,
+        resolve: {
+          DepositOrdersResolver: DepositOrdersResolver,
+          WithdrawOrdersResolver: WithdrawOrdersResolver,
+        },
         canDeactivate: [WithdrawGuard],
-        children: [],
+        canActivate: [WithdrawGuard],
+        children: [
+          {
+            path: ':withdrawOrderId',
+            component: WithdrawComponent,
+            resolve: {
+              WithdrawOrderResolver: WithdrawOrderResolver,
+            }
+          }
+        ],
+      },
+      {
+        path: 'transfer',
+        component: TransferComponent,
+        resolve: {
+          DepositOrdersResolver: DepositOrdersResolver,
+          WithdrawOrdersResolver: WithdrawOrdersResolver,
+        },
+        canDeactivate: [WithdrawGuard],
+        canActivate: [WithdrawGuard],
+        children: [
+          {
+            path: ':cashTrnasferOrderId',
+            component: TransferComponent,
+            resolve: {
+              WithdrawOrderResolver: WithdrawOrderResolver,
+            }
+          }
+        ],
       }
     ]
   },

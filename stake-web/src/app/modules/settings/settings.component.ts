@@ -49,13 +49,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 description: 'manage your password',
                 link: './security',
             },
-            {
-                id: 'wallet',
-                icon: 'heroicons_outline:currency-dollar',
-                title: 'wallet',
-                description: 'manage your coin wallet',
-                link: './wallet',
-            },
         ];
 
         // Subscribe to media changes

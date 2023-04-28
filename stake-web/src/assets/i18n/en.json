@@ -107,5 +107,7 @@
   "amount": "amount",
   "enter amount": "enter amount",
   "enter your message": "enter your message",
-  "memo optional": "memo (optional)"
+  "memo optional": "memo (optional)",
+  "receiving address is required": "receiving address is required",
+  "amount is required": "amount is required"
 }

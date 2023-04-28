@@ -4,11 +4,10 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
-import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
-import { DepositOrder, DepositOrderStatus } from '../wallet.types';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { OrderStatus, OrderHistory } from '../wallet.types';
 import { WalletService } from '../wallet.service';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { DOCUMENT } from '@angular/common';
 import moment from 'moment';
 
 @Component({
@@ -23,9 +22,10 @@ export class WalletComponent implements OnInit, OnDestroy {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   drawerMode: 'side' | 'over';
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  depositOrders$: Observable<DepositOrder[]>;
-  selectedOrder: DepositOrder;
-  DepositOrderStatus = DepositOrderStatus;
+  orderHistories$: Observable<OrderHistory[]>;
+  orderHistories: OrderHistory[];
+  selectedOrder: OrderHistory;
+  DepositOrderStatus = OrderStatus;
   moment = moment;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
@@ -39,12 +39,17 @@ export class WalletComponent implements OnInit, OnDestroy {
 
   }
   ngOnInit(): void {
-    this.depositOrders$ = this._walletService.depositOrders$;
+    this.orderHistories$ = this._walletService.orderHistories$;
+    this.orderHistories$.pipe(takeUntil(this._unsubscribeAll)).subscribe(orderHistories => this.orderHistories = orderHistories);
     this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
       this.user = user;
     });
     this._walletService.depositOrder$.pipe(takeUntil(this._unsubscribeAll)).subscribe(depositOrder => {
-      this.selectedOrder = depositOrder;
+      this.selectedOrder = this.orderHistories.find(e => e._id == depositOrder._id && e.type == 'deposit');
+      this._changeDetectorRef.markForCheck();
+    });
+    this._walletService.withdrawOrder$.pipe(takeUntil(this._unsubscribeAll)).subscribe(withdrawOrder => {
+      this.selectedOrder = this.orderHistories.find(e => e._id == withdrawOrder._id && e.type == 'withdraw');
       this._changeDetectorRef.markForCheck();
     });
 

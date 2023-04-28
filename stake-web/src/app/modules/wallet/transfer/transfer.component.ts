@@ -1,4 +1,3 @@
-import { OrderStatus } from './../wallet.types';
 import { Subject, takeUntil } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WalletComponent } from '../wallet/wallet.component';
@@ -6,14 +5,14 @@ import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { WalletService } from '../wallet.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { WithdrawOrder } from '../wallet.types';
+import { OrderStatus, WithdrawOrder } from '../wallet.types';
 
 @Component({
-  selector: 'app-withdraw',
-  templateUrl: './withdraw.component.html',
-  styleUrls: ['./withdraw.component.scss']
+  selector: 'app-transfer',
+  templateUrl: './transfer.component.html',
+  styleUrls: ['./transfer.component.scss']
 })
-export class WithdrawComponent implements OnInit, OnDestroy {
+export class TransferComponent implements OnInit, OnDestroy {
   editMode: boolean = false;
   form: UntypedFormGroup;
   withdrawOrder: WithdrawOrder;
