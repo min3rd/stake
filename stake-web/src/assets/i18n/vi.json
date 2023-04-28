@@ -113,5 +113,9 @@
   "enter your message": "Nhập tin nhắn của bạn",
   "memo optional": "ghi nhớ (tùy chọn)",
   "receiving address is required": "địa chỉ nhận là bắt buộc",
-  "amount is required": "số tiền được yêu cầu"
+  "amount is required": "số tiền được yêu cầu",
+  "recipient nickname": "biệt danh người nhận",
+  "recipient nickname is required": "biệt danh người nhận là bắt buộc",
+  "enter recipient nickname": "nhập tên người nhận",
+  "transfer": "chuyển khoản"
 }

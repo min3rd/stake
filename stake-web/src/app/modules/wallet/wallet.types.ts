@@ -28,15 +28,20 @@ export interface WithdrawOrder {
     __v?: number
 }
 export interface CashTransfer {
-    _id?: string;
-    time?: Date;
-    status?: OrderStatus;
+    _id?: string
+    userId?: string
+    destinationId?: string
+    destinationUsername?: string
+    time?: Date
+    amount?: number
+    status?: OrderStatus
+    __v?: number
 }
 
 export interface OrderHistory {
     _id?: string;
     time?: Date;
     amount?: Number;
-    type?: "deposit" | "withdraw" | "transfer";
+    type?: "deposit" | "withdraw" | "transfer" | "receiver";
     status?: OrderStatus;
 }

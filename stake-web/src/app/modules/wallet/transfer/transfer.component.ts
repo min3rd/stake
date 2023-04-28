@@ -5,7 +5,8 @@ import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { WalletService } from '../wallet.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { OrderStatus, WithdrawOrder } from '../wallet.types';
+import { CashTransfer, OrderStatus } from '../wallet.types';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'app-transfer',
@@ -15,7 +16,7 @@ import { OrderStatus, WithdrawOrder } from '../wallet.types';
 export class TransferComponent implements OnInit, OnDestroy {
   editMode: boolean = false;
   form: UntypedFormGroup;
-  withdrawOrder: WithdrawOrder;
+  cashTransfer: CashTransfer;
   OrderStatus = OrderStatus;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
@@ -23,6 +24,7 @@ export class TransferComponent implements OnInit, OnDestroy {
     private _walletService: WalletService,
     private _formBuilder: UntypedFormBuilder,
     private _router: Router,
+    private _userService: UserService,
   ) {
 
   }
@@ -31,12 +33,12 @@ export class TransferComponent implements OnInit, OnDestroy {
 
     this.form = this._formBuilder.group({
       amount: ['', Validators.required],
-      userAddress: ['', Validators.required],
+      destinationUsername: ['', Validators.required],
       memo: [''],
     });
 
-    this._walletService.withdrawOrder$.pipe(takeUntil(this._unsubscribeAll)).subscribe(withdrawOrder => {
-      this.withdrawOrder = withdrawOrder;
+    this._walletService.cashTransfer$.pipe(takeUntil(this._unsubscribeAll)).subscribe(cashTransfer => {
+      this.cashTransfer = cashTransfer;
     });
   }
 
@@ -48,21 +50,19 @@ export class TransferComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-  createWithdrawOrder() {
+  createCashTransfer() {
     if (this.form.invalid) {
       return;
     }
     this.form.disable();
-    this._walletService.createWithdrawOrder(this.form.value)
-      .subscribe((withdrawOrder: WithdrawOrder) => {
-        this._router.navigate(['/wallet', 'withdraw', withdrawOrder._id]);
+    this._walletService.createCashTransfer(this.form.value)
+      .subscribe((cashTransfer: CashTransfer) => {
+        this._router.navigate(['/wallet', 'transfer', cashTransfer._id]);
       }, (error) => {
         this.form.enable();
       });
   }
-  deleteWithdrawOrder() {
-    this._walletService.deleteWithdrawOrder(this.withdrawOrder._id).subscribe(() => {
-      this._router.navigate(['/wallet']);
-    });
+  isTransfer(): boolean {
+    return this.cashTransfer && this.cashTransfer.destinationId != this._userService.user.id;
   }
 }

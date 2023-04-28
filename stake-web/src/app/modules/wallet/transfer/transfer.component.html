@@ -1,9 +1,12 @@
 <div class="flex flex-col w-full">
     <!-- Header -->
     <div class="flex relative w-full px-8 sm:px-12 py-4 md:py-6 bg-transparent items-center"
-        [ngClass]="{'justify-between': withdrawOrder, 'justify-end': !withdrawOrder}">
-        <div *ngIf="withdrawOrder" class="text-3xl text-red-500 font-bold">
-            -{{withdrawOrder.amount | currency}}
+        [ngClass]="{'justify-between': cashTransfer, 'justify-end': !cashTransfer}">
+        <div *ngIf="cashTransfer && isTransfer()" class="text-3xl text-red-500 font-bold">
+            -{{cashTransfer.amount | currency}}
+        </div>
+        <div *ngIf="cashTransfer && !isTransfer()" class="text-3xl text-lime-500 font-bold">
+            +{{cashTransfer.amount | currency}}
         </div>
         <button mat-icon-button [routerLink]="['../']">
             <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
@@ -12,21 +15,21 @@
     <div class="relative flex flex-col flex-auto items-center p-6 pt-4 sm:p-12 border-t">
         <div class="w-full max-w-3xl">
             <!-- edit mode -->
-            <ng-container *ngIf="!withdrawOrder">
+            <ng-container *ngIf="!cashTransfer">
                 <div
                     class="flex flex-col space-y-8 -mx-6 sm:-mx-12 pr-4 pl-1 sm:pr-12 sm:pl-7 bg-gray-50 dark:bg-transparent">
                     <form [formGroup]="form">
                         <div class="flex w-full my-2 justify-between items-center gap-2 pb-4">
                             <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full" subscriptSizing="dynamic">
                                 <mat-label>
-                                    {{'receiving address' | transloco | capitalize}}
+                                    {{'recipient nickname' | transloco | capitalize}}
                                 </mat-label>
                                 <mat-icon class="icon-size-5" matPrefix
                                     [svgIcon]="'heroicons_outline:credit-card'"></mat-icon>
-                                <input matInput formControlName="userAddress" type="text" [autocomplete]="'off'"
-                                    [placeholder]="'enter receiving address' | transloco | capitalize">
-                                <mat-error *ngIf="form.get('userAddress').hasError('required')">
-                                    {{'receiving address is required' | transloco | capitalize}}
+                                <input matInput formControlName="destinationUsername" type="text" [autocomplete]="'off'"
+                                    [placeholder]="'enter recipient nickname' | transloco | capitalize">
+                                <mat-error *ngIf="form.get('destinationUsername').hasError('required')">
+                                    {{'recipient nickname is required' | transloco | capitalize}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -61,37 +64,37 @@
                 <div
                     class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-5 sm:pr-12 sm:pl-5 border-t bg-gray-50 dark:bg-transparent">
                     <!-- Cancel -->
-                    <button color="primary" class="ml-auto" mat-button (click)="createWithdrawOrder()">
+                    <button color="primary" class="ml-auto" mat-button (click)="createCashTransfer()">
                         <span *ngIf="!form.disabled">
-                            {{'withdraw' | transloco | capitalize}}
+                            {{'transfer' | transloco | capitalize}}
                         </span>
                         <mat-progress-spinner *ngIf="form.disabled" [diameter]="24"
                             [mode]="'indeterminate'"></mat-progress-spinner>
                     </button>
                 </div>
             </ng-container>
-            <ng-container *ngIf="withdrawOrder">
+            <ng-container *ngIf="cashTransfer">
                 <div
                     class="flex flex-col space-y-8 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 bg-gray-50 dark:bg-transparent">
-                    <ng-container *ngIf="withdrawOrder.amount">
+                    <ng-container *ngIf="cashTransfer.amount">
                         <div class="flex sm:items-center">
                             <mat-icon svgIcon="heroicons_outline:currency-dollar"></mat-icon>
-                            <div class="ml-6 leading-6 truncate">{{withdrawOrder.amount | currency}}
+                            <div class="ml-6 leading-6 truncate">{{cashTransfer.amount | currency}}
                             </div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="withdrawOrder.time">
+                    <ng-container *ngIf="cashTransfer.time">
                         <div class="flex sm:items-center">
                             <mat-icon svgIcon="heroicons_outline:calendar"></mat-icon>
-                            <div class="ml-6 leading-6 truncate">{{withdrawOrder.time | date: 'YYYY/MM/dd HH:mm:ss'}}
+                            <div class="ml-6 leading-6 truncate">{{cashTransfer.time | date: 'YYYY/MM/dd HH:mm:ss'}}
                             </div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="withdrawOrder.userAddress">
+                    <ng-container *ngIf="cashTransfer.destinationUsername">
                         <div class="flex sm:items-center">
-                            <mat-icon svgIcon="heroicons_outline:arrow-circle-up"></mat-icon>
-                            <div class="ml-6 leading-6 truncate">{{withdrawOrder.userAddress}}</div>
-                            <button mat-icon-button [cdkCopyToClipboard]="withdrawOrder.userAddress">
+                            <mat-icon svgIcon="heroicons_outline:user-circle"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">{{cashTransfer.destinationUsername}}</div>
+                            <button mat-icon-button [cdkCopyToClipboard]="cashTransfer.destinationUsername">
                                 <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
                             </button>
                         </div>
@@ -101,7 +104,7 @@
                         <!-- Delete -->
                         <button mat-button [color]="'warn'" [matTooltip]="'delete' | transloco | capitalize"
                             (click)="deleteWithdrawOrder()"
-                            *ngIf="withdrawOrder.status != OrderStatus.SUCCESS && withdrawOrder.status != OrderStatus.CANCELED">
+                            *ngIf="cashTransfer.status != OrderStatus.SUCCESS && cashTransfer.status != OrderStatus.CANCELED">
                             {{'delete' | transloco | capitalize}}
                         </button>
                         <!-- Cancel -->

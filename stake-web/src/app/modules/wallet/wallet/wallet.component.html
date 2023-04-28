@@ -31,7 +31,7 @@
                                     </span>
                                 </div>
                             </button>
-                            <button mat-flat-button routerLink="./cashTransfer" class="bg-transparent p-1">
+                            <button mat-flat-button routerLink="./transfer" class="bg-transparent p-1">
                                 <div class="flex items-center gap-2">
                                     <span class="text-red-500">
                                         <mat-icon svgIcon="heroicons_outline:arrow-circle-down"></mat-icon>
@@ -102,7 +102,7 @@
                                             class="font-medium leading-5 truncate text-red-500">
                                             -{{orderHistory.amount | currency}}
                                         </div>
-                                        <div *ngIf="orderHistory.type == 'deposit'"
+                                        <div *ngIf="orderHistory.type == 'deposit' || orderHistory.type == 'receiver'"
                                             class="font-medium leading-5 truncate text-lime-500">
                                             +{{orderHistory.amount | currency}}
                                         </div>

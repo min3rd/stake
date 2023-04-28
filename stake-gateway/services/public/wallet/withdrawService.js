@@ -91,10 +91,14 @@ const getCashTransfers = async function (req, res, next) {
         return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
     }
     let cashTransfers = await CashTransfer.find({
-        $or: {
-            userId: userId,
-            destinationId: userId,
-        }
+        $or: [
+            {
+                _id: userId,
+            },
+            {
+                destinationId: userId,
+            },
+        ]
     }).sort(JSON.parse(req.query.sort) ?? { time: -1 }).skip(req.query.offset).limit(req.query.size);
     return res.json(cashTransfers);
 }
@@ -106,10 +110,14 @@ const getCashTransfer = async function (req, res, next) {
     }
     let cashTransfer = await CashTransfer.findOne({
         _id: req.params.cashTransferId,
-        $or: {
-            userId: userId,
-            destinationId: userId,
-        }
+        $or: [
+            {
+                _id: userId,
+            },
+            {
+                destinationId: userId,
+            },
+        ]
     });
     return res.json(cashTransfer);
 }
@@ -121,6 +129,7 @@ const createCashTransfer = async function (req, res, next) {
     }
     const session = await publicMongoose.startSession();
     try {
+        await session.startTransaction();
         let user = await User.findById(userId);
         if (!user) {
             await session.abortTransaction();
@@ -128,7 +137,7 @@ const createCashTransfer = async function (req, res, next) {
             return next(badRequestError.make(ErrorCode.USER_NOT_FOUND));
         }
         let receiver = await User.findOne({
-            username: req.body.username,
+            username: req.body.destinationUsername,
         });
         if (!receiver) {
             await session.abortTransaction();

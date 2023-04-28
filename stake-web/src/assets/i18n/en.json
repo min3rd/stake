@@ -109,5 +109,9 @@
   "enter your message": "enter your message",
   "memo optional": "memo (optional)",
   "receiving address is required": "receiving address is required",
-  "amount is required": "amount is required"
+  "amount is required": "amount is required",
+  "recipient nickname": "recipient nickname",
+  "recipient nickname is required": "recipient nickname is required",
+  "enter recipient nickname": "enter recipient nickname",
+  "transfer": "transfer"
 }

@@ -3,10 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { DepositComponent } from './deposit/deposit.component';
 import { WalletComponent } from './wallet/wallet.component';
 import { DepositGuard } from './deposit.guard';
-import { DepositOrderResolver, DepositOrdersResolver, WithdrawOrderResolver, WithdrawOrdersResolver } from './wallet.resolver';
+import { DepositOrderResolver, DepositOrdersResolver, WithdrawOrderResolver, WithdrawOrdersResolver, CashTransfersResolver, CashTransferResolver } from './wallet.resolver';
 import { WithdrawComponent } from './withdraw/withdraw.component';
 import { WithdrawGuard } from './withdraw.guard';
 import { TransferComponent } from './transfer/transfer.component';
+import { TransferGuard } from './transfer.guard';
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
     resolve: {
       DepositOrdersResolver: DepositOrdersResolver,
       WithdrawOrdersResolver: WithdrawOrdersResolver,
+      CashTransfersResolver: CashTransfersResolver,
     },
     children: [
       {
@@ -24,6 +26,7 @@ const routes: Routes = [
         resolve: {
           DepositOrdersResolver: DepositOrdersResolver,
           WithdrawOrdersResolver: WithdrawOrdersResolver,
+          CashTransfersResolver: CashTransfersResolver,
         },
         children: [
           {
@@ -41,6 +44,7 @@ const routes: Routes = [
         resolve: {
           DepositOrdersResolver: DepositOrdersResolver,
           WithdrawOrdersResolver: WithdrawOrdersResolver,
+          CashTransfersResolver: CashTransfersResolver,
         },
         canDeactivate: [WithdrawGuard],
         canActivate: [WithdrawGuard],
@@ -60,15 +64,16 @@ const routes: Routes = [
         resolve: {
           DepositOrdersResolver: DepositOrdersResolver,
           WithdrawOrdersResolver: WithdrawOrdersResolver,
+          CashTransfersResolver: CashTransfersResolver,
         },
-        canDeactivate: [WithdrawGuard],
-        canActivate: [WithdrawGuard],
+        canDeactivate: [TransferGuard],
+        canActivate: [TransferGuard],
         children: [
           {
-            path: ':cashTrnasferOrderId',
+            path: ':cashTransferId',
             component: TransferComponent,
             resolve: {
-              WithdrawOrderResolver: WithdrawOrderResolver,
+              CashTransferResolver: CashTransferResolver,
             }
           }
         ],

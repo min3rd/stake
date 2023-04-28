@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'app/core/api/api.service';
 import { BehaviorSubject, Observable, take, switchMap, tap, of } from 'rxjs';
 import { CashTransfer, DepositOrder, OrderHistory, WithdrawOrder } from './wallet.types';
+import { UserService } from 'app/core/user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class WalletService {
   constructor(
     private _httpClient: HttpClient,
     private _apiService: ApiService,
+    private _userService: UserService,
   ) { }
   get depositOrder$(): Observable<DepositOrder> {
     return this._depositOrder.asObservable();
@@ -157,7 +159,7 @@ export class WalletService {
   getWithdrawOrders(offset: number = 0, size: number = 10, sort: { time: -1 | 1 } = { time: -1 }): Observable<WithdrawOrder[]> {
     return this._orderHistories.pipe(
       take(1),
-      switchMap(orderHistories => this._httpClient.get<DepositOrder[]>(this._apiService.users_wallet_withdrawOrders(offset, size, sort)).pipe(
+      switchMap(orderHistories => this._httpClient.get<WithdrawOrder[]>(this._apiService.users_wallet_withdrawOrders(offset, size, sort)).pipe(
         tap(withdrawOrders => {
           let neworderHistories = withdrawOrders.map(e => {
             let orderHistory: OrderHistory = {
@@ -217,11 +219,89 @@ export class WalletService {
         .pipe(tap(withdrawOrder => {
           let index = orderHistories.findIndex(e => e._id == withdrawOrder._id && e.type == 'withdraw');
           if (index >= 0) {
-            orderHistories[index] = withdrawOrder;
             orderHistories.splice(index, 1);
           }
           orderHistories = orderHistories.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
           this._orderHistories.next(orderHistories);
+        })))
+    );
+  }
+  createCashTransfer(cashTransfer: CashTransfer): Observable<CashTransfer> {
+    return this._orderHistories.pipe(
+      take(1),
+      switchMap(orderHistories => this._httpClient.post<CashTransfer>(this._apiService.users_wallet_cashTransfers(), cashTransfer).pipe(
+        tap(cashTransfer => {
+          let orderHistory: OrderHistory = {
+            _id: cashTransfer._id,
+            time: cashTransfer.time,
+            amount: cashTransfer.amount,
+            type: 'transfer',
+            status: cashTransfer.status,
+          }
+          let index = orderHistories.findIndex(e => e._id == orderHistory._id && e.type == 'transfer');
+          if (index >= 0) {
+            orderHistories[index] = orderHistory;
+          } else {
+            orderHistories.push(orderHistory);
+          }
+          orderHistories = orderHistories.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+          this._orderHistories.next(orderHistories);
+        })
+      ))
+    );
+  }
+
+  getCashTransfers(offset: number = 0, size: number = 10, sort: { time: -1 | 1 } = { time: -1 }): Observable<CashTransfer[]> {
+    return this._orderHistories.pipe(
+      take(1),
+      switchMap(orderHistories => this._httpClient.get<CashTransfer[]>(this._apiService.users_wallet_cashTransfers(offset, size, sort)).pipe(
+        tap(cashTransfers => {
+          let neworderHistories = cashTransfers.map(e => {
+            let orderHistory: OrderHistory = {
+              _id: e._id,
+              time: e.time,
+              amount: e.amount,
+              type: e.destinationId == this._userService.user.id ? 'receiver' : 'transfer',
+              status: e.status,
+            }
+            return orderHistory;
+          });
+          neworderHistories.forEach(t => {
+            let index = orderHistories.findIndex(e => e._id == t._id && t.type == e.type);
+            if (index >= 0) {
+              orderHistories[index] = t;
+            } else {
+              orderHistories.push(t);
+            }
+          })
+          orderHistories = orderHistories.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+          this._orderHistories.next(orderHistories);
+          return of(cashTransfers);
+        })
+      )),
+    );
+  }
+  getCashTransfer(id: string): Observable<CashTransfer> {
+    return this._orderHistories.pipe(
+      take(1),
+      switchMap(orderHistories => this._httpClient.get<CashTransfer>(this._apiService.users_wallet_cashTransfers_cashTransfer(id))
+        .pipe(tap(cashTransfer => {
+          let orderHistory: OrderHistory = {
+            _id: cashTransfer._id,
+            time: cashTransfer.time,
+            amount: cashTransfer.amount,
+            type: cashTransfer.destinationId == this._userService.user.id ? 'receiver' : 'transfer',
+            status: cashTransfer.status,
+          }
+          let index = orderHistories.findIndex(e => e._id == orderHistory._id && e.type == orderHistory.type);
+          if (index >= 0) {
+            orderHistories[index] = orderHistory;
+          } else {
+            orderHistories.push(orderHistory);
+          }
+          orderHistories = orderHistories.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+          this._orderHistories.next(orderHistories);
+          this._cashTransfer.next(cashTransfer);
         })))
     );
   }
