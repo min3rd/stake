@@ -151,47 +151,46 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
       this.canTrade = kline.canTrade;
       this.countdown = moment(kline.closeTime).diff(moment(kline.time), 'seconds');
 
-      let index = this.klines.findIndex(e => new Date(e.openTime).getTime() == new Date(kline.openTime).getTime());
-      if (index >= 0) {
-        this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
+      this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
+        let index = this.klines.findIndex(e => new Date(e.openTime).getTime() == new Date(kline.openTime).getTime());
+        if (index >= 0) {
+          this.klines[index] = kline;
           let point = chart.series[0].points.find(e => new Date(e.x).getTime() == new Date(kline.openTime).getTime());
           if (!point) {
-            point = chart.series[0].points[chart.series[0].points.length - 1];
+            return;
           }
           point.update({
             close: kline.closePrice,
             high: kline.highPrice,
             low: kline.lowPrice,
             open: kline.openPrice,
-          }, true);
+          }, true, true);
 
           chart.series[1].points[chart.series[0].points.length - 1].update({
             x: new Date(kline.openTime).getTime(),
             y: Math.abs(kline.closePrice - kline.openPrice),
             color: (kline.closePrice - kline.openPrice) > 0 ? '#84CC16' : '#EF4444',
-          }, true);
-        });
-
-        this.klines[index] = kline;
-      } else {
-        this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
+          }, true, true);
+        } else {
+          this.klines.push(kline);
           chart.series[0].addPoint({
             x: new Date(kline.openTime).getTime(),
             close: kline.closePrice,
             high: kline.highPrice,
             low: kline.lowPrice,
             open: kline.openPrice,
-          }, false, false, false);
+          }, true, true, true);
           chart.series[1].addPoint({
             x: new Date(kline.openTime).getTime(),
             y: Math.abs(kline.closePrice - kline.openPrice),
             color: (kline.closePrice - kline.openPrice) > 0 ? '#84CC16' : '#EF4444',
-          }, false, false, false);
-        });
-        this.klines.push(kline);
-      }
+          }, true, true, true);
+        }
+        if (this.klines.length > 100) {
+          this.klines.shift();
+        }
+      });
     });
-
     this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
       if (old) {
         this._socketService.socket.emit(SocketEvent.ROOM_LEFT, old.symbol);
@@ -233,7 +232,7 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
   private _prepareChartData(): void {
     this.chart = new StockChart({
       accessibility: {
-        enabled: false
+        enabled: false,
       },
       chart: {
         panning: {
@@ -258,7 +257,7 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           minorGridLineWidth: 0,
           minorTickLength: 0,
-          tickLength: 0
+          tickLength: 0,
         }
       ],
       yAxis: [
@@ -468,7 +467,8 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
   get getLastResults(): any {
     let klines = this.klines.sort((a, b) => new Date(a.openTime).getTime() - new Date(b.openTime).getTime());
     let results = [];
-    for (let i = 0; i < 3; i++) {
+    let max = 1 + klines.length / 20;
+    for (let i = 0; i < max; i++) {
       results[i] = [];
       for (let j = 0; j < 5; j++) {
         results[i][j] = []
