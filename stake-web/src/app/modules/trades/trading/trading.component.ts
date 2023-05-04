@@ -1,16 +1,18 @@
 import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { Subject, takeUntil, pairwise, BehaviorSubject, switchMap } from 'rxjs';
+import { Subject, takeUntil, pairwise, BehaviorSubject } from 'rxjs';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { SocketService } from 'app/core/socket/socket.service';
 import { SocketEvent } from 'app/core/config/socket.config';
-import { chartOptions } from 'app/core/config/trading.config';
 import { TradingService } from './trading.service';
-import { TradingRoom, Kline, ApexChartSeriesData, TradingConfig, TradingCallType, TradingCall } from './trading.types';
+import { TradingRoom, Kline, TradingConfig, TradingCallType, TradingCall, TradingRound } from './trading.types';
 import moment from 'moment';
 import { UserService } from 'app/core/user/user.service';
 import { Router } from '@angular/router';
 import { TimeUtils } from 'app/common/timeutils';
 import { CashAccount, User } from 'app/core/user/user.types';
+import { StockChart } from 'angular-highcharts';
+import currency from 'currency.js';
+import { TranslocoService } from '@ngneat/transloco';
 enum TabType {
   INDICATORS = 1,
   LAST_RESULTS = 2,
@@ -35,7 +37,7 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
   tradingConfig: TradingConfig;
   tradingCalls: TradingCall[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private klines: BehaviorSubject<ApexChartSeriesData[] | null> = new BehaviorSubject(null);
+  private klines: Kline[] = [];
   TabType = TabType;
   tab: number = TabType.INDICATORS;
 
@@ -46,12 +48,16 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
   analysisSellAmount: number;
   analysisSellCount: number;
   user: User;
-
+  chart: StockChart;
+  ohlc: any[];
+  volumes: [];
+  deviceVersion: string;
   constructor(
     private _socketService: SocketService,
     private _tradingService: TradingService,
     private _userService: UserService,
     private _router: Router,
+    private _translocoService: TranslocoService,
   ) { }
   prepare() {
     this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
@@ -82,48 +88,48 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
 
     });
 
-    this._tradingService.rounds$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rounds => {
-      let values = [];
+    this._tradingService.rounds$.pipe(takeUntil(this._unsubscribeAll)).subscribe((rounds: TradingRound[]) => {
+      let klines: Kline[] = [];
       if (!rounds) {
         return;
       }
-      for (let round of rounds) {
-        values.push({
-          x: round.openTime,
-          y: [round.openPrice, round.highPrice, round.lowPrice, round.closePrice],
-        });
-      }
-      this.klines.next(values.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime()).slice(0, 59));
-
-    });
-    this.klines.pipe(takeUntil(this._unsubscribeAll)).subscribe((klines) => {
-      if (!klines) {
-        return;
-      }
-      let _klines = Array.from(klines);
-      _klines = _klines.filter(e => parseFloat(this.currentTime) - new Date(e.x).getTime() <= 60 * 60 * 1000);
-      let openLine = _klines.map(e => {
-        return {
-          x: e.x,
-          y: e.y[0],
+      klines = rounds.map(e => {
+        let kline: Kline = {
+          symbol: e.symbol,
+          time: e.time,
+          openTime: e.openTime,
+          closeTime: e.closeTime,
+          openPrice: e.openPrice,
+          highPrice: e.highPrice,
+          lowPrice: e.lowPrice,
+          closePrice: e.closePrice,
+          closed: e.closed,
+          canTrade: e.canTrade,
         }
+        return kline;
+      }).sort((a, b) => new Date(a.openTime).getTime() - new Date(b.openTime).getTime())
+      this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
+        let candlestick = chart.series[0];
+        let volume = chart.series[1];
+        candlestick.setData(klines.map(e => {
+          let r = {
+            x: new Date(e.openTime).getTime(),
+            close: e.closePrice,
+            high: e.highPrice,
+            low: e.lowPrice,
+            open: e.openPrice,
+          };
+          return r;
+        }));
+        volume.setData(klines.map(e => {
+          let r = {
+            x: new Date(e.openTime).getTime(),
+            y: Math.abs(e.closePrice - e.openPrice),
+            color: (e.closePrice - e.openPrice) > 0 ? '#84CC16' : '#EF4444',
+          };
+          return r;
+        }))
       });
-      let closeLine = _klines.map(e => {
-        return {
-          x: e.x,
-          y: e.y[3],
-        }
-      });
-      if (!this.btcChartComponent) {
-        return;
-      }
-      this.btcChartComponent.updateSeries([
-        {
-          type: 'candlestick',
-          data: _klines,
-        },
-      ]);
-
     });
     this._socketService.socket.fromEvent(SocketEvent.NOW).subscribe(data => {
       this.currentTime = data;
@@ -135,7 +141,6 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this._socketService.socket.fromEvent(SocketEvent.KLINE).subscribe((kline: Kline) => {
-
       this.analysisBuy = kline.analysisBuy;
       this.analysisSell = kline.analysisSell;
       this.analysisBuyAmount = kline.analysisBuyAmount;
@@ -145,47 +150,53 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.canTrade = kline.canTrade;
       this.countdown = moment(kline.closeTime).diff(moment(kline.time), 'seconds');
-      let key = kline.openTime;
-      let klines = this.klines.getValue();
-      let index = klines.findIndex(e => {
-        return e.x == key;
-      });
-      if (index >= 0) {
-        klines[index] = {
-          x: key,
-          y: [kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice],
-        }
-      } else {
-        klines.push({
-          x: key,
-          y: [kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice],
-        });
-      }
-      this.klines.next(klines.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime()).slice(0, 59));
 
+      let index = this.klines.findIndex(e => new Date(e.openTime).getTime() == new Date(kline.openTime).getTime());
+      if (index >= 0) {
+        this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
+          let point = chart.series[0].points.find(e => new Date(e.x).getTime() == new Date(kline.openTime).getTime());
+          if (!point) {
+            point = chart.series[0].points[chart.series[0].points.length - 1];
+          }
+          point.update({
+            close: kline.closePrice,
+            high: kline.highPrice,
+            low: kline.lowPrice,
+            open: kline.openPrice,
+          }, true);
+        });
+
+        this.klines[index] = kline;
+      } else {
+        this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
+          chart.series[0].addPoint({
+            x: new Date(kline.openTime).getTime(),
+            close: kline.closePrice,
+            high: kline.highPrice,
+            low: kline.lowPrice,
+            open: kline.openPrice,
+          });
+        });
+        this.klines.push(kline);
+      }
     });
 
     this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
-      this.klines.next([]);
       if (old) {
         this._socketService.socket.emit(SocketEvent.ROOM_LEFT, old.symbol);
       }
       this._socketService.socket.emit(SocketEvent.ROOM_JOIN, newValue.symbol);
       this.updateRounds(newValue);
-
     });
 
     this._socketService.socket.on(SocketEvent.disconnect, () => {
       this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
       this.updateRounds(this.tradingRoom);
-
     });
 
     this._socketService.socket.fromEvent(SocketEvent.TRADING_CONFIG).subscribe((tradingConfig: TradingConfig) => {
       this.tradingConfig = tradingConfig;
-
-    })
-
+    });
     this._prepareChartData();
     this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
     this.updateRounds(this.tradingRoom);
@@ -209,7 +220,156 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tradingRoom$.complete();
   }
   private _prepareChartData(): void {
-    this.btcOptions = chartOptions;
+    this.chart = new StockChart({
+      accessibility: {
+        enabled: false
+      },
+      chart: {
+        panning: {
+          enabled: false,
+        },
+        backgroundColor: 'transparent',
+        plotBackgroundImage: '/assets/images/trades/world_map_dot.svg',
+      },
+      credits: {
+        enabled: false,
+      },
+      navigator: {
+        enabled: false,
+      },
+      xAxis: [
+        {
+          lineColor: '#363A3E',
+          lineWidth: 1,
+          type: "datetime",
+          labels: {
+            enabled: true,
+          },
+          minorGridLineWidth: 0,
+          minorTickLength: 0,
+          tickLength: 0
+        }
+      ],
+      yAxis: [
+        {
+          gridLineColor: "#363A3E",
+          gridLineDashStyle: 'LongDash',
+          height: '80%',
+          labels: {
+            align: 'left',
+            formatter() {
+              return currency(this.value).format();
+            },
+            style: {
+              color: '#FFFFFF'
+            }
+          },
+          plotLines: [
+            {
+              value: 0,
+              color: "#898B8E",
+              width: 0.75,
+              id: 'current-price',
+              zIndex: 100,
+            }
+          ],
+          lineWidth: 0,
+          resize: {
+            enabled: !0
+          }
+        },
+        {
+          labels: {
+            enabled: false,
+          },
+          top: '80%',
+          height: '20%',
+          gridLineColor: '',
+        }
+      ],
+      plotOptions: {
+        candlestick: {
+          pointWidth: 8,
+          maxPointWidth: 12,
+          lineColor: '#EF4444',
+          upLineColor: '#84CC16',
+          lineWidth: 2,
+          lastPrice: {
+            enabled: true,
+            label: {
+              enabled: false
+            },
+            color: '#FFF'
+          },
+          lastVisiblePrice: {
+            enabled: true,
+            label: {
+              enabled: true,
+              align: 'left',
+              formatter(this, value) {
+                return currency(value).format();
+              },
+              backgroundColor: '#581C87'
+            }
+          },
+        },
+        column: {
+          minPointLength: 2,
+          pointWidth: 8,
+          maxPointWidth: 12,
+          borderRadius: 0
+        },
+        series: {
+          zIndex: 2,
+          states: {
+            inactive: {
+              opacity: 1
+            }
+          },
+          allowPointSelect: false,
+        }
+      },
+      rangeSelector: {
+        enabled: false,
+      },
+      tooltip: {
+        split: false,
+        enabled: true,
+        animation: false,
+        useHTML: true,
+      },
+      series: [
+        {
+          type: 'candlestick',
+          id: 'candlestick',
+          name: this._translocoService.translate('aapl stock price'),
+          data: [],
+          dataGrouping: {
+            enabled: false,
+          },
+          color: '#EF4444',
+          upColor: '#84CC16',
+        },
+        {
+          type: 'column',
+          id: 'volume',
+          name: this._translocoService.translate('volume'),
+          data: [],
+          yAxis: 1,
+          dataGrouping: {
+            enabled: false,
+          }
+        }
+      ],
+      stockTools: {
+        gui: {
+          enabled: false,
+        }
+      },
+      scrollbar: {
+        enabled: false,
+      },
+    });
   }
   onRoomChange(event: any) {
     this.tradingRoom = event;
@@ -244,19 +404,21 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     }).subscribe()
   }
   checkCanTrade() {
+    if (!this.tradingConfig) {
+      return false;
+    }
     if (!this.canTrade) {
       return false;
     }
-    if (!this.klines.getValue()) {
+    if (!this.klines) {
       return false;
     }
-    let maxX = Math.max(...this.klines.getValue().map(o => new Date(o.x).getTime()));
-    let currentRound = this.klines.getValue()
-      .find(e => new Date(e.x).getTime() == maxX);
+    let maxX = Math.max(...this.klines.map(o => new Date(o.openTime).getTime()));
+    let currentRound = this.klines.find(e => new Date(e.openTime).getTime() == maxX);
     if (!currentRound) {
       return false;
     }
-    let closeDate = TimeUtils.getCloseDate(new Date(currentRound.x));
+    let closeDate = TimeUtils.getCloseDate(new Date(currentRound.openTime));
     if (new Date(this.currentTime).getTime() > (closeDate.getTime() - this.tradingConfig.blockingTime)) {
       return false;
     }
@@ -293,7 +455,7 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get getLastResults(): any {
-    let klines = this.klines.getValue().sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime());
+    let klines = this.klines.sort((a, b) => new Date(a.openTime).getTime() - new Date(b.openTime).getTime());
     let results = [];
     for (let i = 0; i < 3; i++) {
       results[i] = [];
@@ -303,7 +465,7 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
           let kline = klines[i * 5 + j * 4 + k];
           if (!kline) {
             results[i][j].push(0);
-          } else if (kline.y[3] - kline.y[0] > 0) {
+          } else if (kline.closePrice - kline.openPrice > 0) {
             results[i][j].push(1);
           } else {
             results[i][j].push(2);

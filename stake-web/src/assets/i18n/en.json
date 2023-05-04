@@ -113,5 +113,7 @@
   "recipient nickname": "recipient nickname",
   "recipient nickname is required": "recipient nickname is required",
   "enter recipient nickname": "enter recipient nickname",
-  "transfer": "transfer"
+  "transfer": "transfer",
+  "aapl stock price": "AAPL Stock Price",
+  "volume": "volume"
 }

@@ -16,8 +16,12 @@ import { SharedModule } from 'app/shared/shared.module';
 import { TradingComponent } from './trading.component';
 import { CommonModule } from '@angular/common';
 import { TradingRoutingModule } from './trading-routing.module';
-
-
+import { HIGHCHARTS_MODULES } from 'angular-highcharts';
+import * as more from 'highcharts/highcharts-more.src';
+import * as indicators from 'highcharts/modules/price-indicator.src';
+import * as annotations from "highcharts/modules/annotations-advanced.src";
+import * as tools from 'highcharts/modules/stock-tools.src';
+import * as accessibility from 'highcharts/modules/accessibility.src';
 @NgModule({
   declarations: [
     TradingComponent
@@ -40,6 +44,10 @@ import { TradingRoutingModule } from './trading-routing.module';
     NgApexchartsModule,
     SharedModule,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [{
+    provide: HIGHCHARTS_MODULES,
+    useFactory: () => [more, indicators, annotations, tools, accessibility]
+  }],
 })
 export class TradingModule { }

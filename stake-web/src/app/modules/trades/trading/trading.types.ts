@@ -7,9 +7,9 @@ export interface TradingRoom {
 
 export interface Kline {
     symbol?: string
-    time?: string
-    openTime?: string
-    closeTime?: string
+    time?: Date
+    openTime?: Date
+    closeTime?: Date
     openPrice?: number
     highPrice?: number
     lowPrice?: number

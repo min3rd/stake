@@ -117,5 +117,7 @@
   "recipient nickname": "biệt danh người nhận",
   "recipient nickname is required": "biệt danh người nhận là bắt buộc",
   "enter recipient nickname": "nhập tên người nhận",
-  "transfer": "chuyển khoản"
+  "transfer": "chuyển khoản",
+  "aapl stock price": "Giá cổ phiếu AAPL",
+  "volume": "thị giá"
 }
