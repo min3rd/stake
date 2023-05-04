@@ -164,6 +164,12 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
             low: kline.lowPrice,
             open: kline.openPrice,
           }, true);
+
+          chart.series[1].points[chart.series[0].points.length - 1].update({
+            x: new Date(kline.openTime).getTime(),
+            y: Math.abs(kline.closePrice - kline.openPrice),
+            color: (kline.closePrice - kline.openPrice) > 0 ? '#84CC16' : '#EF4444',
+          }, true);
         });
 
         this.klines[index] = kline;
@@ -175,7 +181,12 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
             high: kline.highPrice,
             low: kline.lowPrice,
             open: kline.openPrice,
-          });
+          }, false, false, false);
+          chart.series[1].addPoint({
+            x: new Date(kline.openTime).getTime(),
+            y: Math.abs(kline.closePrice - kline.openPrice),
+            color: (kline.closePrice - kline.openPrice) > 0 ? '#84CC16' : '#EF4444',
+          }, false, false, false);
         });
         this.klines.push(kline);
       }
