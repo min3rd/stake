@@ -393,7 +393,7 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     this._tradingService.getConfig(tradingRoom).subscribe();
     this._tradingService.getLatestRounds(tradingRoom).subscribe();
     if (this._userService.user) {
-      this._tradingService.getTradingCalls().subscribe();
+      this._tradingService.getLatestTradingCalls().subscribe();
     }
   }
   addBetCash(value: number) {

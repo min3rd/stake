@@ -22,5 +22,21 @@
   "00x0002": "이름은 비워둘 수 없습니다.",
   "00x0003": "비밀번호는 비워둘 수 없습니다.",
   "00x0004": "사용자 이름은 6~32자 사이여야 합니다.",
-  "00x0005": "사용자 이름이 올바른 형식이 아닙니다."
+  "00x0005": "사용자 이름이 올바른 형식이 아닙니다.",
+  "trade stats": "거래 통계",
+  "bo statistics": "BO 통계",
+  "total trade": "총 무역",
+  "total win round": "총 승리 라운드",
+  "total lose round": "총 패배 라운드",
+  "win rate": "승률",
+  "total trade amount": "총 거래 금액",
+  "net profit": "순이익",
+  "total revenue": "총 수익",
+  "trade summary": "무역 개요",
+  "trade history": "거래 내역",
+  "search": "찾다",
+  "select date": "날짜 선택",
+  "trade": "거래",
+  "aapl stock price": "AAPL 주가",
+  "amount": "양"
 }

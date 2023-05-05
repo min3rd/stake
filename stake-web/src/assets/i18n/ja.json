@@ -22,5 +22,21 @@
   "00x0002": "名前を空白にすることはできません",
   "00x0003": "パスワードを空白にすることはできません",
   "00x0004": "ユーザー名は 6 ～ 32 文字である必要があります",
-  "00x0005": "ユーザー名の形式が正しくありませんでした"
+  "00x0005": "ユーザー名の形式が正しくありませんでした",
+  "trade stats": "貿易統計",
+  "bo statistics": "BO統計",
+  "total trade": "総取引",
+  "total win round": "合計勝利ラウンド",
+  "total lose round": "総負けラウンド",
+  "win rate": "勝率",
+  "total trade amount": "取引総額",
+  "net profit": "純利益",
+  "total revenue": "総収入",
+  "trade summary": "取引概要",
+  "trade history": "取引履歴",
+  "search": "検索",
+  "select date": "日付を選択",
+  "trade": "トレード",
+  "aapl stock price": "AAPL株価",
+  "amount": "額"
 }

@@ -78,8 +78,12 @@ export class ApiService {
         return this._usersApi(`/addDemoCash`);
     }
 
-    users_trading_call() {
-        return this._usersApi(`/trading/call`);
+    users_trading_calls(startDate: Date = new Date(), endDate: Date = new Date()) {
+        return this._usersApi(`/trading/calls?startDate=${startDate}&endDate=${endDate}`);
+    }
+
+    users_trading_latestCalls() {
+        return this._usersApi(`/trading/latestCalls`);
     }
 
     users_notifications() {
@@ -155,6 +159,10 @@ export class ApiService {
 
     users_wallet_cashTransfers_cashTransfer(id: string) {
         return this._usersApi(`/wallet/cashTransfers/${id}`);
+    }
+
+    users_dashboard_tradeStats() {
+        return this._usersApi(`/dashboard/tradeStats`);
     }
 }
 

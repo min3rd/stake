@@ -24,5 +24,21 @@
   "00x0002": "isim boş olamaz",
   "00x0003": "şifre boş olamaz",
   "00x0004": "kullanıcı adı 6 ile 32 karakter arasında olmalıdır",
-  "00x0005": "kullanıcı adı doğru biçim değildi"
+  "00x0005": "kullanıcı adı doğru biçim değildi",
+  "trade stats": "ticaret istatistikleri",
+  "bo statistics": "BO İstatistikleri",
+  "total trade": "toplam ticaret",
+  "total win round": "toplam galibiyet turu",
+  "total lose round": "toplam kaybetme turu",
+  "win rate": "kazanma oranı",
+  "total trade amount": "toplam ticaret tutarı",
+  "net profit": "net kazanç",
+  "total revenue": "toplam gelir",
+  "trade summary": "ticaret özeti",
+  "trade history": "ticaret geçmişi",
+  "search": "aramak",
+  "select date": "tarih seç",
+  "trade": "ticaret",
+  "aapl stock price": "AAPL Hisse Fiyatı",
+  "amount": "miktar"
 }

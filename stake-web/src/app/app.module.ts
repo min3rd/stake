@@ -17,6 +17,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ApiService } from './core/api/api.service';
 import { Observable, tap } from 'rxjs';
 import { HotToastModule } from '@ngneat/hot-toast';
+import { DateAdapter } from '@angular/material/core';
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -60,7 +61,7 @@ function initializeAppFactory(httpClient: HttpClient, apiService: ApiService): (
         {
             provide: APP_INITIALIZER,
             useFactory: initializeAppFactory,
-            deps: [HttpClient, ApiService],
+            deps: [HttpClient, ApiService, DateAdapter],
             multi: true
         },
     ]

@@ -115,5 +115,19 @@
   "enter recipient nickname": "enter recipient nickname",
   "transfer": "transfer",
   "aapl stock price": "AAPL Stock Price",
-  "volume": "volume"
+  "volume": "volume",
+  "bo statistics": "BO Statistics",
+  "trade stats": "trade stats",
+  "total trade": "total trade",
+  "total win round": "total win round",
+  "total lose round": "total lose round",
+  "win rate": "win rate",
+  "total trade amount": "total trade amount",
+  "net profit": "net profit",
+  "total revenue": "total revenue",
+  "trade summary": "trade summary",
+  "trade history": "trade history",
+  "search": "search",
+  "select date": "select date",
+  "trade": "trade"
 }

@@ -1,5 +1,4 @@
 import { AppConfigResolver } from './app.resolvers';
-import { settings } from './mock-api/apps/mailbox/data';
 import { Route } from '@angular/router';
 import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
@@ -30,8 +29,6 @@ export const appRoutes: Route[] = [
             AppConfigResolver: AppConfigResolver,
         },
         children: [
-            { path: '', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule) },
-
             // Trading
             {
                 path: 'trades',
@@ -84,15 +81,21 @@ export const appRoutes: Route[] = [
             AppConfigResolver: AppConfigResolver,
         },
         children: [
+            // Settings
             {
                 path: 'settings',
                 loadChildren: () => import('app/modules/settings/settings.module').then(m => m.SettingsModule),
             },
-            
+
             // Wallet
             {
                 path: 'wallet',
                 loadChildren: () => import('app/modules/wallet/wallet.module').then(m => m.WalletModule),
+            },
+            // Dashboard
+            {
+                path: 'dashboard',
+                loadChildren: () => import('app/modules/dashboard/dashboard.module').then(m => m.DashboardModule),
             }
         ]
     },

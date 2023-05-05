@@ -12,6 +12,7 @@ const TradingRoom = require("../../models/TradingRoom");
 const TradingRound = require("../../models/TradingRound");
 const { User, ClientUser } = require("../../models/User");
 const notificationService = require("./notificationService");
+const moment = require('moment');
 
 const tradingRooms = async function (req, res, next) {
     let tradingRooms = await TradingRoom.find({});
@@ -68,7 +69,11 @@ const tradingConfig = async function (req, res, next) {
         blockingTime: tradingRoom.blockingTime,
     });
 }
-const getTradingCalls = async function (req, res, next) {
+const getLatestTradingCalls = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
     let now = new Date();
     let openTime = TimeUtils.getOpenDate(now);
     let closeTime = TimeUtils.getCloseDate(now);
@@ -79,7 +84,42 @@ const getTradingCalls = async function (req, res, next) {
     });
     res.json(tradingCalls);
 }
+
+const getTradingCalls = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
+    let now = moment();
+    let startDate = req.query.startDate || now.clone().weekday(1).toDate();
+    let endDate = req.query.endDate || now.clone.weekday(7).toDate();
+    logger.debug('tradingService_getTradingCalls', `startDate=${startDate} endDate=${endDate}`);
+    let tradingCalls = await TradingCall.find({
+        userId: userId,
+        time: {
+            $gte: new Date(startDate),
+            $lt: new Date(endDate),
+        }
+    }).sort({ time: -1 });
+    let mapped = tradingCalls.map(e => {
+        return {
+            id: e._id,
+            symbol: e.symbol,
+            time: e.time,
+            type: e.type,
+            winType: e.winType,
+            betCash: e.betCash,
+            cashAccount: e.cashAccount,
+            profit: e.benefit,
+        };
+    });
+    res.json(mapped);
+}
 const call = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
     const session = await publicMongoose.startSession();
     const now = new Date();
     const openTime = TimeUtils.getOpenDate(now);
@@ -221,7 +261,6 @@ const call = async function (req, res, next) {
                 tradingRound.analysisSellAmount += betCash;
                 tradingRound.analysisSellCount += 1;
             }
-
             await tradingRound.save();
         } catch (e) {
             logger.error(`tradingService_call`, `could not add fake data e=${e}`);
@@ -260,5 +299,6 @@ module.exports = {
     latestKlines: latestKlines,
     latestRounds: latestRounds,
     call: call,
+    getLatestTradingCalls: getLatestTradingCalls,
     getTradingCalls: getTradingCalls,
 }

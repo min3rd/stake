@@ -119,5 +119,19 @@
   "enter recipient nickname": "nhập tên người nhận",
   "transfer": "chuyển khoản",
   "aapl stock price": "Giá cổ phiếu AAPL",
-  "volume": "thị giá"
+  "volume": "thị giá",
+  "bo statistics": "Thống kê BO",
+  "trade stats": "thống kê giao dịch",
+  "total trade": "tổng giao dịch",
+  "total win round": "tổng số vòng thắng",
+  "total lose round": "tổng số vòng thua",
+  "win rate": "tỉ lệ chiến thắng",
+  "total trade amount": "tổng số tiền giao dịch",
+  "net profit": "lợi nhuận ròng",
+  "total revenue": "Tổng doanh thu",
+  "trade summary": "tổng hợp giao dịch",
+  "trade history": "lịch sử giao dịch",
+  "search": "tìm kiếm",
+  "select date": "chọn ngày",
+  "trade": "giao dịch"
 }

@@ -2,13 +2,6 @@
 import { FuseNavigationItem } from '@fuse/components/navigation';
 
 const navigations: FuseNavigationItem[] = [
-    // {
-    //     id: 'home',
-    //     title: 'Home',
-    //     type: 'basic',
-    //     icon: 'heroicons_outline:home',
-    //     link: '/'
-    // },
     {
         id: 'trades',
         title: 'Trades',
@@ -30,6 +23,13 @@ const navigations: FuseNavigationItem[] = [
         icon: 'heroicons_outline:credit-card',
         link: '/wallet',
     },
+    {
+        id: 'dashboard',
+        title: 'Dashboard',
+        type: 'basic',
+        icon: 'heroicons_outline:chart-bar',
+        link: '/dashboard'
+    }
 ];
 
 export const defaultNavigation: FuseNavigationItem[] = navigations;

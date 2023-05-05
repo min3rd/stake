@@ -1,0 +1,202 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
+
+    <!-- Main -->
+    <div class="flex-auto p-6 sm:p-10">
+
+        <!-- CONTENT GOES HERE -->
+        <div class="h-400 min-h-400 max-h-400 rounded-2xl">
+            <div class="flex">
+                <span class="text-lg md:text-4xl font-semibold">
+                    {{'bo statistics' | transloco}}
+                </span>
+            </div>
+            <div class="md:flex mt-2 gap-6">
+                <!-- Trade stats -->
+                <div class="bg-card p-6 rounded-lg border border-gray-500 shadow w-full">
+                    <span class="text-lg">
+                        {{'trade stats' | transloco | capitalize}}
+                    </span>
+                    <div class="md:flex mt-2 items-center">
+                        <div class="w-full items-center">
+                            <apx-chart class="flex flex-auto items-center justify-center" [chart]="chartOptions.chart"
+                                [colors]="chartOptions.colors" [labels]="chartOptions.labels"
+                                [plotOptions]="chartOptions.plotOptions" [series]="chartOptions.series"
+                                [states]="chartOptions.states" [tooltip]="chartOptions.tooltip"></apx-chart>
+                            <div class="relative -top-22 w-full text-center">
+                                <div class="text-sm text-secondary">
+                                    {{'total trade' | transloco | capitalize}}
+                                </div>
+                                <div class="text-xl font-semibold">
+                                    {{dashboardTradeStats.tradeStats.totalRound}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-col w-full items-center">
+                            <div class="flex gap-2 items-center">
+                                <div class="bg-lime-500 rounded-full icon-size-4"></div>
+                                {{'total win round' | transloco | capitalize}}
+                            </div>
+                            <div class="flex gap-2 items-center">
+                                <div class="bg-red-500 rounded-full icon-size-4"></div>
+                                {{'total lose round' | transloco | capitalize}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- win rate, amount -->
+                    <div class="md:flex items-center mt-2 p-4 border-t md:border-t-0">
+                        <!-- win rate -->
+                        <div class="text-center w-full md:w-1/2">
+                            <div class="text-secondary">
+                                {{'win rate' | transloco | capitalize}}
+                            </div>
+                            <div class="text-xl font-semibold">
+                                {{(dashboardTradeStats.tradeStats.winrate *100).toFixed(2)}}%
+                            </div>
+                        </div>
+                        <!-- trade amount -->
+                        <div class="md:border-l text-center  w-full md:w-1/2">
+                            <div class="text-secondary">
+                                {{'total trade amount' | transloco | capitalize}}
+                            </div>
+                            <div class="text-xl font-semibold">
+                                {{dashboardTradeStats.tradeStats.totalAmount | currency}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Trades summary -->
+                <div class="w-full">
+                    <div class="md:flex gap-6">
+                        <!-- Net profit -->
+                        <div
+                            class="mt-2 md:mt-0 flex bg-violet-700 rounded-lg items-center justify-center md:w-1/2 py-6 gap-4 shadow">
+                            <div class="bg-transparent rounded-full p-2 text-white">
+                                <mat-icon svgIcon="heroicons_outline:chart-bar"
+                                    class="icon-size-12 text-white"></mat-icon>
+                            </div>
+                            <div>
+                                <div class="text-xl sm:text-lg font-semibold">
+                                    {{'net profit' | transloco | capitalize}}
+                                </div>
+                                <div class="text-3xl sm:text-lg font-semibold">
+                                    {{dashboardTradeStats.tradeSummary.netProfit | currency}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Revenue -->
+                        <div
+                            class="mt-2 md:mt-0 flex bg-emerald-600 rounded-lg items-center justify-center md:w-1/2 py-6 gap-4 shadow">
+                            <div class="bg-transparent rounded-full p-2 text-white">
+                                <mat-icon svgIcon="heroicons_outline:currency-dollar"
+                                    class="icon-size-12 text-white"></mat-icon>
+                            </div>
+                            <div>
+                                <div class="text-xl sm:text-lg font-semibold">
+                                    {{'total revenue' | transloco | capitalize}}
+                                </div>
+                                <div class="text-3xl sm:text-lg font-semibold">
+                                    {{dashboardTradeStats.tradeSummary.totalRevenue | currency}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- trade summary -->
+                    <div class="mt-2">
+                        <div class="text-2xl text-center">
+                            {{'trade summary' | transloco | capitalize}}
+                        </div>
+                        <div class="mt-2">
+                            <mat-progress-bar mode="determinate" [value]="dashboardTradeStats.tradeSummary.sellCount"
+                                color="warn"></mat-progress-bar>
+                            <div class="flex justify-between items-center">
+                                <div class="text-xl font-semibold">
+                                    {{'sell' | transloco | uppercase}}
+                                    <span class="text-red-500">
+                                        {{(dashboardTradeStats.tradeSummary.sellCount /
+                                        (dashboardTradeStats.tradeSummary.sellCount +
+                                        dashboardTradeStats.tradeSummary.buyCount) *100).toFixed(2)}}%
+                                    </span>
+                                </div>
+                                <div class="text-xl font-semibold">
+                                    <span class="text-lime-500">
+                                        {{(dashboardTradeStats.tradeSummary.buyCount /
+                                        (dashboardTradeStats.tradeSummary.sellCount +
+                                        dashboardTradeStats.tradeSummary.buyCount) *100).toFixed(2)}}%
+                                    </span>
+                                    {{'buy' | transloco | uppercase}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- trade history -->
+            <div class="mt-4 py-6">
+                <div class="md:flex items-center gap-4 justify-between">
+                    <div class="text-lg md:text-4xl font-semibold">
+                        {{'trade history' | transloco | capitalize}}
+                    </div>
+                    <div class="flex gap-4 items-center justify-between md:justify-end">
+                        <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full md:min-w-64"
+                            subscriptSizing="dynamic">
+                            <mat-date-range-input [rangePicker]="picker">
+                                <input [(ngModel)]="startDate" disabled matStartDate
+                                    [placeholder]="'select date' | transloco | capitalize" class="w-full">
+                                <input [(ngModel)]="endDate" disabled matEndDate
+                                    [placeholder]="'select date' | transloco | capitalize" class="w-full">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary" class="px-4" (click)="search()">
+                            <mat-icon matIconPrefix svgIcon="heroicons_outline:search"></mat-icon>
+                            <span>
+                                {{'search' | transloco | capitalize}}
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <ng-container *ngIf="dashboardTradingCalls.length > 0">
+                    <div class="flex-col">
+                        <div *ngFor="let dashboardTradingCall of dashboardTradingCalls"
+                            class="bg-card shadow my-2 p-4 rounded-md">
+                            <div class="flex items-center gap-2">
+                                <div class="bg-amber-500 rounded-md p-1">
+                                    {{dashboardTradingCall.symbol}}
+                                </div>
+                                <div class="flex items-center">
+                                    <mat-icon svgIcon="heroicons_outline:hashtag"
+                                        class="text-white icon-size-4"></mat-icon>
+                                    {{dashboardTradingCall.id}}
+                                </div>
+                                <button *ngIf="dashboardTradingCall.type == 1" mat-icon-button
+                                    class="rounded-full bg-lime-500 icon-size-5">
+                                    <mat-icon svgIcon="heroicons_outline:trending-up" class="text-white"></mat-icon>
+                                </button>
+                                <button *ngIf="dashboardTradingCall.type == 2" mat-icon-button
+                                    class="rounded-full bg-red-500 icon-size-5">
+                                    <mat-icon svgIcon="heroicons_outline:trending-down" class="text-white"></mat-icon>
+                                </button>
+                                <div class="text-secondary text-sm">
+                                    {{dashboardTradingCall.time | date: 'YYYY/MM/dd HH:mm:ss'}}
+                                </div>
+                            </div>
+                            <div *ngIf="dashboardTradingCall.type == dashboardTradingCall.winType"
+                                class="text-lime-500">
+                                +{{dashboardTradingCall.profit | currency}}
+                            </div>
+                            <div *ngIf="dashboardTradingCall.type != dashboardTradingCall.winType" class="text-red-500">
+                                -{{dashboardTradingCall.profit | currency}}
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+    </div>
+
+</div>

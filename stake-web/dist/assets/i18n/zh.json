@@ -22,5 +22,21 @@
   "00x0002": "名字不能为空",
   "00x0003": "密码不能为空",
   "00x0004": "用户名必须介于 6 到 32 个字符之间",
-  "00x0005": "用户名格式不正确"
+  "00x0005": "用户名格式不正确",
+  "trade stats": "贸易统计",
+  "bo statistics": "BO统计",
+  "total trade": "贸易总额",
+  "total win round": "总赢局",
+  "total lose round": "总输局",
+  "win rate": "赢率",
+  "total trade amount": "交易总额",
+  "net profit": "净利",
+  "total revenue": "总收入",
+  "trade summary": "交易概要",
+  "trade history": "交易历史",
+  "search": "搜索",
+  "select date": "选择日期",
+  "trade": "贸易",
+  "aapl stock price": "苹果股价",
+  "amount": "数量"
 }

@@ -22,5 +22,21 @@
   "00x0002": "nama tidak boleh kosong",
   "00x0003": "kata sandi tidak boleh kosong",
   "00x0004": "nama pengguna harus antara 6 dan 32 karakter",
-  "00x0005": "nama pengguna bukan format yang benar"
+  "00x0005": "nama pengguna bukan format yang benar",
+  "trade stats": "statistik perdagangan",
+  "bo statistics": "Statistik BO",
+  "total trade": "perdagangan total",
+  "total win round": "putaran kemenangan total",
+  "total lose round": "putaran kalah total",
+  "win rate": "tingkat kemenangan",
+  "total trade amount": "jumlah total perdagangan",
+  "net profit": "laba bersih",
+  "total revenue": "total pendapatan",
+  "trade summary": "ringkasan perdagangan",
+  "trade history": "sejarah perdagangan",
+  "search": "mencari",
+  "select date": "pilih tanggal",
+  "trade": "berdagang",
+  "aapl stock price": "Harga Saham AAPL",
+  "amount": "jumlah"
 }
