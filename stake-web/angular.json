@@ -32,7 +32,20 @@
                             "crypto-js/hmac-sha256",
                             "crypto-js/enc-base64",
                             "flat",
-                            "quill"
+                            "quill",
+                            "highcharts",
+                            "highcharts/highcharts-gantt",
+                            "highcharts/highmaps",
+                            "highcharts/highstock",
+                            "qrcode",
+                            "currency.js",
+                            "highcharts/highcharts-more.src",
+                            "highcharts/modules/accessibility.src",
+                            "highcharts/modules/annotations-advanced.src",
+                            "highcharts/modules/price-indicator.src",
+                            "highcharts/modules/stock-tools.src",
+                            "highcharts/modules/stock.src",
+                            "moment-timezone"
                         ],
                         "assets": [
                             "src/favicon-16x16.png",
@@ -65,8 +78,8 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "3mb",
-                                    "maximumError": "5mb"
+                                    "maximumWarning": "5mb",
+                                    "maximumError": "10mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",

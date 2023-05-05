@@ -5,6 +5,7 @@ import { DatetimePipe } from './datetime.pipe';
 import { CountdownPipe } from './countdown.pipe';
 import { CurrencyPipe } from './currency.pipe';
 import { CashaccountPipe } from './cashaccount.pipe';
+import { UppercasePipe } from './uppercase.pipe';
 
 
 
@@ -15,6 +16,7 @@ import { CashaccountPipe } from './cashaccount.pipe';
     CountdownPipe,
     CurrencyPipe,
     CashaccountPipe,
+    UppercasePipe,
   ],
   imports: [
     CommonModule
@@ -25,6 +27,7 @@ import { CashaccountPipe } from './cashaccount.pipe';
     CountdownPipe,
     CurrencyPipe,
     CashaccountPipe,
+    UppercasePipe
   ]
 })
 export class PipeModule { }

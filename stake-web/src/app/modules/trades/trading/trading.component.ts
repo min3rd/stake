@@ -107,7 +107,8 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
           canTrade: e.canTrade,
         }
         return kline;
-      }).sort((a, b) => new Date(a.openTime).getTime() - new Date(b.openTime).getTime())
+      }).sort((a, b) => new Date(a.openTime).getTime() - new Date(b.openTime).getTime());
+      this.klines = klines;
       this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
         let candlestick = chart.series[0];
         let volume = chart.series[1];
@@ -186,9 +187,6 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
             color: (kline.closePrice - kline.openPrice) > 0 ? '#84CC16' : '#EF4444',
           }, true, true, true);
         }
-        if (this.klines.length > 100) {
-          this.klines.shift();
-        }
       });
     });
     this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
@@ -230,9 +228,13 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tradingRoom$.complete();
   }
   private _prepareChartData(): void {
+
     this.chart = new StockChart({
       accessibility: {
         enabled: false,
+      },
+      time: {
+        useUTC: false,
       },
       chart: {
         panning: {
@@ -277,15 +279,16 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
           plotLines: [
             {
               value: 0,
-              color: "#898B8E",
-              width: 0.75,
+              color: "#581C87",
+              width: 1,
               id: 'current-price',
               zIndex: 100,
+              dashStyle: 'Solid'
             }
           ],
-          lineWidth: 0,
+          lineWidth: 1,
           resize: {
-            enabled: !0
+            enabled: true
           }
         },
         {
@@ -309,7 +312,8 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
             label: {
               enabled: false
             },
-            color: '#FFF'
+            color: '#581C87',
+
           },
           lastVisiblePrice: {
             enabled: true,
@@ -467,23 +471,38 @@ export class TradingComponent implements OnInit, OnDestroy, AfterViewInit {
   get getLastResults(): any {
     let klines = this.klines.sort((a, b) => new Date(a.openTime).getTime() - new Date(b.openTime).getTime());
     let results = [];
-    let max = 1 + klines.length / 20;
+    let max = (1 + Math.ceil(klines.length / 20)) * 20;
+    let j = 0, k = 0;
+    results[j] = [];
+    results[j][k] = [];
     for (let i = 0; i < max; i++) {
-      results[i] = [];
-      for (let j = 0; j < 5; j++) {
-        results[i][j] = []
-        for (let k = 0; k < 4; k++) {
-          let kline = klines[i * 5 + j * 4 + k];
-          if (!kline) {
-            results[i][j].push(0);
-          } else if (kline.closePrice - kline.openPrice > 0) {
-            results[i][j].push(1);
-          } else {
-            results[i][j].push(2);
-          }
-        }
+      if (typeof klines[i] == 'undefined' || klines[i] == undefined || !klines[i]) {
+        results[j][k].push(0)
+      } else if (klines[i].closePrice > klines[i].openPrice) {
+        results[j][k].push(1);
+      } else if (klines[i].closePrice <= klines[i].openPrice) {
+        results[j][k].push(2);
+      } else {
+        results[j][k].push(0)
+      }
+      if (results[j][k].length >= 4) {
+        k++;
+        results[j][k] = [];
+      }
+      if (k >= 5) {
+        j++;
+        k = 0;
+        results[j] = []
+        results[j][k] = [];
       }
     }
     return results;
+  }
+
+  get countResult(): { buy: number, sell: number } {
+    return {
+      buy: this.klines.filter(e => e.closePrice > e.openPrice).length,
+      sell: this.klines.filter(e => e.closePrice <= e.openPrice).length,
+    }
   }
 }

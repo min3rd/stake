@@ -119,19 +119,36 @@
     </div>
     <div class="relative">
         <!-- Tabs -->
-        <div class="flex flex-auto px-2 items-center justify-between">
+        <div class="flex flex-auto px-2 items-center gap-4">
             <div class="flex gap-4">
-                <div mat-flat-button (click)="switchTab(TabType.INDICATORS)"
+                <div (click)="switchTab(TabType.INDICATORS)"
                     [class]="'text-sm md:text-md p-1 md:p-2 hover:cursor-pointer hover:bg-default ' + (tab == TabType.INDICATORS ? 'border-b-2 border-b-purple-500 md:font-bold' : '')">
                     {{'indicators' | transloco | capitalize}}
                 </div>
-                <div mat-flat-button (click)="switchTab(TabType.LAST_RESULTS)"
+                <div (click)="switchTab(TabType.LAST_RESULTS)"
                     [class]="'text-sm md:text-md p-1 md:p-2 hover:cursor-pointer hover:bg-default ' + (tab == TabType.LAST_RESULTS ? 'border-b-2 border-b-purple-500 md:font-bold' : '')">
                     {{'last results' | transloco | capitalize}}
                 </div>
             </div>
             <ng-container *ngIf="tab === TabType.LAST_RESULTS">
-                <div></div>
+                <div class="flex gap-4">
+                    <button mat-button class="bg-lime-500 rounded-md">
+                        <span class="font-semibold">
+                            {{'buy' | transloco | uppercase}}
+                        </span>
+                        <span class="font-semibold">
+                            {{countResult.buy}}
+                        </span>
+                    </button>
+                    <button mat-button class="bg-red-500 rounded-md">
+                        <span class="font-semibold">
+                            {{'sell' | transloco | uppercase}}
+                        </span>
+                        <span class="font-semibold">
+                            {{countResult.sell}}
+                        </span>
+                    </button>
+                </div>
             </ng-container>
         </div>
 

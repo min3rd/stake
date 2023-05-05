@@ -22,7 +22,6 @@ import * as indicators from 'highcharts/modules/price-indicator.src';
 import * as annotations from "highcharts/modules/annotations-advanced.src";
 import * as tools from 'highcharts/modules/stock-tools.src';
 import * as accessibility from 'highcharts/modules/accessibility.src';
-import * as drag from 'highcharts/modules/drag-panes.src';
 import * as stock from 'highcharts/modules/stock.src';
 @NgModule({
   declarations: [
@@ -49,7 +48,7 @@ import * as stock from 'highcharts/modules/stock.src';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [{
     provide: HIGHCHARTS_MODULES,
-    useFactory: () => [more, indicators, annotations, tools, accessibility, drag, stock]
+    useFactory: () => [more, indicators, annotations, tools, accessibility, stock]
   }],
 })
 export class TradingModule { }
