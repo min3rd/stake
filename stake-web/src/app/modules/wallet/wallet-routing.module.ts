@@ -10,81 +10,81 @@ import { TransferComponent } from './transfer/transfer.component';
 import { TransferGuard } from './transfer.guard';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: WalletComponent,
-    resolve: {
-      DepositOrdersResolver: DepositOrdersResolver,
-      WithdrawOrdersResolver: WithdrawOrdersResolver,
-      CashTransfersResolver: CashTransfersResolver,
-    },
-    children: [
-      {
-        path: 'deposit',
-        component: DepositComponent,
-        canDeactivate: [DepositGuard],
+    {
+        path: '',
+        component: WalletComponent,
         resolve: {
-          DepositOrdersResolver: DepositOrdersResolver,
-          WithdrawOrdersResolver: WithdrawOrdersResolver,
-          CashTransfersResolver: CashTransfersResolver,
+            DepositOrdersResolver: DepositOrdersResolver,
+            WithdrawOrdersResolver: WithdrawOrdersResolver,
+            CashTransfersResolver: CashTransfersResolver,
         },
         children: [
-          {
-            path: ':depositOrderId',
-            component: DepositComponent,
-            resolve: {
-              DepositOrderResolver: DepositOrderResolver,
+            {
+                path: 'deposit',
+                component: DepositComponent,
+                canDeactivate: [DepositGuard],
+                resolve: {
+                    DepositOrdersResolver: DepositOrdersResolver,
+                    WithdrawOrdersResolver: WithdrawOrdersResolver,
+                    CashTransfersResolver: CashTransfersResolver,
+                },
+                children: [
+                    {
+                        path: ':depositOrderId',
+                        component: DepositComponent,
+                        resolve: {
+                            DepositOrderResolver: DepositOrderResolver,
+                        },
+                    }
+                ]
             },
-          }
+            {
+                path: 'withdraw',
+                component: WithdrawComponent,
+                resolve: {
+                    DepositOrdersResolver: DepositOrdersResolver,
+                    WithdrawOrdersResolver: WithdrawOrdersResolver,
+                    CashTransfersResolver: CashTransfersResolver,
+                },
+                canDeactivate: [WithdrawGuard],
+                canActivate: [WithdrawGuard],
+                children: [
+                    {
+                        path: ':withdrawOrderId',
+                        component: WithdrawComponent,
+                        resolve: {
+                            WithdrawOrderResolver: WithdrawOrderResolver,
+                        }
+                    }
+                ],
+            },
+            {
+                path: 'transfer',
+                component: TransferComponent,
+                resolve: {
+                    DepositOrdersResolver: DepositOrdersResolver,
+                    WithdrawOrdersResolver: WithdrawOrdersResolver,
+                    CashTransfersResolver: CashTransfersResolver,
+                },
+                canDeactivate: [TransferGuard],
+                canActivate: [TransferGuard],
+                children: [
+                    {
+                        path: ':cashTransferId',
+                        component: TransferComponent,
+                        resolve: {
+                            CashTransferResolver: CashTransferResolver,
+                        }
+                    }
+                ],
+            }
         ]
-      },
-      {
-        path: 'withdraw',
-        component: WithdrawComponent,
-        resolve: {
-          DepositOrdersResolver: DepositOrdersResolver,
-          WithdrawOrdersResolver: WithdrawOrdersResolver,
-          CashTransfersResolver: CashTransfersResolver,
-        },
-        canDeactivate: [WithdrawGuard],
-        canActivate: [WithdrawGuard],
-        children: [
-          {
-            path: ':withdrawOrderId',
-            component: WithdrawComponent,
-            resolve: {
-              WithdrawOrderResolver: WithdrawOrderResolver,
-            }
-          }
-        ],
-      },
-      {
-        path: 'transfer',
-        component: TransferComponent,
-        resolve: {
-          DepositOrdersResolver: DepositOrdersResolver,
-          WithdrawOrdersResolver: WithdrawOrdersResolver,
-          CashTransfersResolver: CashTransfersResolver,
-        },
-        canDeactivate: [TransferGuard],
-        canActivate: [TransferGuard],
-        children: [
-          {
-            path: ':cashTransferId',
-            component: TransferComponent,
-            resolve: {
-              CashTransferResolver: CashTransferResolver,
-            }
-          }
-        ],
-      }
-    ]
-  },
-  { path: '**', redirectTo: '/wallet' }
+    },
+    { path: '**', redirectTo: '/wallet' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class WalletRoutingModule { }
