@@ -113,6 +113,22 @@ export class ApiService {
     admin_users_user(id: string): string {
         return this._adminApi(`/users/${id}`);
     }
+
+    admin_depositOrders(startDate: Date = new Date(), endDate: Date = new Date(), offset: number = 0, size: number = 10) {
+        return this._adminApi(`/depositOrders?startDate=${startDate}&endDate=${endDate}&offset=${offset}&size=${size}`);
+    }
+
+    admin_depositOrders_depositOrder(depositOrderId: string): string {
+        return this._adminApi(`/depositOrders/${depositOrderId}`);
+    }
+
+    admin_depositOrders_depositOrder_acceptDepositOrder(depositOrderId: string): string {
+        return this._adminApi(`/depositOrders/${depositOrderId}/acceptDepositOrder`);
+    }
+
+    admin_depositOrders_depositOrder_denyDepositOrder(depositOrderId: string): string {
+        return this._adminApi(`/depositOrders/${depositOrderId}/denyDepositOrder`);
+    }
 }
 
 

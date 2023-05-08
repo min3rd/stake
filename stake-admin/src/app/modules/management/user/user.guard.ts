@@ -20,7 +20,7 @@ export class UserGuard implements CanDeactivate<UserDetailComponent> {
     if (!nextState.url.includes('/management/users')) {
       return true;
     }
-    if (nextRoute.paramMap.get('id')) {
+    if (nextRoute.paramMap.get('userId')) {
       return true;
     }
     else {

@@ -38,5 +38,6 @@
   "select date": "日付を選択",
   "trade": "トレード",
   "aapl stock price": "AAPL株価",
-  "amount": "額"
+  "amount": "額",
+  "price range": "価格帯"
 }

@@ -38,5 +38,6 @@
   "select date": "选择日期",
   "trade": "贸易",
   "aapl stock price": "苹果股价",
-  "amount": "数量"
+  "amount": "数量",
+  "price range": "价格范围"
 }

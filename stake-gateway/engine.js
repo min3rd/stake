@@ -29,6 +29,10 @@ class Engine {
     get userIo() {
         return this._userIo;
     }
+
+    get adminIo() {
+        return this._adminIo;
+    }
     get tradingJob() {
         return this._tradingJob;
     }

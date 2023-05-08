@@ -38,5 +38,6 @@
   "select date": "pilih tanggal",
   "trade": "berdagang",
   "aapl stock price": "Harga Saham AAPL",
-  "amount": "jumlah"
+  "amount": "jumlah",
+  "price range": "kisaran harga"
 }

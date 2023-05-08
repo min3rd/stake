@@ -417,6 +417,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ng-apexcharts
 MIT
 
+ngx-device-detector
+MIT
+
 ngx-socket-io
 MIT
 MIT License

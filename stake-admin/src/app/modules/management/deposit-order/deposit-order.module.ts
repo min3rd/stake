@@ -20,11 +20,13 @@ import { MatRadioModule } from '@angular/material/radio';
 import { DepositOrderRoutingModule } from './deposit-order-routing.module';
 import { DepositOrderListComponent } from './deposit-order-list/deposit-order-list.component';
 import { SharedModule } from 'app/shared/shared.module';
+import { DepositOrderDetailComponent } from './deposit-order-detail/deposit-order-detail.component';
 
 
 @NgModule({
   declarations: [
-    DepositOrderListComponent
+    DepositOrderListComponent,
+    DepositOrderDetailComponent
   ],
   imports: [
     CommonModule,

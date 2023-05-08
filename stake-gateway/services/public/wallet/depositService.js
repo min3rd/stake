@@ -11,6 +11,7 @@ const AdminUser = require("../../../models/AdminUser");
 const notificationService = require("../notificationService");
 const AppConfig = require("../../../models/AppConfig");
 const { Status } = require("../../../common/constants");
+const { User } = require("../../../models/User");
 
 const getDepositOrderById = async function (req, res, next) {
     let userId = req.params.userId;
@@ -82,8 +83,10 @@ const checkTransaction = async (req, res, next) => {
             await session.endSession();
             return next(badRequestError.make(ErrorCode.WALLET_TRANSACTION_EXISTS));
         }
+        let user = await User.findById(userId);
         depositOrder = new DepositOrder({
             userId: userId,
+            username: user.username,
             masterAddress: masterAddress,
             transactionId: transactionId,
             time: new Date(),
@@ -115,7 +118,7 @@ async function sendNotificationToAllAdmin(depositOrder) {
     let admins = await AdminUser.find({});
     for (let admin of admins) {
         let noti = notificationService.createDepositOrder(admin._id, depositOrder);
-        engine._adminIo.to(admin._id).emit(SocketEvent.NOTIFICATION, noti);
+        engine.adminIo.to(admin._id).emit(SocketEvent.NOTIFICATION, noti);
     }
 }
 

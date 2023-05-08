@@ -40,5 +40,6 @@
   "select date": "tarih seç",
   "trade": "ticaret",
   "aapl stock price": "AAPL Hisse Fiyatı",
-  "amount": "miktar"
+  "amount": "miktar",
+  "price range": "fiyat aralığı"
 }

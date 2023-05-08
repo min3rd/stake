@@ -38,5 +38,6 @@
   "select date": "날짜 선택",
   "trade": "거래",
   "aapl stock price": "AAPL 주가",
-  "amount": "양"
+  "amount": "양",
+  "price range": "가격 범위"
 }

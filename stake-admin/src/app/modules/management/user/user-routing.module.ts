@@ -7,33 +7,37 @@ import { UserResolver, UsersResolver } from './user.resolver';
 import { UserGuard } from './user.guard';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: UserComponent,
-    children: [
-      {
+    {
         path: '',
-        component: UserListComponent,
-        resolve: {
-          UsersResolver: UsersResolver,
-        },
+        component: UserComponent,
         children: [
-          {
-            path: ':userId',
-            canDeactivate: [UserGuard],
-            component: UserDetailComponent,
-            resolve: {
-              UserResolver: UserResolver,
+            {
+                path: '',
+                component: UserListComponent,
+                resolve: {
+                    UsersResolver: UsersResolver,
+                },
+                children: [
+                    {
+                        path: ':userId',
+                        canDeactivate: [UserGuard],
+                        component: UserDetailComponent,
+                        resolve: {
+                            UserResolver: UserResolver,
+                        }
+                    }
+                ]
             }
-          }
         ]
-      }
-    ]
-  }
+    },
+    {
+        path: '**',
+        redirectTo: '/management/users',
+    }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class UserRoutingModule { }

@@ -14,27 +14,87 @@
             <div class="flex-auto">
 
                 <!-- Header -->
-                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8 border-b">
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8">
 
                     <!-- Title -->
                     <div>
-                        <div class="text-4xl font-extrabold tracking-tight leading-none">{{'deposit orders' | transloco
-                            |
-                            capitalize}}</div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                            {{'deposit orders' | transloco | capitalize}}
+                        </div>
                     </div>
 
                     <!-- Main actions -->
                     <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
                         <!-- Search -->
                         <div class="flex-auto">
-                            <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full min-w-50"
-                                subscriptSizing="dynamic">
-                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
-                                    [placeholder]="'search deposit orders' | transloco | capitalize">
-                            </mat-form-field>
                         </div>
                     </div>
+                </div>
+
+                <!-- Deposit Order List -->
+                <div class="flex-col">
+                    <ng-container *ngIf="depositOrders$ | async as depositOrders">
+                        <ng-container *ngIf="depositOrders.length > 0">
+                            <div *ngFor="let depositOrder of depositOrders"
+                                class="flex px-8 py-4 items-center gap-2 border-t hover:cursor-pointer"
+                                [routerLink]="['./', depositOrder._id]">
+                                <!-- Status -->
+                                <ng-container>
+                                    <div *ngIf="depositOrder.status == 0">
+                                        <div
+                                            class="absolute rounded-full bg-amber-500 icon-size-4 transition animate-ping">
+                                        </div>
+                                        <div class="rounded-full bg-amber-500 icon-size-4"></div>
+                                    </div>
+                                    <div *ngIf="depositOrder.status == 1">
+
+                                        <div class="rounded-full bg-lime-500 icon-size-3"></div>
+                                    </div>
+                                    <div *ngIf="depositOrder.status == 2">
+                                        <div class="rounded-full bg-red-500 icon-size-3"></div>
+                                    </div>
+                                </ng-container>
+
+                                <!-- Detail -->
+                                <ng-container *ngIf="depositOrder.username">
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <span>
+                                                {{depositOrder.username}}
+                                            </span>
+                                            <span class="text-secondary text-sm">
+                                                ({{depositOrder.userId}})
+                                            </span>
+                                            <span class="truncate">
+                                                -
+                                                {{depositOrder.transactionId}}
+                                            </span>
+                                            <a mat-icon-button
+                                                [href]="'https://bscscan.com/tx/' + depositOrder.transactionId"
+                                                target="_blank">
+                                                <mat-icon svgIcon="heroicons_outline:external-link"></mat-icon>
+                                            </a>
+                                        </div>
+                                        <div>
+                                            {{depositOrder.time | date: 'YYYY/MM/dd HH:mm:ss'}}
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <!-- Actions -->
+                                <!-- <ng-container>
+                                    <button mat-flat-button class="bg-lime-500">
+                                        <span>{{'accept' | transloco | capitalize}}</span>
+                                    </button>
+                                    <button mat-flat-button class="bg-red-500">
+                                        <span>{{'deny' | transloco | capitalize}}</span>
+                                    </button>
+                                </ng-container> -->
+
+                            </div>
+                        </ng-container>
+                    </ng-container>
+
                 </div>
 
             </div>

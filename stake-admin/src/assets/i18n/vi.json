@@ -47,5 +47,9 @@
   "unblock": "mở khóa",
   "search users": "người dùng tìm kiếm",
   "deposit orders": "lệnh gửi tiền",
-  "search deposit orders": "tra cứu lệnh đặt cọc"
+  "search deposit orders": "tra cứu lệnh nạp tiền",
+  "accept": "chấp nhận",
+  "deny": "từ chối",
+  "amount": "số lượng",
+  "user wallet address": "địa chỉ ví người dùng"
 }

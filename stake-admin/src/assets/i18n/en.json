@@ -56,5 +56,9 @@
   "unblock": "unblock",
   "search users": "search users",
   "deposit orders": "deposit orders",
-  "search deposit orders": "search deposit orders"
+  "search deposit orders": "search deposit orders",
+  "accept": "accept",
+  "deny": "deny",
+  "amount": "amount",
+  "user wallet address": "user wallet address"
 }

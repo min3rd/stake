@@ -38,5 +38,6 @@
   "select date": "เลือกวันที่",
   "trade": "ซื้อขาย",
   "aapl stock price": "ราคาหุ้น AAPL",
-  "amount": "จำนวน"
+  "amount": "จำนวน",
+  "price range": "ช่วงราคา"
 }

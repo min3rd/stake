@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
-import { ActivatedRoute } from '@angular/router';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { Contact } from 'app/layout/common/quick-chat/quick-chat.types';
 import { Subject, takeUntil } from 'rxjs';
 import { UserListComponent } from '../user-list/user-list.component';
 import { User } from 'app/core/user/user.types';
@@ -25,11 +22,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
    * Constructor
    */
   constructor(
-    private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
     private _userListComponent: UserListComponent,
     private _formBuilder: UntypedFormBuilder,
-    private _fuseConfirmationService: FuseConfirmationService,
     private _userService: UserService,
   ) {
   }
