@@ -4,7 +4,7 @@ import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { SocketService } from 'app/core/socket/socket.service';
 import { SocketEvent } from 'app/core/config/socket.config';
 import { TradingService } from './trading.service';
-import { TradingRoom, Kline, TradingConfig, TradingCallType, TradingCall, TradingRound } from './trading.types';
+import { TradingRoom, Kline, TradingConfig, TradingCallType, TradingCall, TradingRound, BollingerBand } from './trading.types';
 import moment from 'moment';
 import { UserService } from 'app/core/user/user.service';
 import { Router } from '@angular/router';
@@ -54,6 +54,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     volumes: [];
     deviceVersion: string;
     isMobile: boolean;
+    bollingBands: BollingerBand[];
     constructor(
         private _socketService: SocketService,
         private _tradingService: TradingService,
@@ -123,7 +124,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                 let candlestick = chart.series[0];
                 let volume = chart.series[1];
                 let spline = chart.series[2];
-                let bollingerBands = this.calculateBollingerBands(klines, 20, 2);
+                let line = chart.series[3];
                 candlestick.setData(klines.map(e => {
                     let r = {
                         x: new Date(e.openTime).getTime(),
@@ -142,13 +143,15 @@ export class TradingComponent implements OnInit, OnDestroy {
                     };
                     return r;
                 }));
-                spline.setData(bollingerBands.map(e => {
+                this.bollingBands = this.calculateBollingerBands(klines);
+                spline.setData(this.bollingBands.map(e => {
                     return [
                         new Date(e.openTime).getTime(),
                         e.lower,
                         e.upper,
                     ];
                 }));
+                line.setData(this.bollingBands.map(e => [new Date(e.openTime).getTime(), e.average]));
             });
             this._changeDetectorRef.markForCheck();
         });
@@ -194,16 +197,23 @@ export class TradingComponent implements OnInit, OnDestroy {
                             color: (kline.closePrice - kline.openPrice) > 0 ? '#84CC16' : '#EF4444',
                         }, true, true);
                     }
-                    let spline = chart.series[2];
+                    let spline = chart.series[2].points[chart.series[1].points.length - 1];
                     if (spline) {
-                        let bollingerBands = this.calculateBollingerBands(this.klines, 20, 2);
-                        spline.setData(bollingerBands.map(e => {
-                            return [
-                                new Date(e.openTime).getTime(),
-                                e.lower,
-                                e.upper,
-                            ];
-                        }));
+                        this.bollingBands = this.calculateBollingerBands(this.klines);
+                        spline.update([
+                            new Date(this.bollingBands[index].openTime).getTime(),
+                            this.bollingBands[index].lower,
+                            this.bollingBands[index].upper
+                        ], true, true);
+                    }
+
+                    let line = chart.series[3].points[chart.series[1].points.length - 1];
+                    if (line) {
+                        this.bollingBands = this.calculateBollingerBands(this.klines);
+                        line.update([
+                            new Date(this.bollingBands[index].openTime).getTime(),
+                            this.bollingBands[index].average,
+                        ], true, true);
                     }
                 } else {
                     this.klines.push(kline);
@@ -221,15 +231,17 @@ export class TradingComponent implements OnInit, OnDestroy {
                     }, true, true, true);
                     let spline = chart.series[2];
                     if (spline) {
-                        let bollingerBands = this.calculateBollingerBands(this.klines, 20, 2);
-                        spline.setData(bollingerBands.map(e => {
-                            return [
-                                new Date(e.openTime).getTime(),
-                                e.lower,
-                                e.upper,
-                            ];
-                        }));
+                        this.bollingBands = this.calculateBollingerBands(this.klines);
+                        spline.addPoint([
+                            new Date(this.bollingBands[this.bollingBands.length - 1].openTime).getTime(),
+                            this.bollingBands[this.bollingBands.length - 1].lower,
+                            this.bollingBands[this.bollingBands.length - 1].upper,
+                        ], true, true, true);
                     }
+                    chart.series[3].addPoint([
+                        new Date(this.bollingBands[this.bollingBands.length - 1].openTime).getTime(),
+                        this.bollingBands[this.bollingBands.length - 1].average
+                    ], true, true, true);
                 }
             });
             this._changeDetectorRef.markForCheck();
@@ -385,6 +397,10 @@ export class TradingComponent implements OnInit, OnDestroy {
                     fillOpacity: 0.1,
                     lineColor: '#4ade80'
                 },
+                line: {
+                    dashStyle: 'LongDash',
+                    color: '#f59e0b'
+                },
                 series: {
                     states: {
                         inactive: {
@@ -430,6 +446,15 @@ export class TradingComponent implements OnInit, OnDestroy {
                     type: 'areasplinerange',
                     id: 'price-range',
                     name: this._translocoService.translate('price range'),
+                    data: [],
+                    dataGrouping: {
+                        enabled: false,
+                    },
+                },
+                {
+                    type: 'line',
+                    id: 'average-price',
+                    name: this._translocoService.translate('average price'),
                     data: [],
                     dataGrouping: {
                         enabled: false,
@@ -566,22 +591,23 @@ export class TradingComponent implements OnInit, OnDestroy {
             sell: this.klines.filter(e => e.closePrice <= e.openPrice).length,
         }
     }
-    calculateBollingerBands(klines: Kline[], windowSize: number, numDeviations: number) {
-        // Calculate rolling mean and standard deviation
-        const rolling = klines.map((kline, index) => {
-            const window = klines.slice(Math.max(0, index - windowSize + 1), index + 1);
-            const average = window.reduce((sum, k) => sum + k.closePrice, 0) / windowSize;
-            const variance = window.reduce((sum, k) => sum + Math.pow(k.closePrice - average, 2), 0) / windowSize;
-            const stdDev = Math.sqrt(variance);
-            return {
-                openTime: kline.openTime,
-                close: kline.closePrice,
-                average,
-                upper: average + numDeviations * stdDev,
-                lower: average - numDeviations * stdDev,
-            };
-        });
+    calculateBollingerBands(data: Kline[], period = 20, deviation = 2): BollingerBand[] {
+        const results: BollingerBand[] = [];
+        for (let i = 0; i < data.length; i++) {
+            const prices = data.slice(Math.max(0, i - period + 1), i + 1).map(candle => candle.closePrice);
+            const average = prices.reduce((total, price) => total + price, 0) / prices.length;
+            const standardDeviation = Math.sqrt(prices.reduce((total, price) => total + Math.pow(price - average, 2), 0) / prices.length);
+            const upperBand = average + deviation * standardDeviation;
+            const lowerBand = average - deviation * standardDeviation;
 
-        return rolling;
+            results.push({
+                openTime: data[i].openTime,
+                average: average,
+                upper: upperBand,
+                lower: lowerBand
+            });
+        }
+        return results;
     }
+
 }

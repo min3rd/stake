@@ -77,3 +77,9 @@ export interface TradingCall {
     type?: TradingCallType,
     betCash?: number,
 }
+export interface BollingerBand {
+    openTime?: Date;
+    average?: number;
+    upper?: number;
+    lower?: number;
+}

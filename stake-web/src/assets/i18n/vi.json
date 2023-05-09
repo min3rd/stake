@@ -186,5 +186,6 @@
   "trading lose": "Bạn đã thua",
   "you traded betCash": "bạn đã giao dịch {{betCash}}",
   "you traded betCash and earned profit": "bạn đã giao dịch {{betCash}} và kiếm được {{profit}}",
-  "deposit order": "lệnh nạp tiền"
+  "deposit order": "lệnh nạp tiền",
+  "average price": "giá trung bình"
 }

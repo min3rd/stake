@@ -1,9 +1,8 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
     <div class="md:flex md:flex-auto items-start">
-        <div class="relative flex w-full h-auto md:h-160 bg-gray-50 dark:bg-transparent">
-            <div class="w-full h-full" [chart]="chart"></div>
+        <div class="relative w-full h-auto md:h-160 bg-gray-50 dark:bg-transparent">
             <ng-container *ngIf="tradingRooms?.length">
-                <div class="absolute top-2 left-2 z-10">
+                <div class="absolute md:relative top-2 left-2 z-10">
                     <mat-form-field class="min-w-32 rounded-md bg-slate-700" subscriptSizing="dynamic">
                         <mat-select [(value)]="tradingRoom" class="w-full" (valueChange)="onRoomChange($event)">
                             <mat-option *ngFor="let room of tradingRooms" [value]="room">
@@ -12,6 +11,7 @@
                     </mat-form-field>
                 </div>
             </ng-container>
+            <div class="w-full h-full mt-0 md:mt-2" [chart]="chart"></div>
         </div>
         <div
             class="absolute md:relative bottom-0 border-t md:border-0 text-center w-full md:py-2 md:w-80 bg-card dark:bg-default">
