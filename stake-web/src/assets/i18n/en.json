@@ -174,5 +174,13 @@
     "search": "search",
     "select date": "select date",
     "trade": "trade",
-    "price range": "price range"
+    "price range": "price range",
+    "got new deposit order": "got new deposit order",
+    "trading call": "trading call",
+    "your deposit order was accepted amount": "your deposit order was accepted: +{{amount}}",
+    "trading win": "You won",
+    "trading lose": "You losed",
+    "you traded betCash": "you traded {{betCash}}",
+    "you traded betCash and earned profit": "you traded {{betCash}} and earned {{profit}}",
+    "deposit order": "deposit order"
 }

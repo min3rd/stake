@@ -25,16 +25,24 @@ export interface Kline {
 }
 
 export interface TradingRound {
-    symbol?: string;
-    time?: Date;
-    openTime?: Date;
-    closeTime?: Date;
-    openPrice?: number;
-    highPrice?: number;
-    lowPrice?: number;
-    closePrice?: number;
-    closed?: boolean;
-    canTrade?: boolean;
+    symbol?: string
+    time?: Date
+    openTime?: Date
+    closeTime?: Date
+    openPrice?: number
+    highPrice?: number
+    lowPrice?: number
+    closePrice?: number
+    closed?: boolean
+    analysisBuyAmount?: number
+    analysisSellAmount?: number
+    analysisBuyCount?: number
+    analysisSellCount?: number
+    analysisBuy?: number
+    analysisSell?: number
+    expectedHighPrice?: number
+    expectedLowPrice?: number
+    canTrade?: boolean
 }
 
 export interface ApexChartSeriesData {

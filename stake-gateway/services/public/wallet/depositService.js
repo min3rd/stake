@@ -102,6 +102,8 @@ const checkTransaction = async (req, res, next) => {
         await session.endSession();
         try {
             sendNotificationToAllAdmin(depositOrder);
+            let notification = await notificationService.user_createDepositOrderNotification(user._id, depositOrder);
+            engine.publicIo.to(user._id).emit(SocketEvent.NOTIFICATION, notification);
         } catch (e) {
             logger.error('depositService', `sendNotificationToAllAdmin e=${e}`);
         }
@@ -117,7 +119,7 @@ const checkTransaction = async (req, res, next) => {
 async function sendNotificationToAllAdmin(depositOrder) {
     let admins = await AdminUser.find({});
     for (let admin of admins) {
-        let noti = notificationService.createDepositOrder(admin._id, depositOrder);
+        let noti = await notificationService.admin_createDepositOrderNotification(admin._id, depositOrder);
         engine.adminIo.to(admin._id).emit(SocketEvent.NOTIFICATION, noti);
     }
 }

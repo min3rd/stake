@@ -1,25 +1,23 @@
 <div class="w-full h-full">
-    <!-- Drawer -->
-    <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
-        [disableClose]="true" #matDrawer>
-        <router-outlet></router-outlet>
-    </mat-drawer>
     <div class="h-full bg-card dark:bg-default">
         <div class="md:flex md:flex-auto p-6 gap-6">
             <ng-container *ngIf="tradingRooms$ | async as tradingRooms">
                 <ng-container *ngFor="let tradingRoom of tradingRooms; let index = index">
-                    <div class="rounded-xl w-80 border p-2 my-2">
+                    <div class="rounded-xl w-1/4 border p-2 my-2">
                         <div class="flex flex-auto justify-between items-center p-2 border-b">
                             <div>
                                 {{tradingRoom.symbol}}
                                 <button mat-icon-button *ngIf="getLatestRound(tradingRoom)"
                                     [class]="(!result(getLatestRound(tradingRoom)) ? 'bg-red-500' : 'bg-lime-500') + ' icon-size-3 ml-2'"></button>
                             </div>
-                            <button mat-flat-button class="bg-lime-500"
+                            <div class="text-2xl font-semibold">
+                                {{getCountdown(tradingRoom) | countdown}}
+                            </div>
+                            <button mat-flat-button class="bg-lime-500 rounded-md"
                                 (click)="switchResult(index, TradingCallType.BUY)">
                                 <mat-icon svgIcon="heroicons_outline:trending-up"></mat-icon>
                             </button>
-                            <button mat-flat-button class="bg-red-500"
+                            <button mat-flat-button class="bg-red-500 rounded-md"
                                 (click)="switchResult(index, TradingCallType.SELL)">
                                 <mat-icon svgIcon="heroicons_outline:trending-down"></mat-icon>
                             </button>

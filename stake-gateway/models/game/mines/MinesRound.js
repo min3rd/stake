@@ -13,7 +13,7 @@ const MinesRoundSchema = new Schema({
     resultHash: { type: String, require: true, },
     playerChoices: { type: String, default: '0000000000000000000000000', },
     profitStep: { type: Number, default: 0 },
-    profitPercent: { type: Number, default: 1, },
+    profitPercent: { type: Number, default: 0, },
     profit: { type: Number, default: 0, },
     userPaid: { type: Boolean, default: false, },
     masterPaid: { type: Boolean, default: false, },

@@ -83,5 +83,18 @@
   "00x0046": "ไม่สามารถรับคำสั่งถอนได้",
   "00x0047": "ไม่สามารถรับคำสั่งฝากได้",
   "00x0049": "ไม่สามารถบันทึกข้อมูลการฝากเงินได้",
-  "00x0048": "ไม่สามารถบันทึกข้อมูลผู้ใช้ได้"
+  "00x0048": "ไม่สามารถบันทึกข้อมูลผู้ใช้ได้",
+  "got new deposit order": "ได้รับคำสั่งฝากใหม่",
+  "trading call": "โทรซื้อขาย",
+  "your deposit order was accepted amount": "คำสั่งฝากของคุณได้รับการยอมรับ: +{{amount}}",
+  "notifications": "การแจ้งเตือน",
+  "mark as unread": "ทำเครื่องหมายว่ายังไม่ได้อ่าน",
+  "communication details in case we want to connect with you these will be kept private": "รายละเอียดการติดต่อสื่อสารในกรณีที่เราต้องการติดต่อกับคุณ \nสิ่งเหล่านี้จะถูกเก็บไว้เป็นส่วนตัว",
+  "amount is required": "ต้องระบุจำนวนเงิน",
+  "please enter a valid email address": "กรุณาใส่อีเมล์ที่ถูกต้อง",
+  "trading win": "คุณได้รับรางวัล",
+  "trading lose": "คุณแพ้",
+  "you traded betCash": "คุณซื้อขาย {{betCash}}",
+  "you traded betCash and earned profit": "คุณซื้อขาย {{betCash}} และรับ {{profit}}",
+  "deposit order": "คำสั่งฝาก"
 }

@@ -8,7 +8,9 @@ export interface DepositOrder {
     _id?: string
     userId?: string
     time?: Date
+    updated?: Date
     masterAddress?: string
+    userAddress?: string
     transactionId?: string
     amount?: number
     flag?: number
@@ -19,8 +21,10 @@ export interface DepositOrder {
 export interface WithdrawOrder {
     userId?: string
     time?: Date
+    updated?: Date
     masterAddress?: string
     userAddress?: string
+    transactionId?: string
     amount?: number
     flag?: number
     status?: OrderStatus
@@ -33,6 +37,7 @@ export interface CashTransfer {
     destinationId?: string
     destinationUsername?: string
     time?: Date
+    updated?: Date
     amount?: number
     status?: OrderStatus
     __v?: number

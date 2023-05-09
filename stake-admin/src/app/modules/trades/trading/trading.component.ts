@@ -14,7 +14,6 @@ export class TradingComponent implements OnInit, OnDestroy {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     tradingRooms$: Observable<TradingRoom[]>;
     tradingRooms: TradingRoom[];
-    drawerMode: 'slide' | 'over';
     editMode: boolean[];
     tradingRoomForms: UntypedFormGroup[];
     tradingRounds$: Observable<TradingRound[]>;
@@ -74,8 +73,9 @@ export class TradingComponent implements OnInit, OnDestroy {
             if (index >= 0) {
                 this.tradingRounds[index] = tradingRound;
             } else {
-
+                this.tradingRounds.push(tradingRound);
             }
+            this._changeDetectorRef.markForCheck();
         });
     }
 
@@ -104,5 +104,13 @@ export class TradingComponent implements OnInit, OnDestroy {
     }
     deleteRoom(index: number) {
         this._tradingService.deleteTradingRoom(this.tradingRooms[index]).subscribe();
+    }
+
+    getCountdown(tradingRoom: TradingRoom) {
+        let tradingRound = this.getLatestRound(tradingRoom);
+        if (!tradingRound) {
+            return 0;
+        }
+        return (new Date(tradingRound.closeTime).getTime() - new Date().getTime()) / 1000;
     }
 }

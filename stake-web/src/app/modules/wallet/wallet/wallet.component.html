@@ -81,8 +81,8 @@
                                 </ng-container>
                                 <a class="z-20 flex items-center px-6 py-2 md:px-8 cursor-pointer"
                                     [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedOrder || selectedOrder._id !== orderHistory._id,
-                                                'bg-primary-50 dark:bg-hover': selectedOrder && selectedOrder._id === orderHistory._id}" [routerLink]="orderHistory.type == 'deposit' ? ['./deposit', orderHistory._id] 
-                                    : orderHistory.type == 'withdraw' ? ['./withdraw', orderHistory._id] 
+                                                'bg-primary-50 dark:bg-hover': selectedOrder && selectedOrder._id === orderHistory._id}" [routerLink]="orderHistory.type == 'deposit' ? ['./deposit', orderHistory._id]
+                                    : orderHistory.type == 'withdraw' ? ['./withdraw', orderHistory._id]
                                     : ['./transfer', orderHistory._id]">
                                     <div
                                         *ngIf="!orderHistory.status || orderHistory.status === DepositOrderStatus.PENDING">

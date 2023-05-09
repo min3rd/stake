@@ -83,5 +83,18 @@
   "00x0046": "无法获得撤单",
   "00x0047": "无法接受存款订单",
   "00x0049": "无法保存定金订单信息",
-  "00x0048": "无法保存用户信息"
+  "00x0048": "无法保存用户信息",
+  "got new deposit order": "得到新的存款订单",
+  "trading call": "交易电话",
+  "your deposit order was accepted amount": "您的存款订单已被接受：+{{amount}}",
+  "notifications": "通知",
+  "mark as unread": "标记为未读",
+  "communication details in case we want to connect with you these will be kept private": "如果我们想与您联系，请提供通讯详细信息。\n这些将被保密。",
+  "amount is required": "金额是必需的",
+  "please enter a valid email address": "请输入有效的电子邮件地址",
+  "trading win": "你赢了",
+  "trading lose": "你输了",
+  "you traded betCash": "您交易了 {{betCash}}",
+  "you traded betCash and earned profit": "您交易了 {{betCash}} 并赚取了 {{profit}}",
+  "deposit order": "定金单"
 }

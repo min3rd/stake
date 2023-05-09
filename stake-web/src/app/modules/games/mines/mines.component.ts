@@ -55,7 +55,7 @@ export class MinesComponent implements OnInit, OnDestroy {
   }
   prepare() {
     this.betForm = this._formBuilder.group({
-      betAmount: [0, Validators.required],
+      betAmount: [10, Validators.required],
       mines: [3, Validators.required],
     });
     this.boxes = [];

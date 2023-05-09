@@ -40,8 +40,15 @@ const navigations: FuseNavigationItem[] = [
                 id: 'depositOrders',
                 title: 'Deposit Orders',
                 type: 'basic',
-                icon: 'mat_outline:receipt',
+                icon: 'heroicons_outline:cash',
                 link: '/management/depositOrders'
+            },
+            {
+                id: 'withdrawOrders',
+                title: 'Withdraw Orders',
+                type: 'basic',
+                icon: 'heroicons_outline:receipt-refund',
+                link: '/management/withdrawOrders'
             }
         ],
     }

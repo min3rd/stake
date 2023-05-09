@@ -83,5 +83,18 @@
   "00x0046": "引き出し注文を受け取ることができませんでした",
   "00x0047": "預金注文を受け入れることができませんでした",
   "00x0049": "入金注文情報を保存できませんでした",
-  "00x0048": "ユーザー情報を保存できませんでした"
+  "00x0048": "ユーザー情報を保存できませんでした",
+  "got new deposit order": "新しい入金注文を受け取りました",
+  "trading call": "トレーディングコール",
+  "your deposit order was accepted amount": "あなたの入金注文は受理されました: +{{amount}}",
+  "notifications": "通知",
+  "mark as unread": "未読としてマーク",
+  "communication details in case we want to connect with you these will be kept private": "私たちがあなたとつながりたい場合のコミュニケーションの詳細。\nこれらは非公開にします。",
+  "amount is required": "金額が必要です",
+  "please enter a valid email address": "有効なメールアドレスを入力してください",
+  "trading win": "あなたが勝った",
+  "trading lose": "負けた",
+  "you traded betCash": "{{betCash}}を取引しました",
+  "you traded betCash and earned profit": "{{betCash}} を取引して {{profit}} を獲得しました",
+  "deposit order": "入金注文"
 }

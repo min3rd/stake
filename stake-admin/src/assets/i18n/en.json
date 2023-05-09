@@ -60,5 +60,7 @@
   "accept": "accept",
   "deny": "deny",
   "amount": "amount",
-  "user wallet address": "user wallet address"
+  "user wallet address": "user wallet address",
+  "withdraw orders": "withdraw orders",
+  "transaction hash": "transaction hash"
 }

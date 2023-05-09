@@ -19,7 +19,7 @@ export class DepositOrdersResolver implements Resolve<DepositOrder[]> {
 
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<DepositOrder[]> {
-        let startDate = moment().startOf('day').toDate();
+        let startDate = moment().add(-7, 'days').toDate();
         let endDate = moment().endOf('day').toDate();
         return this._depositOrderService.searchDepositOrders(startDate, endDate);
     }

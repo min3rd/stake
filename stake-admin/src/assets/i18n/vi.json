@@ -51,5 +51,7 @@
   "accept": "chấp nhận",
   "deny": "từ chối",
   "amount": "số lượng",
-  "user wallet address": "địa chỉ ví người dùng"
+  "user wallet address": "địa chỉ ví người dùng",
+  "withdraw orders": "lệnh rút tiền",
+  "transaction hash": "băm giao dịch"
 }

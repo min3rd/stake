@@ -42,6 +42,9 @@ const latestRounds = async function (req, res, next) {
             highPrice: e.highPrice,
             lowPrice: e.lowPrice,
             closePrice: e.closePrice,
+            canTrade: e.canTrade,
+            closed: e.closed,
+            time: e.time,
 
             analysisBuyAmount: e.analysisBuyAmount,
             analysisSellAmount: e.analysisSellAmount,
@@ -137,7 +140,12 @@ const call = async function (req, res, next) {
             openTime: openTime,
             closeTime: closeTime,
         });
-
+        if (now.getTime() >= new Date(tradingRound.closeTime).getTime()) {
+            await session.abortTransaction();
+            await session.endSession();
+            logger.error('call_TRADING_ROUND_CLOSED', `data=${req.body}`);
+            return next(badRequestError.make(ErrorCode.TRADING_ROUND_CLOSED));
+        }
         if (!tradingRound) {
             await session.abortTransaction();
             await session.endSession();
@@ -234,8 +242,7 @@ const call = async function (req, res, next) {
             await session.endSession();
             return next(badRequestError.make(ErrorCode.SAVE_TRADING_CALL_FAIL));
         }
-        let noti = await notificationService.createTradingCall(user, betCash, tradingCall.benefit);
-        logger.info('CREATE_TRADING_CALL', JSON.stringify(tradingCall));
+
 
         if (user.cashAccount == CashAccount.REAL) {
             if (type == TradingCallType.BUY) {
@@ -265,15 +272,17 @@ const call = async function (req, res, next) {
         } catch (e) {
             logger.error(`tradingService_call`, `could not add fake data e=${e}`);
         }
-        await session.commitTransaction();
+
         try {
+            let noti = await notificationService.createTradingCall(user, betCash, tradingCall.benefit);
             engine.userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));
             engine.userIo.to(user.id).emit(SocketEvent.NOTIFICATION, noti);
         } catch (e) {
             logger.error(`tradingService_call`, `could not send notification to user e=${e}`);
-
         }
+        await session.commitTransaction();
         await session.endSession();
+        logger.info('CREATE_TRADING_CALL', JSON.stringify(tradingCall));
         res.json({
             userId: tradingCall.userId,
             symbol: tradingCall.symbol,

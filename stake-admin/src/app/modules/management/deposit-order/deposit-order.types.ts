@@ -3,6 +3,7 @@ export interface DepositOrder {
     userId?: string
     username?: string
     time?: Date
+    updated?: Date
     masterAddress?: string
     userAddress?: string
     transactionId?: string

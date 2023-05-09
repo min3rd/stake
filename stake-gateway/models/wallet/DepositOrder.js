@@ -5,6 +5,7 @@ const DepositOrderSchema = new Schema({
     userId: { type: String, require: true, index: true, },
     username: { type: String, index: true, },
     time: { type: Date, default: new Date(), },
+    updated: { type: Date, default: new Date(), },
     masterAddress: { type: String, index: true, },
     userAddress: { type: String, index: true, },
     transactionId: { type: String, },

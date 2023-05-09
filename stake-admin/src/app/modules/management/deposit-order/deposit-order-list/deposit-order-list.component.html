@@ -26,7 +26,24 @@
                     <!-- Main actions -->
                     <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
                         <!-- Search -->
-                        <div class="flex-auto">
+                        <div class="flex gap-4">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full md:min-w-64"
+                                subscriptSizing="dynamic">
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input [(ngModel)]="startDate" disabled matStartDate
+                                        [placeholder]="'select date' | transloco | capitalize" class="w-full">
+                                    <input [(ngModel)]="endDate" disabled matEndDate
+                                        [placeholder]="'select date' | transloco | capitalize" class="w-full">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
+                            </mat-form-field>
+                            <button mat-flat-button color="primary" class="px-4" (click)="search()">
+                                <mat-icon matIconPrefix svgIcon="heroicons_outline:search"></mat-icon>
+                                <span>
+                                    {{'search' | transloco | capitalize}}
+                                </span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -37,6 +54,7 @@
                         <ng-container *ngIf="depositOrders.length > 0">
                             <div *ngFor="let depositOrder of depositOrders"
                                 class="flex px-8 py-4 items-center gap-2 border-t hover:cursor-pointer"
+                                [ngClass]="{'bg-card': selected && selected._id == depositOrder._id}"
                                 [routerLink]="['./', depositOrder._id]">
                                 <!-- Status -->
                                 <ng-container>

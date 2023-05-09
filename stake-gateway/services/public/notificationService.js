@@ -1,3 +1,4 @@
+const AdminNotification = require("../../models/AdminNotification");
 const Notification = require("../../models/Notification");
 
 class NotificationService {
@@ -10,7 +11,11 @@ class NotificationService {
             userId: user.id,
             icon: 'heroicons_outline:currency-dollar',
             title: title,
-            description: `you traded ${betCash} and earned ${benefit}`,
+            description: `you traded betCash and earned profit`,
+            data: {
+                betCash: betCash,
+                profit: benefit,
+            },
             time: new Date(),
             read: false,
         });
@@ -22,7 +27,11 @@ class NotificationService {
             userId: user.id,
             icon: 'heroicons_outline:currency-dollar',
             title: 'trading call',
-            description: `you traded ${betCash} and earned ${benefit} if win`,
+            description: `you traded betCash`,
+            data: {
+                betCash: betCash,
+                profit: benefit,
+            },
             time: new Date(),
             read: false,
         });
@@ -63,15 +72,89 @@ class NotificationService {
      * 
      * @param {DepositOrder} depositOrder 
      */
-    async createDepositOrder(userId, depositOrder) {
+    async user_createDepositOrderNotification(userId, depositOrder) {
         let noti = new Notification({
             userId: userId,
             icon: 'heroicons_outline:currency-dollar',
-            title: 'got new deposit order',
-            description: ``,
+            title: 'deposit order',
+            description: `got new deposit order`,
             time: new Date(),
             read: false,
-            link: `/management/depositOrder/${depositOrder.id}`,
+            link: `/wallet/deposit/${depositOrder.id}`,
+        });
+        noti = await noti.save();
+        return noti;
+    }
+
+    async admin_createDepositOrderNotification(userId, depositOrder) {
+        let noti = new AdminNotification({
+            userId: userId,
+            icon: 'heroicons_outline:currency-dollar',
+            title: 'deposit order',
+            description: `got new deposit order`,
+            time: new Date(),
+            read: false,
+            link: `/management/depositOrders/${depositOrder.id}`,
+        });
+        noti = await noti.save();
+        return noti;
+    }
+
+    async user_acceptDepositOrder(userId, depositOrder) {
+        let noti = new Notification({
+            userId: userId,
+            icon: 'heroicons_outline:currency-dollar',
+            title: 'deposit order',
+            description: 'your deposit order was accepted amount',
+            data: depositOrder,
+            time: new Date(),
+            read: false,
+            link: `/wallet/deposit/${depositOrder.id}`,
+        });
+        noti = await noti.save();
+        return noti;
+    }
+
+    async admin_acceptDepositOrder(userId, depositOrder) {
+        let noti = new AdminNotification({
+            userId: userId,
+            icon: 'heroicons_outline:currency-dollar',
+            title: 'deposit order',
+            description: 'your deposit order was accepted amount',
+            data: depositOrder,
+            time: new Date(),
+            read: false,
+            link: `/wallet/deposit/${depositOrder.id}`,
+        });
+        noti = await noti.save();
+        return noti;
+    }
+
+    async user_denyDepositOrder(userId, depositOrder) {
+        let noti = new Notification({
+            userId: userId,
+            icon: 'heroicons_outline:currency-dollar',
+            title: 'deposit order',
+            description: 'your deposit order was denied',
+            data: depositOrder,
+            time: new Date(),
+            read: false,
+            link: `/wallet/deposit/${depositOrder.id}`,
+        });
+        noti = await noti.save();
+        return noti;
+    }
+
+    async admin_denyDepositOrder(userId, depositOrder) {
+        let noti = new AdminNotification({
+            userId: userId,
+            icon: 'heroicons_outline:currency-dollar',
+            title: 'deposit order',
+            description: 'your deposit order was denied',
+            data: depositOrder,
+            time: new Date(),
+            read: false,
+            link: `/wallet/deposit/${depositOrder.id}`,
         });
         noti = await noti.save();
         return noti;

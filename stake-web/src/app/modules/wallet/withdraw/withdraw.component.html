@@ -80,18 +80,36 @@
                             </div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="withdrawOrder.time">
+                    <ng-container *ngIf="withdrawOrder.updated">
                         <div class="flex sm:items-center">
                             <mat-icon svgIcon="heroicons_outline:calendar"></mat-icon>
-                            <div class="ml-6 leading-6 truncate">{{withdrawOrder.time | date: 'YYYY/MM/dd HH:mm:ss'}}
+                            <div class="ml-6 leading-6 truncate">{{withdrawOrder.updated | date: 'YYYY/MM/dd HH:mm:ss'}}
                             </div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="withdrawOrder.userAddress">
                         <div class="flex sm:items-center">
-                            <mat-icon svgIcon="heroicons_outline:arrow-circle-up"></mat-icon>
+                            <mat-icon svgIcon="heroicons_outline:arrow-circle-down"></mat-icon>
                             <div class="ml-6 leading-6 truncate">{{withdrawOrder.userAddress}}</div>
                             <button mat-icon-button [cdkCopyToClipboard]="withdrawOrder.userAddress">
+                                <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="withdrawOrder.masterAddress">
+                        <div class="flex sm:items-center">
+                            <mat-icon svgIcon="heroicons_outline:arrow-circle-up"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">{{withdrawOrder.masterAddress}}</div>
+                            <button mat-icon-button [cdkCopyToClipboard]="withdrawOrder.masterAddress">
+                                <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="withdrawOrder.transactionId">
+                        <div class="flex sm:items-center">
+                            <mat-icon svgIcon="heroicons_outline:hashtag"></mat-icon>
+                            <div class="ml-6 leading-6 truncate">{{withdrawOrder.transactionId}}</div>
+                            <button mat-icon-button [cdkCopyToClipboard]="withdrawOrder.transactionId">
                                 <mat-icon svgIcon="heroicons_outline:clipboard-copy"></mat-icon>
                             </button>
                         </div>

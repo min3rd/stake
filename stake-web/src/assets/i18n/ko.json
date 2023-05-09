@@ -83,5 +83,18 @@
   "00x0046": "철회 명령을 받을 수 없습니다.",
   "00x0047": "입금 주문을 수락할 수 없습니다.",
   "00x0049": "입금 주문 정보를 저장할 수 없습니다.",
-  "00x0048": "사용자 정보를 저장할 수 없습니다"
+  "00x0048": "사용자 정보를 저장할 수 없습니다",
+  "got new deposit order": "새로운 입금 주문을 받았습니다",
+  "trading call": "트레이딩 콜",
+  "your deposit order was accepted amount": "귀하의 입금 주문이 승인되었습니다: +{{amount}}",
+  "notifications": "알림",
+  "mark as unread": "읽지 않은 상태로 표시",
+  "communication details in case we want to connect with you these will be kept private": "귀하와 연결하려는 경우를 위한 통신 세부 정보입니다. \n비공개로 유지됩니다.",
+  "amount is required": "금액이 필요합니다",
+  "please enter a valid email address": "유효한 이메일 주소를 입력하세요",
+  "trading win": "당신이 이겼다",
+  "trading lose": "넌 졌어",
+  "you traded betCash": "당신은 {{betCash}}를 거래했습니다",
+  "you traded betCash and earned profit": "{{betCash}}를 거래하고 {{profit}}을(를) 얻었습니다.",
+  "deposit order": "입금 주문"
 }

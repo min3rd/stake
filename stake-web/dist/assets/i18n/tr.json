@@ -85,5 +85,18 @@
   "00x0046": "para çekme emirleri alınamadı",
   "00x0047": "para yatırma emrini kabul edemedi",
   "00x0049": "para yatırma emri bilgileri kaydedilemedi",
-  "00x0048": "kullanıcı bilgileri kaydedilemedi"
+  "00x0048": "kullanıcı bilgileri kaydedilemedi",
+  "got new deposit order": "yeni para yatırma emri aldım",
+  "trading call": "ticaret görüşmesi",
+  "your deposit order was accepted amount": "para yatırma siparişiniz kabul edildi: +{{amount}}",
+  "notifications": "bildirimler",
+  "mark as unread": "okunmamış olarak işaretle",
+  "communication details in case we want to connect with you these will be kept private": "Sizinle bağlantı kurmak istememiz durumunda iletişim detayları. \nBunlar gizli tutulacaktır.",
+  "amount is required": "miktar gerekli",
+  "please enter a valid email address": "Geçerli bir e",
+  "trading win": "Kazandın",
+  "trading lose": "sen kaybettin",
+  "you traded betCash": "{{betCash}} takas ettin",
+  "you traded betCash and earned profit": "{{betCash}} ile işlem yaptınız ve {{profit}} kazandınız",
+  "deposit order": "para yatırma emri"
 }

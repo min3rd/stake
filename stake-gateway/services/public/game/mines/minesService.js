@@ -14,7 +14,7 @@ const POSITION_TYPE = {
     GEM: 1,
     MINE: 2,
 }
-const MINES_TOTAL_PROFIT_PERCENT = process.env.MINES_TOTAL_PROFIT_PERCENT ?? 1;
+const MINES_TOTAL_PROFIT_PERCENT = process.env.MINES_TOTAL_PROFIT_PERCENT ?? 2;
 class ClientMinesRound {
     constructor(minesRound) {
         this._id = minesRound._id;

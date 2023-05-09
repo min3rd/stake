@@ -1,5 +1,4 @@
-export interface Notification
-{
+export interface Notification {
     _id: string;
     icon?: string;
     image?: string;
@@ -9,4 +8,5 @@ export interface Notification
     link?: string;
     useRouter?: boolean;
     read: boolean;
+    data?: any;
 }

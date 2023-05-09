@@ -178,5 +178,13 @@
   "00x0046": "không nhận được lệnh rút tiền",
   "00x0047": "không thể chấp nhận đặt cọc",
   "00x0049": "không lưu được thông tin đặt cọc",
-  "00x0048": "không thể lưu thông tin người dùng"
+  "00x0048": "không thể lưu thông tin người dùng",
+  "got new deposit order": "có lệnh đặt cọc mới",
+  "trading call": "cuộc gọi giao dịch",
+  "your deposit order was accepted amount": "lệnh gửi tiền của bạn đã được chấp nhận: +{{amount}}",
+  "trading win": "Bạn đã thắng",
+  "trading lose": "Bạn đã thua",
+  "you traded betCash": "bạn đã giao dịch {{betCash}}",
+  "you traded betCash and earned profit": "bạn đã giao dịch {{betCash}} và kiếm được {{profit}}",
+  "deposit order": "lệnh nạp tiền"
 }

@@ -6,6 +6,7 @@ const CashTransferSchema = new Schema({
     destinationId: { type: String, require: true, index: true, },
     destinationUsername: { type: String, require: true, index: true, },
     time: { type: Date, default: new Date(), },
+    updated: { type: Date, default: new Date(), },
     amount: { type: Number, default: 0, },
     status: { type: Number, default: 0, },
 });

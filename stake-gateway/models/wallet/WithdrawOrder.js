@@ -4,6 +4,7 @@ const { publicMongoose } = require("../../config/publicMongoose");
 const WithdrawOrderSchema = new Schema({
     userId: { type: String, require: true, index: true, },
     time: { type: Date, default: new Date(), },
+    updated: { type: Date, default: new Date(), },
     masterAddress: { type: String, },
     userAddress: { type: String, require: true, },
     transactionId: { type: String, },

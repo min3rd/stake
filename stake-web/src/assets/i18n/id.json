@@ -83,5 +83,18 @@
   "00x0046": "tidak bisa mendapatkan perintah penarikan",
   "00x0047": "tidak dapat menerima pesanan deposit",
   "00x0049": "tidak dapat menyimpan informasi pesanan setoran",
-  "00x0048": "tidak dapat menyimpan informasi pengguna"
+  "00x0048": "tidak dapat menyimpan informasi pengguna",
+  "got new deposit order": "mendapat pesanan setoran baru",
+  "trading call": "panggilan perdagangan",
+  "your deposit order was accepted amount": "pesanan setoran Anda diterima: +{{amount}}",
+  "notifications": "notifikasi",
+  "mark as unread": "tandai sebagai Belum dibaca",
+  "communication details in case we want to connect with you these will be kept private": "Detail komunikasi jika kami ingin terhubung dengan Anda. \nIni akan dirahasiakan.",
+  "amount is required": "jumlah diperlukan",
+  "please enter a valid email address": "silakan isi alamat email",
+  "trading win": "Anda menang",
+  "trading lose": "Anda kalah",
+  "you traded betCash": "Anda memperdagangkan {{betCash}}",
+  "you traded betCash and earned profit": "Anda memperdagangkan {{betCash}} dan memperoleh {{profit}}",
+  "deposit order": "pesanan setoran"
 }

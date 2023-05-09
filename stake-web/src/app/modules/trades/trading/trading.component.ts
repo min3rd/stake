@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Subject, takeUntil, pairwise, BehaviorSubject } from 'rxjs';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { SocketService } from 'app/core/socket/socket.service';
@@ -61,12 +61,15 @@ export class TradingComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _translocoService: TranslocoService,
         private _deviceDetectorService: DeviceDetectorService,
+        private _changeDetectorRef: ChangeDetectorRef,
     ) {
         this.isMobile = _deviceDetectorService.isMobile();
     }
     prepare() {
         this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
-            this.user = user
+            this.user = user;
+
+            this._changeDetectorRef.markForCheck();
         });
         this._tradingService.rooms$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rooms => {
             this.tradingRooms = rooms;
@@ -74,6 +77,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                 this.tradingRoom = this.tradingRooms[0];
             }
 
+            this._changeDetectorRef.markForCheck();
         });
 
         this._tradingService.config$.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {
@@ -83,6 +87,7 @@ export class TradingComponent implements OnInit, OnDestroy {
             this.tradingConfig = config;
             this.betCash = this.tradingConfig.sliderMin;
 
+            this._changeDetectorRef.markForCheck();
         })
 
         this._tradingService.tradingCalls$.pipe(takeUntil(this._unsubscribeAll)).subscribe(tradingCalls => {
@@ -90,7 +95,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                 return;
             }
             this.tradingCalls = tradingCalls;
-
+            this._changeDetectorRef.markForCheck();
         });
 
         this._tradingService.rounds$.pipe(takeUntil(this._unsubscribeAll)).subscribe((rounds: TradingRound[]) => {
@@ -118,6 +123,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                 let candlestick = chart.series[0];
                 let volume = chart.series[1];
                 let spline = chart.series[2];
+                let bollingerBands = this.calculateBollingerBands(klines, 20, 2);
                 candlestick.setData(klines.map(e => {
                     let r = {
                         x: new Date(e.openTime).getTime(),
@@ -136,24 +142,24 @@ export class TradingComponent implements OnInit, OnDestroy {
                     };
                     return r;
                 }));
-                spline.setData(klines.map(e => {
-                    let baseVolume = e.closePrice;
-                    let range = Math.max(e.openPrice, e.highPrice, e.lowPrice, e.closePrice) - baseVolume;
+                spline.setData(bollingerBands.map(e => {
                     return [
                         new Date(e.openTime).getTime(),
-                        Math.min(e.openPrice, e.highPrice, e.lowPrice, e.closePrice) - range,
-                        Math.max(e.openPrice, e.highPrice, e.lowPrice, e.closePrice) + range,
+                        e.lower,
+                        e.upper,
                     ];
                 }));
             });
+            this._changeDetectorRef.markForCheck();
         });
         this._socketService.socket.fromEvent(SocketEvent.NOW).subscribe(data => {
             this.currentTime = data;
+            this._changeDetectorRef.markForCheck();
 
         });
         this._socketService.socket.fromEvent(SocketEvent.ROOM_JOIN).subscribe(data => {
             this.tradingRoom = this.tradingRooms.find(e => e.symbol == data);
-
+            this._changeDetectorRef.markForCheck();
         });
 
         this._socketService.socket.fromEvent(SocketEvent.KLINE).subscribe((kline: Kline) => {
@@ -188,15 +194,16 @@ export class TradingComponent implements OnInit, OnDestroy {
                             color: (kline.closePrice - kline.openPrice) > 0 ? '#84CC16' : '#EF4444',
                         }, true, true);
                     }
-                    let spline = chart.series[2].points[chart.series[2].points.length - 1];
+                    let spline = chart.series[2];
                     if (spline) {
-                        let baseVolume = kline.closePrice;
-                        let range = Math.max(kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice) - baseVolume;
-                        spline.update([
-                            new Date(kline.openTime).getTime(),
-                            Math.min(kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice) - range,
-                            Math.max(kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice) + range,
-                        ], true, true);
+                        let bollingerBands = this.calculateBollingerBands(this.klines, 20, 2);
+                        spline.setData(bollingerBands.map(e => {
+                            return [
+                                new Date(e.openTime).getTime(),
+                                e.lower,
+                                e.upper,
+                            ];
+                        }));
                     }
                 } else {
                     this.klines.push(kline);
@@ -212,15 +219,20 @@ export class TradingComponent implements OnInit, OnDestroy {
                         y: Math.abs(kline.closePrice - kline.openPrice),
                         color: (kline.closePrice - kline.openPrice) > 0 ? '#84CC16' : '#EF4444',
                     }, true, true, true);
-                    let baseVolume = kline.closePrice;
-                    let range = Math.max(kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice) - baseVolume;
-                    chart.series[2].addPoint([
-                        new Date(kline.openTime).getTime(),
-                        Math.min(kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice) - range,
-                        Math.max(kline.openPrice, kline.highPrice, kline.lowPrice, kline.closePrice) + range,
-                    ], true, true, true);
+                    let spline = chart.series[2];
+                    if (spline) {
+                        let bollingerBands = this.calculateBollingerBands(this.klines, 20, 2);
+                        spline.setData(bollingerBands.map(e => {
+                            return [
+                                new Date(e.openTime).getTime(),
+                                e.lower,
+                                e.upper,
+                            ];
+                        }));
+                    }
                 }
             });
+            this._changeDetectorRef.markForCheck();
         });
         this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
             if (old) {
@@ -228,15 +240,18 @@ export class TradingComponent implements OnInit, OnDestroy {
             }
             this._socketService.socket.emit(SocketEvent.ROOM_JOIN, newValue.symbol);
             this.updateRounds(newValue);
+            this._changeDetectorRef.markForCheck();
         });
 
         this._socketService.socket.on(SocketEvent.disconnect, () => {
             this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
             this.updateRounds(this.tradingRoom);
+            this._changeDetectorRef.markForCheck();
         });
 
         this._socketService.socket.fromEvent(SocketEvent.TRADING_CONFIG).subscribe((tradingConfig: TradingConfig) => {
             this.tradingConfig = tradingConfig;
+            this._changeDetectorRef.markForCheck();
         });
         this._prepareChartData();
         this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
@@ -550,5 +565,23 @@ export class TradingComponent implements OnInit, OnDestroy {
             buy: this.klines.filter(e => e.closePrice > e.openPrice).length,
             sell: this.klines.filter(e => e.closePrice <= e.openPrice).length,
         }
+    }
+    calculateBollingerBands(klines: Kline[], windowSize: number, numDeviations: number) {
+        // Calculate rolling mean and standard deviation
+        const rolling = klines.map((kline, index) => {
+            const window = klines.slice(Math.max(0, index - windowSize + 1), index + 1);
+            const average = window.reduce((sum, k) => sum + k.closePrice, 0) / windowSize;
+            const variance = window.reduce((sum, k) => sum + Math.pow(k.closePrice - average, 2), 0) / windowSize;
+            const stdDev = Math.sqrt(variance);
+            return {
+                openTime: kline.openTime,
+                close: kline.closePrice,
+                average,
+                upper: average + numDeviations * stdDev,
+                lower: average - numDeviations * stdDev,
+            };
+        });
+
+        return rolling;
     }
 }

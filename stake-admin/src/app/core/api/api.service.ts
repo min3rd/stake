@@ -129,6 +129,23 @@ export class ApiService {
     admin_depositOrders_depositOrder_denyDepositOrder(depositOrderId: string): string {
         return this._adminApi(`/depositOrders/${depositOrderId}/denyDepositOrder`);
     }
+
+
+    admin_withdrawOrders(startDate: Date = new Date(), endDate: Date = new Date(), offset: number = 0, size: number = 10) {
+        return this._adminApi(`/withdrawOrders?startDate=${startDate}&endDate=${endDate}&offset=${offset}&size=${size}`);
+    }
+
+    admin_withdrawOrders_withdrawOrder(withdrawOrderId: string): string {
+        return this._adminApi(`/withdrawOrders/${withdrawOrderId}`);
+    }
+
+    admin_withdrawOrders_withdrawOrder_acceptWithdrawOrder(withdrawOrderId: string): string {
+        return this._adminApi(`/withdrawOrders/${withdrawOrderId}/acceptWithdrawOrder`);
+    }
+
+    admin_withdrawOrders_withdrawOrder_denyWithdrawOrder(withdrawOrderId: string): string {
+        return this._adminApi(`/withdrawOrders/${withdrawOrderId}/denyWithdrawOrder`);
+    }
 }
 
 
