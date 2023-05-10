@@ -187,5 +187,10 @@
   "you traded betCash": "bạn đã giao dịch {{betCash}}",
   "you traded betCash and earned profit": "bạn đã giao dịch {{betCash}} và kiếm được {{profit}}",
   "deposit order": "lệnh nạp tiền",
-  "average price": "giá trung bình"
+  "average price": "giá trung bình",
+  "trade cryptocurrencies on coinmarket": "giao dịch tiền điện tử trên Coinmarket",
+  "sign up with email": "đăng ký với email",
+  "or continue with": "hoặc tiếp tục với",
+  "top monthly profit": "lợi nhuận hàng tháng hàng đầu",
+  "top traders": "thương nhân hàng đầu"
 }

@@ -60,6 +60,14 @@ export class ApiService {
         return this._publicApi(`/appConfig`);
     }
 
+    public_news(): string {
+        return this._publicApi(`/news`);
+    }
+
+    public_bestTraders(time: Date = new Date()): string {
+        return this._publicApi(`/bestTraders?time=${time}`);
+    }
+
     user_socket(): string {
         return `${this.API_URL}/user`;
     }

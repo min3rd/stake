@@ -96,5 +96,10 @@
   "trading lose": "你输了",
   "you traded betCash": "您交易了 {{betCash}}",
   "you traded betCash and earned profit": "您交易了 {{betCash}} 并赚取了 {{profit}}",
-  "deposit order": "定金单"
+  "deposit order": "定金单",
+  "trade cryptocurrencies on coinmarket": "在 Coinmarket 上交易加密货币",
+  "sign up with email": "使用电子邮件注册",
+  "or continue with": "或继续",
+  "top monthly profit": "最高月利润",
+  "top traders": "顶级交易员"
 }

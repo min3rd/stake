@@ -29,6 +29,12 @@ export const appRoutes: Route[] = [
             AppConfigResolver: AppConfigResolver,
         },
         children: [
+            // Landing
+            {
+                path: '',
+                loadChildren: () => import('app/modules/landing/landing.module').then(m => m.LandingModule),
+            },
+
             // Trading
             {
                 path: 'trades',

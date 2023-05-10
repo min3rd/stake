@@ -5,11 +5,14 @@ const TimeUtils = require("../common/timeUtils");
 const { publicMongoose } = require("../config/publicMongoose");
 const { SocketEvent, SocketRoom } = require("../config/socket.config");
 const Kline = require("../models/Kline");
+const MonthlyProfit = require("../models/MonthlyProfit");
 const TradingCall = require("../models/TradingCall");
 const TradingRoom = require("../models/TradingRoom");
 const TradingRound = require("../models/TradingRound");
 const { User, ClientUser } = require("../models/User");
 const notificationService = require("../services/public/notificationService");
+const moment = require('moment');
+
 async function updateRound(publicIo, adminIo) {
     const session = await publicMongoose.startSession();
     let now = new Date();
@@ -191,6 +194,56 @@ async function updateKline(publicIo) {
         updateKline(publicIo)
     }, process.env.UPDATE_TRADING_KLINE_DURARION || 1000);
 }
+
+async function updateMonthlyProfit(tradingCall, user) {
+    if (tradingCall.cashAccount != CashAccount.REAL) {
+        return;
+    }
+    try {
+        let isWin = tradingCall.type == tradingCall.winType;
+        let startDate = moment().startOf('month').toDate();
+        let endDate = moment().endOf('month').toDate();
+        let monthlyProfit = await MonthlyProfit.findOne({
+            userId: tradingCall.userId,
+            time: {
+                $gte: startDate,
+                $lte: endDate,
+            }
+        });
+        if (!monthlyProfit) {
+            monthlyProfit = new MonthlyProfit({
+                userId: tradingCall.userId,
+                username: user.username,
+                name: user.name,
+                time: new Date(),
+                winAmount: isWin ? tradingCall.benefit : 0,
+                loseAmount: isWin ? 0 : tradingCall.betCash,
+                winCount: isWin ? 1 : 0,
+                loseCount: isWin ? 0 : 1,
+                buyCount: tradingCall.type == TradingCallType.BUY ? 1 : 0,
+                sellCount: tradingCall.type == TradingCallType.SELL ? 1 : 0,
+            });
+        } else {
+            if (isWin) {
+                monthlyProfit.winAmount += tradingCall.benefit;
+                monthlyProfit.winCount += 1;
+            } else {
+                monthlyProfit.loseAmount += tradingCall.betCash;
+                monthlyProfit.loseCount += 1;
+            }
+
+            if (tradingCall.type == TradingCallType.BUY) {
+                monthlyProfit.buyCount += 1;
+            } else if (tradingCall.type == TradingCallType.SELL) {
+                monthlyProfit.sellCount += 1;
+            }
+        }
+        monthlyProfit = await monthlyProfit.save();
+        logger.info('tradingJob_updateCallResult', `update monthly profit tradingCall=${tradingCall} monthlyProfit=${monthlyProfit}`);
+    } catch (e) {
+        logger.error('tradingJob_updateCallResult', `could not update monthly profit information tradingCall=${tradingCall} e=${e}`);
+    }
+}
 const updateCallResult = async function (publicIo, userIo) {
     let now = new Date();
     const session = await publicMongoose.startSession();
@@ -225,7 +278,7 @@ const updateCallResult = async function (publicIo, userIo) {
                 let oldCash = user.demoCash;
                 let isWin = tradingCall.type == winType;
                 let benefit = 0;
-                if (isWin || (process.env.DEBUG === 'true' && process.env.TRADING_ALWAYS_WIN === 'true')) {
+                if (isWin) {
                     benefit = tradingCall.benefit;
                     if (tradingCall.cashAccount === CashAccount.REAL) {
                         oldCash = user.cash;
@@ -239,6 +292,10 @@ const updateCallResult = async function (publicIo, userIo) {
                 tradingCall.masterPaid = true;
                 user = await user.save();
                 tradingCall = await tradingCall.save();
+
+                // update monthly profit record
+                updateMonthlyProfit(tradingCall, user);
+
                 logger.info("updateCallResult_MASTER_PAID", `user=${JSON.stringify(user)} tradingCall=${JSON.stringify(tradingCall)}`);
                 let noti = await notificationService.createTradingCallResult(user, isWin, tradingCall.betCash, benefit);
                 userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));

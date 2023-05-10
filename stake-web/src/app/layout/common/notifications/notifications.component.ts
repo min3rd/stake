@@ -51,9 +51,13 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
             this.user = user;
+
+            this._changeDetectorRef.markForCheck();
         });
         this._clientSocketService.userSocket.fromEvent(SocketEvent.NOTIFICATION).subscribe((notification: Notification) => {
             this._notificationsService.add(notification);
+
+            this._changeDetectorRef.markForCheck();
         });
         // Subscribe to notification changes
         this._notificationsService.notifications$

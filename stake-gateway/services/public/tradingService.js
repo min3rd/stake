@@ -7,6 +7,7 @@ const { publicMongoose } = require("../../config/publicMongoose");
 const { SocketEvent } = require("../../config/socket.config");
 const engine = require("../../engine");
 const Kline = require("../../models/Kline");
+const MonthlyProfit = require("../../models/MonthlyProfit");
 const TradingCall = require("../../models/TradingCall");
 const TradingRoom = require("../../models/TradingRoom");
 const TradingRound = require("../../models/TradingRound");
@@ -302,6 +303,20 @@ const call = async function (req, res, next) {
     }
 }
 
+const getBestTrader = async function (req, res, next) {
+    let time = req.query.time || new Date();
+    let startDate = moment(new Date(time).getTime()).startOf('month').toDate();
+    let endDate = moment(new Date(time).getTime()).endOf('month').toDate();
+
+    let monthlyProfits = await MonthlyProfit.find({
+        time: {
+            $gte: startDate,
+            $lte: endDate,
+        }
+    }).sort({ winAmount: -1 }).limit(20);
+    res.json(monthlyProfits);
+}
+
 module.exports = {
     tradingRooms: tradingRooms,
     tradingConfig: tradingConfig,
@@ -310,4 +325,5 @@ module.exports = {
     call: call,
     getLatestTradingCalls: getLatestTradingCalls,
     getTradingCalls: getTradingCalls,
+    getBestTrader: getBestTrader,
 }

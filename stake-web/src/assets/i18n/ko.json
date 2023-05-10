@@ -96,5 +96,10 @@
   "trading lose": "넌 졌어",
   "you traded betCash": "당신은 {{betCash}}를 거래했습니다",
   "you traded betCash and earned profit": "{{betCash}}를 거래하고 {{profit}}을(를) 얻었습니다.",
-  "deposit order": "입금 주문"
+  "deposit order": "입금 주문",
+  "trade cryptocurrencies on coinmarket": "코인마켓에서 암호화폐 거래",
+  "sign up with email": "이메일로 가입",
+  "or continue with": "또는 계속",
+  "top monthly profit": "월 최고 수익",
+  "top traders": "탑 트레이더"
 }

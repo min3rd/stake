@@ -1,0 +1,98 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
+    <!-- Main -->
+    <div class="flex-auto p-2 md:p-6">
+        <!-- CONTENT GOES HERE -->
+        <div class="h-400 min-h-400 max-h-400 max-w-4xl mx-auto">
+            <!-- <div class="w-full">
+                <fuse-alert [appearance]="alertAppeareance" [dismissible]="true" [dismissed]="false"
+                    [name]="'alertBox3'" [type]="'success'">
+                    Your subscription model is successfully upgraded to the <b>Lifetime Pro</b>.
+                </fuse-alert>
+            </div> -->
+            <div class="rounded-xl md:shadow md:bg-card mt-4">
+                <div class="md:flex p-2 md:p-6 gap-8">
+                    <!-- Sign in/Sign up -->
+                    <div class="flex-col">
+                        <div class="text-4xl font-semibold md:mt-8">
+                            {{'trade cryptocurrencies on coinmarket' | transloco | capitalize}}
+                        </div>
+                        <div class="flex mt-6 md:mt-16 gap-6">
+                            <div class="flex-col w-full md:w-3/4">
+                                <div class="w-full">
+                                    <button mat-button class="bg-primary w-full" [routerLink]="['/sign-up']">
+                                        <mat-icon svgIcon="heroicons_outline:user-circle" class="text-white"></mat-icon>
+                                        <span>
+                                            {{'sign up with email' | transloco | capitalize}}
+                                        </span>
+                                    </button>
+                                </div>
+                                <!-- Separator -->
+                                <div class="flex items-center mt-8">
+                                    <div class="flex-auto mt-px border-t"></div>
+                                    <div class="mx-2 text-secondary">{{'or continue with' | transloco | capitalize}}
+                                    </div>
+                                    <div class="flex-auto mt-px border-t"></div>
+                                </div>
+                                <div class="flex justify-between gap-6 mt-4">
+                                    <button mat-button class="bg-sky-600 w-1/2">
+                                        <mat-icon svgIcon="feather:facebook" class="text-white"></mat-icon>
+                                        {{'facebook' | transloco | capitalize}}
+                                    </button>
+                                    <button mat-button class="bg-red-500 w-1/2">
+                                        <mat-icon svgIcon="feather:chrome" class="text-white"></mat-icon>
+                                        {{'google' | transloco | capitalize}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- News -->
+                    <ng-container *ngIf="news?.length > 0">
+                        <div class="md:border-l p-6 sm:p-12"></div>
+                    </ng-container>
+
+                </div>
+            </div>
+
+            <!-- Top profit -->
+            <ng-container *ngIf="monthlyProfits$ | async as monthlyProfits">
+                <ng-container *ngIf="monthlyProfits.length > 0">
+                    <div class="grid grid-cols-1 gap-4 rounded-xl md:shadow md:bg-card md:mt-12 md:p-6">
+                        <div class="md:bg-primary md:-mt-12 md:rounded-lg md:w-fit p-2 md:p-4 border-b md:border-0">
+                            {{'top traders' | transloco | capitalize}}
+                        </div>
+                        <div *ngFor="let monthlyProfit of monthlyProfits; let i = index"
+                            class="flex items-center rounded-md gap-6 justify-between" [ngClass]="{
+                                'p-4': i == 0,
+                                'p-3': i == 1 || i == 2,
+                                'px-3 border-b py-1': i > 2,
+                                'bg-gradient-to-r from-cyan-500 to-blue-500': i == 0,
+                                'bg-yellow-500': i == 1,
+                                'bg-gray-500': i == 2
+                            }">
+                            <div class="flex items-center gap-2" [ngClass]="{'text-xl md:text-3xl' : i == 0}">
+                                <div class="flex items-center">
+                                    <mat-icon svgIcon="heroicons_outline:hashtag" class="text-white"
+                                        [ngClass]="{'icon-size-3': i > 0,'icon-size-4 md:icon-size-6': i == 0}"></mat-icon>
+                                    {{i + 1}}
+                                </div>
+                                <span class="">
+                                    {{monthlyProfit.name}}
+                                </span>
+                                <span class="text-sm">
+                                    ({{monthlyProfit.username}})
+                                </span>
+                            </div>
+                            <div>
+                                {{monthlyProfit.winAmount | currency}}
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+            </ng-container>
+
+        </div>
+    </div>
+</div>

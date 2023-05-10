@@ -96,5 +96,10 @@
   "trading lose": "คุณแพ้",
   "you traded betCash": "คุณซื้อขาย {{betCash}}",
   "you traded betCash and earned profit": "คุณซื้อขาย {{betCash}} และรับ {{profit}}",
-  "deposit order": "คำสั่งฝาก"
+  "deposit order": "คำสั่งฝาก",
+  "trade cryptocurrencies on coinmarket": "แลกเปลี่ยน cryptocurrencies บน Coinmarket",
+  "sign up with email": "ลงทะเบียนด้วยอีเมล",
+  "or continue with": "หรือต่อด้วย",
+  "top monthly profit": "กำไรสูงสุดต่อเดือน",
+  "top traders": "เทรดเดอร์ชั้นนำ"
 }

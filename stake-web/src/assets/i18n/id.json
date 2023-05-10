@@ -96,5 +96,10 @@
   "trading lose": "Anda kalah",
   "you traded betCash": "Anda memperdagangkan {{betCash}}",
   "you traded betCash and earned profit": "Anda memperdagangkan {{betCash}} dan memperoleh {{profit}}",
-  "deposit order": "pesanan setoran"
+  "deposit order": "pesanan setoran",
+  "trade cryptocurrencies on coinmarket": "perdagangan cryptocurrency di Coinmarket",
+  "sign up with email": "mendaftar dengan email",
+  "or continue with": "atau lanjutkan dengan",
+  "top monthly profit": "keuntungan bulanan teratas",
+  "top traders": "pedagang papan atas"
 }

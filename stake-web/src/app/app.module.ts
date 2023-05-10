@@ -18,6 +18,7 @@ import { ApiService } from './core/api/api.service';
 import { Observable, tap } from 'rxjs';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { DateAdapter } from '@angular/material/core';
+import { LandingModule } from './modules/landing/landing.module';
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
     scrollPositionRestoration: 'enabled'

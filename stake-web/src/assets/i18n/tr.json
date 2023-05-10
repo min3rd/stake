@@ -98,5 +98,10 @@
   "trading lose": "sen kaybettin",
   "you traded betCash": "{{betCash}} takas ettin",
   "you traded betCash and earned profit": "{{betCash}} ile işlem yaptınız ve {{profit}} kazandınız",
-  "deposit order": "para yatırma emri"
+  "deposit order": "para yatırma emri",
+  "trade cryptocurrencies on coinmarket": "Coinmarket'te kripto para ticareti yapın",
+  "sign up with email": "e-posta ile kaydol",
+  "or continue with": "veya ile devam et",
+  "top monthly profit": "en yüksek aylık kar",
+  "top traders": "en iyi tüccarlar"
 }

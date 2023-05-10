@@ -183,5 +183,10 @@
   "you traded betCash": "you traded {{betCash}}",
   "you traded betCash and earned profit": "you traded {{betCash}} and earned {{profit}}",
   "deposit order": "deposit order",
-  "average price": "average price"
+  "average price": "average price",
+  "trade cryptocurrencies on coinmarket": "trade cryptocurrencies on Coinmarket",
+  "sign up with email": "sign up with email",
+  "or continue with": "or continue with",
+  "top monthly profit": "top monthly profit",
+  "top traders": "top traders"
 }

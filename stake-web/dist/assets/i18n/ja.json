@@ -96,5 +96,10 @@
   "trading lose": "負けた",
   "you traded betCash": "{{betCash}}を取引しました",
   "you traded betCash and earned profit": "{{betCash}} を取引して {{profit}} を獲得しました",
-  "deposit order": "入金注文"
+  "deposit order": "入金注文",
+  "trade cryptocurrencies on coinmarket": "Coinmarketで暗号通貨を取引する",
+  "sign up with email": "メールでサインアップ",
+  "or continue with": "または続行してください",
+  "top monthly profit": "月間最高利益",
+  "top traders": "トップトレーダー"
 }

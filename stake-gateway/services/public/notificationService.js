@@ -46,7 +46,8 @@ class NotificationService {
 
     async markAllAsRead(user) {
         await Notification.updateMany({
-            userId: user.id,
+            userId: user.id
+        }, {
             read: true,
         });
         return await this.getAll(user);
