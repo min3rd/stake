@@ -101,5 +101,20 @@
   "sign up with email": "ลงทะเบียนด้วยอีเมล",
   "or continue with": "หรือต่อด้วย",
   "top monthly profit": "กำไรสูงสุดต่อเดือน",
-  "top traders": "เทรดเดอร์ชั้นนำ"
+  "top traders": "เทรดเดอร์ชั้นนำ",
+  "username": "ชื่อผู้ใช้",
+  "dont have an account": "ไม่มีบัญชี?",
+  "sign in": "เข้าสู่ระบบ",
+  "sign up": "ลงชื่อ",
+  "username is required": "ต้องระบุชื่อผู้ใช้",
+  "remember me": "จดจำฉัน",
+  "forgot password": "ลืมรหัสผ่าน",
+  "already have an account": "มีบัญชีอยู่แล้ว?",
+  "full name": "ชื่อเต็ม",
+  "full name is required": "ต้องระบุชื่อเต็ม",
+  "i agree with": "ฉันเห็นด้วยกับ",
+  "terms": "ข้อกำหนด",
+  "and": "และ",
+  "privacy policy": "นโยบายความเป็นส่วนตัว",
+  "create your free account": "สร้างบัญชีฟรีของคุณ"
 }

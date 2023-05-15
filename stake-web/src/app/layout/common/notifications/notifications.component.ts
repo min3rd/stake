@@ -8,7 +8,6 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { SocketService } from 'app/core/socket/socket.service';
-import { Socket } from 'ngx-socket-io';
 import { SocketEvent } from 'app/core/config/socket.config';
 
 @Component({

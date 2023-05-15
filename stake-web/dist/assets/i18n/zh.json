@@ -101,5 +101,20 @@
   "sign up with email": "使用电子邮件注册",
   "or continue with": "或继续",
   "top monthly profit": "最高月利润",
-  "top traders": "顶级交易员"
+  "top traders": "顶级交易员",
+  "username": "用户名",
+  "dont have an account": "没有帐户？",
+  "sign in": "登入",
+  "sign up": "报名",
+  "username is required": "用户名是必需的",
+  "remember me": "记住账号",
+  "forgot password": "忘记密码",
+  "already have an account": "已有帐户？",
+  "full name": "全名",
+  "full name is required": "需要全名",
+  "i agree with": "我同意",
+  "terms": "条款",
+  "and": "和",
+  "privacy policy": "隐私政策",
+  "create your free account": "创建您的免费帐户"
 }

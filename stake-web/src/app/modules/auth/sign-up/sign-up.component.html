@@ -8,10 +8,13 @@
                 </div>
 
                 <!-- Title -->
-                <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Sign up</div>
+                <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">
+                    {{'sign up' | transloco | capitalize}}
+                </div>
                 <div class="flex items-baseline mt-0.5 font-medium">
-                    <div>Already have an account?</div>
-                    <a class="ml-1 text-primary-500 hover:underline" (click)="signIn()">Sign in
+                    <div>{{'already have an account' | transloco | capitalize}}</div>
+                    <a class="ml-1 text-primary-500 hover:underline" (click)="signIn()">
+                        {{'sign in' | transloco | capitalize}}
                     </a>
                 </div>
 
@@ -31,7 +34,7 @@
                         <mat-error *ngIf="signUpForm.get('username').hasError('required')">
                             {{'username is required' | transloco | capitalize}}
                         </mat-error>
-                        <mat-error *ngIf="signUpForm.get('username').hasError('pattern')" >
+                        <mat-error *ngIf="signUpForm.get('username').hasError('pattern')">
                             {{'wrong username format' | transloco | capitalize}}
                         </mat-error>
                     </mat-form-field>
@@ -65,11 +68,13 @@
                     <!-- ToS and PP -->
                     <div class="inline-flex items-end w-full mt-1.5">
                         <mat-checkbox class="-ml-2" [color]="'primary'" [formControlName]="'agreements'">
-                            <span>I agree with</span>
-                            <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">Terms
+                            <span>{{'i agree with' | transloco | capitalize}}</span>
+                            <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">
+                                {{'terms' | transloco | capitalize}}
                             </a>
-                            <span>and</span>
-                            <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">Privacy Policy
+                            <span>{{'and' | transloco | capitalize}}</span>
+                            <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">
+                                {{'privacy policy' | transloco | capitalize}}
                             </a>
                         </mat-checkbox>
                     </div>
@@ -78,7 +83,7 @@
                     <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
                         [disabled]="signUpForm.disabled" (click)="signUp()">
                         <span *ngIf="!signUpForm.disabled">
-                            Create your free account
+                            {{'create your free account' | transloco | capitalize}}
                         </span>
                         <mat-progress-spinner *ngIf="signUpForm.disabled" [diameter]="24"
                             [mode]="'indeterminate'"></mat-progress-spinner>

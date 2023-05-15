@@ -101,5 +101,20 @@
   "sign up with email": "メールでサインアップ",
   "or continue with": "または続行してください",
   "top monthly profit": "月間最高利益",
-  "top traders": "トップトレーダー"
+  "top traders": "トップトレーダー",
+  "username": "ユーザー名",
+  "dont have an account": "アカウントをお持ちでない場合は、",
+  "sign in": "ログイン",
+  "sign up": "サインアップ",
+  "username is required": "ユーザー名は必須です",
+  "remember me": "私を覚えてますか",
+  "forgot password": "パスワードをお忘れですか",
+  "already have an account": "すでにアカウントをお持ちですか？",
+  "full name": "フルネーム",
+  "full name is required": "フルネームは必須です",
+  "i agree with": "同意する",
+  "terms": "条項",
+  "and": "と",
+  "privacy policy": "プライバシーポリシー",
+  "create your free account": "無料アカウントを作成する"
 }

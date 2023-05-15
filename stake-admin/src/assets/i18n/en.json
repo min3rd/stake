@@ -62,5 +62,6 @@
   "amount": "amount",
   "user wallet address": "user wallet address",
   "withdraw orders": "withdraw orders",
-  "transaction hash": "transaction hash"
+  "transaction hash": "transaction hash",
+  "dont have an account": "Don't have an account?"
 }
