@@ -1,10 +1,9 @@
-import { Observable, tap, BehaviorSubject, switchMap, map, take } from 'rxjs';
+import { Observable, tap, BehaviorSubject, switchMap, map, take, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Kline, TradingCall, TradingConfig, TradingRoom, TradingRound } from './trading.types';
 import { ApiService } from 'app/core/api/api.service';
-import { AuthService } from 'app/core/auth/auth.service';
-import { UserService } from 'app/core/user/user.service';
+import { constants } from 'app/common/constants';
 
 @Injectable({
     providedIn: 'root'
@@ -19,8 +18,6 @@ export class TradingService {
     constructor(
         private _httpClient: HttpClient,
         private _apiService: ApiService,
-        private _authService: AuthService,
-        private _userService: UserService,
     ) { }
 
     get rooms$(): Observable<TradingRoom[]> {
@@ -74,12 +71,7 @@ export class TradingService {
             take(1),
             switchMap(tradingCalls => this._httpClient.post(this._apiService.users_trading_calls(), tradingCall)
                 .pipe(map((newTradingCall: TradingCall) => {
-                    let index = tradingCalls.findIndex(e => e.symbol == newTradingCall.symbol);
-                    if (index >= 0) {
-                        tradingCalls[index] = newTradingCall;
-                    } else {
-                        tradingCalls.push(newTradingCall);
-                    }
+                    tradingCalls.push(newTradingCall);
                     this._tradingCalls.next(tradingCalls);
                     return newTradingCall;
                 }))
@@ -90,5 +82,28 @@ export class TradingService {
         return this._httpClient.get<TradingCall[]>(this._apiService.users_trading_latestCalls()).pipe(tap(tradingCalls => {
             this._tradingCalls.next(tradingCalls);
         }));
+    }
+
+    getStorageTradingCalls(): Observable<TradingCall[]> {
+        return this._tradingCalls.pipe(
+            take(1),
+            switchMap(tradingCalls => {
+                let raw = localStorage.getItem(constants.LOCAL_STORAGE_KEYS.TRADING_CALLS);
+                if (!raw) {
+                    return of([]);
+                }
+                try {
+                    let results: TradingCall[] = JSON.parse(raw);
+                    if (!Array.isArray(results)) {
+                        return of([]);
+                    }
+                    this._tradingCalls.next([...tradingCalls, ...results]);
+                    return of(results);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            ),
+        );
     }
 }

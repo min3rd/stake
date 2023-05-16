@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CountdownPipe implements PipeTransform {
 
-  transform(value: number, ...args: unknown[]): unknown {
+  transform(value: any, ...args: unknown[]): any {
     let minutes: any = parseInt(`${value / 60}`, 10);
     let seconds: any = parseInt(`${value % 60}`, 10);
     minutes = minutes < 10 ? '0' + minutes : minutes;

@@ -285,6 +285,7 @@ const call = async function (req, res, next) {
         await session.endSession();
         logger.info('CREATE_TRADING_CALL', JSON.stringify(tradingCall));
         res.json({
+            _id: tradingCall._id,
             userId: tradingCall.userId,
             symbol: tradingCall.symbol,
             time: tradingCall.time,

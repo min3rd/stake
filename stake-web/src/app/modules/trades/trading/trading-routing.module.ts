@@ -1,23 +1,24 @@
-import { TradingRoomResolver } from './trading.resolver';
+import { StorageTradingCallsResolver, TradingRoomResolver } from './trading.resolver';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TradingComponent } from './trading.component';
 import { TradingGuard } from './trading.guard';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: TradingComponent,
-    resolve: {
-      TradingRoomResolver: TradingRoomResolver,
-    },
-    canDeactivate: [TradingGuard],
-  }
+    {
+        path: '',
+        component: TradingComponent,
+        resolve: {
+            TradingRoomResolver: TradingRoomResolver,
+            StorageTradingCallsResolver: StorageTradingCallsResolver,
+        },
+        canDeactivate: [TradingGuard],
+    }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TradingRoutingModule { }

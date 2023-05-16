@@ -11,10 +11,10 @@ import { Router } from '@angular/router';
 import { TimeUtils } from 'app/common/timeutils';
 import { CashAccount, User } from 'app/core/user/user.types';
 import { StockChart } from 'angular-highcharts';
-import currency from 'currency.js';
 import { TranslocoService } from '@ngneat/transloco';
 import { CountdownPipe } from 'app/core/pipe/countdown.pipe';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { CurrencyPipe } from 'app/core/pipe/currency.pipe';
 enum TabType {
     INDICATORS = 1,
     LAST_RESULTS = 2,
@@ -38,8 +38,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     betCash: number = 0;
     tradingConfig: TradingConfig;
     tradingCalls: TradingCall[];
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
-    private klines: Kline[] = [];
+    klines: Kline[] = [];
     TabType = TabType;
     tab: number = TabType.INDICATORS;
     analysisBuy: number;
@@ -55,6 +54,9 @@ export class TradingComponent implements OnInit, OnDestroy {
     deviceVersion: string;
     isMobile: boolean;
     bollingBands: BollingerBand[];
+    history: boolean = false;
+
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         private _socketService: SocketService,
         private _tradingService: TradingService,
@@ -285,11 +287,16 @@ export class TradingComponent implements OnInit, OnDestroy {
         this.tradingRoom$.complete();
     }
     private _prepareChartData(): void {
-        let countdownPipe = new CountdownPipe;
+        let countdownPipe = new CountdownPipe();
+        let currencyPipe = new CurrencyPipe();
         let that = this;
         this.chart = new StockChart({
             accessibility: {
                 enabled: false,
+            },
+            boost: {
+                seriesThreshold: this.isMobile ? 10 : 50,
+                enabled: true,
             },
             time: {
                 useUTC: false,
@@ -310,16 +317,12 @@ export class TradingComponent implements OnInit, OnDestroy {
             xAxis: [
                 {
                     lineColor: '#363A3E',
-                    lineWidth: 1,
+                    lineWidth: this.isMobile ? 0.5 : 1,
                     type: "datetime",
                     labels: {
                         enabled: true,
                     },
-                    minorGridLineWidth: 0,
-                    minorTickLength: 0,
-                    tickLength: 0,
-                    tickAmount: this.isMobile ? 15 : 60,
-                }
+                },
             ],
             yAxis: [
                 {
@@ -329,26 +332,25 @@ export class TradingComponent implements OnInit, OnDestroy {
                     labels: {
                         align: 'left',
                         formatter() {
-                            return currency(this.value).format();
+                            return currencyPipe.transform(this.value);
                         },
                         style: {
                             color: '#FFFFFF'
-                        }
+                        },
                     },
                     plotLines: [
                         {
-                            value: 0,
                             color: "#581C87",
-                            width: 1,
+                            width: this.isMobile ? 0.5 : 1,
                             id: 'current-price',
                             zIndex: 100,
                             dashStyle: 'Solid'
                         }
                     ],
-                    lineWidth: 1,
+                    lineWidth: this.isMobile ? 0.5 : 1,
                     resize: {
                         enabled: true
-                    }
+                    },
                 },
                 {
                     labels: {
@@ -361,8 +363,8 @@ export class TradingComponent implements OnInit, OnDestroy {
             ],
             plotOptions: {
                 candlestick: {
-                    pointWidth: this.isMobile ? 6 : 8,
-                    maxPointWidth: 12,
+                    pointWidth: this.isMobile ? 2 : 8,
+                    maxPointWidth: this.isMobile ? 6 : 12,
                     lineColor: '#EF4444',
                     upLineColor: '#84CC16',
                     lineWidth: 2,
@@ -380,7 +382,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                             enabled: true,
                             align: 'left',
                             formatter(this, value) {
-                                return currency(value).format() + '</br>' + countdownPipe.transform(that.countdown);
+                                return currencyPipe.transform(value) + '</br>' + countdownPipe.transform(that.countdown);
                             },
                             backgroundColor: '#581C87',
                         }
@@ -388,8 +390,8 @@ export class TradingComponent implements OnInit, OnDestroy {
                 },
                 column: {
                     minPointLength: 2,
-                    pointWidth: 8,
-                    maxPointWidth: 12,
+                    pointWidth: this.isMobile ? 2 : 8,
+                    maxPointWidth: this.isMobile ? 6 : 12,
                     borderRadius: 0
                 },
                 areasplinerange: {
@@ -528,7 +530,7 @@ export class TradingComponent implements OnInit, OnDestroy {
         if (!this.tradingCalls) {
             return true;
         }
-        let tradingCall = this.tradingCalls.find(e => e.symbol == this.tradingRoom.symbol);
+        let tradingCall = this.tradingCalls.find(e => e.symbol == this.tradingRoom.symbol && new Date(e.closeTime).getTime() == closeDate.getTime());
         if (!tradingCall) {
             return true;
         }

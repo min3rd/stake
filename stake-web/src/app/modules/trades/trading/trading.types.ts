@@ -70,12 +70,13 @@ export enum TradingCallType {
     SELL = 2,
 }
 export interface TradingCall {
-    userId?: string,
-    symbol?: string,
-    openTime?: Date,
-    closeTime?: Date,
-    type?: TradingCallType,
-    betCash?: number,
+    _id?: string;
+    userId?: string;
+    symbol?: string;
+    openTime?: Date;
+    closeTime?: Date;
+    type?: TradingCallType;
+    betCash?: number;
 }
 export interface BollingerBand {
     openTime?: Date;

@@ -27,8 +27,9 @@
                     <mat-form-field class="w-full drop-shadow-lg">
                         <mat-label>{{'mines' | transloco | capitalize}}</mat-label>
                         <mat-select formControlName="mines">
-                            <mat-option *ngFor="let mine of mines; let i = index" [value]="i + 1">{{i +
-                                1}}</mat-option>
+                            <mat-option *ngFor="let mineOption of mineOptions" [value]="mineOption">
+                                {{mineOption}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </form>

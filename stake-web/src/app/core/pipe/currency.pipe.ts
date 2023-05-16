@@ -23,8 +23,8 @@ export function nFormatter(num: number, digits: number) {
 })
 export class CurrencyPipe implements PipeTransform {
 
-    transform(value: number, ...args: unknown[]): string {
-        if (value > 99999) {
+    transform(value: any, ...args: unknown[]): any {
+        if (value > 999) {
             return '$' + nFormatter(value, 2);
         }
         return currency(value).format({
