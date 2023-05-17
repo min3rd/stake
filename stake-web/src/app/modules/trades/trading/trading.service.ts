@@ -71,7 +71,7 @@ export class TradingService {
             take(1),
             switchMap(tradingCalls => this._httpClient.post(this._apiService.users_trading_calls(), tradingCall)
                 .pipe(map((newTradingCall: TradingCall) => {
-                    tradingCalls.push(newTradingCall);
+                    (tradingCalls ?? []).push(newTradingCall);
                     this._tradingCalls.next(tradingCalls);
                     return newTradingCall;
                 }))
@@ -79,9 +79,12 @@ export class TradingService {
         );
     }
     getLatestTradingCalls(): Observable<TradingCall[]> {
-        return this._httpClient.get<TradingCall[]>(this._apiService.users_trading_latestCalls()).pipe(tap(tradingCalls => {
-            this._tradingCalls.next(tradingCalls);
-        }));
+        return this._tradingCalls.pipe(
+            take(1),
+            switchMap(tradingCalls => this._httpClient.get<TradingCall[]>(this._apiService.users_trading_latestCalls()).pipe(tap(newTradingCalls => {
+                this._tradingCalls.next([...(tradingCalls ?? []), ...newTradingCalls]);
+            })))
+        );
     }
 
     getStorageTradingCalls(): Observable<TradingCall[]> {
@@ -96,6 +99,9 @@ export class TradingService {
                     let results: TradingCall[] = JSON.parse(raw);
                     if (!Array.isArray(results)) {
                         return of([]);
+                    }
+                    if (!Array.isArray(tradingCalls)) {
+                        tradingCalls = [];
                     }
                     this._tradingCalls.next([...tradingCalls, ...results]);
                     return of(results);

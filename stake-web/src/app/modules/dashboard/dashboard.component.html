@@ -139,8 +139,30 @@
                     <div class="text-lg md:text-4xl font-semibold">
                         {{'trade history' | transloco | capitalize}}
                     </div>
-                    <div class="flex gap-4 items-center justify-between md:justify-end">
-                        <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full md:min-w-64"
+                    <div class="md:flex gap-4 items-center justify-between md:justify-end">
+                        <mat-button-toggle-group [(ngModel)]="selectedTime" (change)="onTimeChange($event)">
+                            <mat-button-toggle value="1">
+                                <span class="text-sm md:text-md">
+                                    {{'yesterday' | transloco | capitalize}}
+                                </span>
+                            </mat-button-toggle>
+                            <mat-button-toggle value="2">
+                                <span class="text-sm md:text-md">
+                                    {{'today' | transloco | capitalize}}
+                                </span>
+                            </mat-button-toggle>
+                            <mat-button-toggle value="3">
+                                <span class="text-sm md:text-md">
+                                    {{'last month' | transloco | capitalize}}
+                                </span>
+                            </mat-button-toggle>
+                            <mat-button-toggle value="4">
+                                <span class="text-sm md:text-md">
+                                    {{'this month' | transloco | capitalize}}
+                                </span>
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                        <mat-form-field class="fuse-mat-dense fuse-mat-rounded md:min-w-64 mt-4 md:mt-0"
                             subscriptSizing="dynamic">
                             <mat-date-range-input [rangePicker]="picker">
                                 <input [(ngModel)]="startDate" disabled matStartDate
@@ -151,7 +173,7 @@
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
                         </mat-form-field>
-                        <button mat-flat-button color="primary" class="px-4" (click)="search()">
+                        <button mat-flat-button color="primary" (click)="search()" class="ml-2 md:m-0">
                             <mat-icon matIconPrefix svgIcon="heroicons_outline:search"></mat-icon>
                             <span>
                                 {{'search' | transloco | capitalize}}
@@ -170,7 +192,9 @@
                                 <div class="flex items-center">
                                     <mat-icon svgIcon="heroicons_outline:hashtag"
                                         class="text-white icon-size-4"></mat-icon>
-                                    {{dashboardTradingCall.id}}
+                                    <span class="hidden md:block truncate">
+                                        {{dashboardTradingCall.id}}
+                                    </span>
                                 </div>
                                 <button *ngIf="dashboardTradingCall.type == 1" mat-icon-button
                                     class="rounded-full bg-lime-500 icon-size-5">

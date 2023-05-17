@@ -300,9 +300,23 @@ const updateCallResult = async function (publicIo, userIo) {
                 let noti = await notificationService.createTradingCallResult(user, isWin, tradingCall.betCash, benefit);
                 userIo.to(user.id).emit(SocketEvent.USER, new ClientUser(user));
                 userIo.to(user.id).emit(SocketEvent.NOTIFICATION, noti);
+                if (isWin) {
+                    userIo.to(user.id).emit(SocketEvent.WON, {
+                        isDemo: tradingCall.cashAccount == CashAccount.DEMO,
+                        amount: tradingCall.benefit
+                    });
+                } else {
+                    userIo.to(user.id).emit(SocketEvent.LOSED, {
+                        isDemo: tradingCall.cashAccount == CashAccount.DEMO,
+                        amount: tradingCall.betCash,
+                    });
+                }
             }
             tradingRound.closed = true;
             tradingRound = await tradingRound.save();
+            if (!tradingRound) {
+                logger.error("updateCallResult_UPDATE_ROUND", `could not update round=${JSON.stringify(tradingRound)}`);
+            }
             logger.info("updateCallResult_UPDATE_ROUND", `round=${JSON.stringify(tradingRound)}`);
         }
         await session.commitTransaction();

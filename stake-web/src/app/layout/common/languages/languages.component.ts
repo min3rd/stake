@@ -1,8 +1,10 @@
+import { CapitalizePipe } from './../../../core/pipe/capitalize.pipe';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { take } from 'rxjs';
 import { AvailableLangs, TranslocoService } from '@ngneat/transloco';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { DateAdapter } from '@angular/material/core';
+import { take } from 'rxjs';
+import { constants } from 'app/common/constants';
 
 @Component({
     selector: 'languages',
@@ -46,13 +48,28 @@ export class LanguagesComponent implements OnInit, OnDestroy {
 
             // Update the navigation
             this._updateNavigation(activeLang);
+
+            this._changeDetectorRef.markForCheck();
         });
 
         // Set the country iso codes for languages for flags
         this.flagCodes = {
-            'en': 'us',
+            'de': 'de',
+            'en': 'en',
+            'es': 'es',
+            'fr': 'fr',
+            'hi': 'hi',
+            'id': 'id',
+            'ja': 'ja',
+            'ko': 'ko',
+            'pl': 'pl',
+            'pt': 'pt',
+            'ru': 'ru',
+            'th': 'th',
             'tr': 'tr',
-            'vi': 'vn',
+            'vi': 'vi',
+            'zh': 'zh',
+            'fi': 'fi',
         };
     }
 
@@ -76,6 +93,7 @@ export class LanguagesComponent implements OnInit, OnDestroy {
         this._translocoService.setActiveLang(lang);
         this._dateAdapter.setLocale(lang);
         this._updateNavigation(lang);
+        localStorage.setItem(constants.LOCAL_STORAGE_KEYS.LANGUAGE, lang);
     }
 
     /**
@@ -117,11 +135,44 @@ export class LanguagesComponent implements OnInit, OnDestroy {
         // Get the flat navigation data
         const navigation = navComponent.navigation;
 
-        // Get the Project dashboard item and update its title
-        const tradeItem = this._fuseNavigationService.getItem('trade', navigation);
+        // Get the Trades item and update its title
+        const tradeItem = this._fuseNavigationService.getItem('trades', navigation);
         if (tradeItem) {
-            tradeItem.title = this._translocoService.translate('trade');
-            navComponent.refresh();
+            this._translocoService.selectTranslate('trade').pipe(take(1)).subscribe(translation => {
+                let capitalizePipe = new CapitalizePipe();
+                tradeItem.title = capitalizePipe.transform(translation);
+                navComponent.refresh();
+            });
+        }
+
+        // Get the Trades item and update its title
+        const gameItem = this._fuseNavigationService.getItem('games', navigation);
+        if (gameItem) {
+            this._translocoService.selectTranslate('games').pipe(take(1)).subscribe(translation => {
+                let capitalizePipe = new CapitalizePipe();
+                gameItem.title = capitalizePipe.transform(translation);
+                navComponent.refresh();
+            });
+        }
+
+        // Get the Trades item and update its title
+        const walletItem = this._fuseNavigationService.getItem('wallet', navigation);
+        if (walletItem) {
+            this._translocoService.selectTranslate('wallet').pipe(take(1)).subscribe(translation => {
+                let capitalizePipe = new CapitalizePipe();
+                walletItem.title = capitalizePipe.transform(translation);
+                navComponent.refresh();
+            });
+        }
+
+        // Get the Trades item and update its title
+        const dashboardItem = this._fuseNavigationService.getItem('dashboard', navigation);
+        if (dashboardItem) {
+            this._translocoService.selectTranslate('dashboard').pipe(take(1)).subscribe(translation => {
+                let capitalizePipe = new CapitalizePipe();
+                dashboardItem.title = capitalizePipe.transform(translation);
+                navComponent.refresh();
+            });
         }
     }
 }

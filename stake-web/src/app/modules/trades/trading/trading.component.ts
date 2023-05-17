@@ -15,6 +15,10 @@ import { TranslocoService } from '@ngneat/transloco';
 import { CountdownPipe } from 'app/core/pipe/countdown.pipe';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CurrencyPipe } from 'app/core/pipe/currency.pipe';
+import { HotToastService } from '@ngneat/hot-toast';
+import { hotToastOptions } from 'app/common/constants';
+import { CapitalizePipe } from 'app/core/pipe/capitalize.pipe';
+import { SoundService } from 'app/core/sound/sound.service';
 enum TabType {
     INDICATORS = 1,
     LAST_RESULTS = 2,
@@ -26,6 +30,8 @@ enum TabType {
 })
 export class TradingComponent implements OnInit, OnDestroy {
     @ViewChild('btcChartComponent') btcChartComponent: ChartComponent;
+    CashAccount = CashAccount;
+    TradingCallType = TradingCallType;
     appConfig: any;
     btcOptions: ApexOptions = {};
     currentTime: any;
@@ -55,7 +61,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     isMobile: boolean;
     bollingBands: BollingerBand[];
     history: boolean = false;
-
+    capitalizePipe: CapitalizePipe = new CapitalizePipe();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         private _socketService: SocketService,
@@ -65,10 +71,13 @@ export class TradingComponent implements OnInit, OnDestroy {
         private _translocoService: TranslocoService,
         private _deviceDetectorService: DeviceDetectorService,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _hotToastService: HotToastService,
+        private _soundService: SoundService,
     ) {
-        this.isMobile = _deviceDetectorService.isMobile();
     }
     prepare() {
+        this.isMobile = this._deviceDetectorService.isMobile();
+
         this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
             this.user = user;
 
@@ -503,7 +512,12 @@ export class TradingComponent implements OnInit, OnDestroy {
             symbol: this.tradingRoom.symbol,
             betCash: this.betCash,
             type: type,
-        }).subscribe()
+        }).subscribe(() => {
+            this._hotToastService.success(this.capitalizePipe.transform(this._translocoService.translate('order successfully')), hotToastOptions);
+            this._soundService.playOrder();
+        }, () => {
+            this._hotToastService.error(this.capitalizePipe.transform(this._translocoService.translate('order failed')), hotToastOptions);
+        });
     }
     checkCanTrade() {
         if (!this.tradingConfig) {
@@ -611,5 +625,16 @@ export class TradingComponent implements OnInit, OnDestroy {
         }
         return results;
     }
-
+    getTradingCallsByStatus(status: "opening" | "closed"): TradingCall[] {
+        let now = new Date();
+        return (this.tradingCalls ?? [])
+            .filter(e => {
+                if (status == 'opening') {
+                    return now.getTime() < new Date(e.closeTime).getTime();
+                } else {
+                    return now.getTime() >= new Date(e.closeTime).getTime();
+                }
+            })
+            .sort((a, b) => new Date(b.openTime).getTime() - new Date(a.openTime).getTime());
+    }
 }

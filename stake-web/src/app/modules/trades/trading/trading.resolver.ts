@@ -25,13 +25,12 @@ export class TradingRoomResolver implements Resolve<TradingRoom[]> {
 @Injectable({
     providedIn: 'root'
 })
-export class StorageTradingCallsResolver implements Resolve<boolean> {
+export class StorageTradingCallsResolver implements Resolve<TradingCall[]> {
     private _unsubscribeAll: Subject<any> = new Subject();
     constructor(private _tradingService: TradingService) {
 
     }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        this._tradingService.getStorageTradingCalls();
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TradingCall[]> {
         this._tradingService.tradingCalls$.pipe(takeUntil(this._unsubscribeAll)).subscribe(tradingCalls => {
             if (!tradingCalls) {
                 return of(true);
@@ -50,6 +49,6 @@ export class StorageTradingCallsResolver implements Resolve<boolean> {
                 localStorage.setItem(constants.LOCAL_STORAGE_KEYS.TRADING_CALLS, JSON.stringify(tradingCalls));
             }
         });
-        return of(true);
+        return this._tradingService.getStorageTradingCalls();
     }
 }

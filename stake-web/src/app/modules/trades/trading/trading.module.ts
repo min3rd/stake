@@ -11,6 +11,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatBadgeModule } from '@angular/material/badge';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { TradingComponent } from './trading.component';
@@ -24,31 +25,32 @@ import * as tools from 'highcharts/modules/stock-tools.src';
 import * as accessibility from 'highcharts/modules/accessibility.src';
 import * as stock from 'highcharts/modules/stock.src';
 @NgModule({
-  declarations: [
-    TradingComponent
-  ],
-  imports: [
-    CommonModule,
-    TradingRoutingModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatMenuModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatSliderModule,
-    NgApexchartsModule,
-    SharedModule,
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [{
-    provide: HIGHCHARTS_MODULES,
-    useFactory: () => [more, indicators, annotations, tools, accessibility, stock]
-  }],
+    declarations: [
+        TradingComponent
+    ],
+    imports: [
+        CommonModule,
+        TradingRoutingModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatMenuModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        MatSliderModule,
+        MatBadgeModule,
+        NgApexchartsModule,
+        SharedModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [{
+        provide: HIGHCHARTS_MODULES,
+        useFactory: () => [more, indicators, annotations, tools, accessibility, stock]
+    }],
 })
 export class TradingModule { }

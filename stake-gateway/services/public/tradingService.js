@@ -284,18 +284,7 @@ const call = async function (req, res, next) {
         await session.commitTransaction();
         await session.endSession();
         logger.info('CREATE_TRADING_CALL', JSON.stringify(tradingCall));
-        res.json({
-            _id: tradingCall._id,
-            userId: tradingCall.userId,
-            symbol: tradingCall.symbol,
-            time: tradingCall.time,
-            openTime: tradingCall.openTime,
-            closeTime: tradingCall.closeTime,
-            type: tradingCall.type,
-            betCash: tradingCall.betCash,
-            benefitPercent: tradingCall.benefitPercent,
-            benefit: tradingCall.benefit,
-        });
+        res.json(tradingCall);
     } catch (e) {
         logger.error('CREATE_TRADING_CALL', `error=${e}`);
         await session.abortTransaction();

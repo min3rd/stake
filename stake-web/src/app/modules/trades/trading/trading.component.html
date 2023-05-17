@@ -1,5 +1,5 @@
-<div class="w-full md:flex items-start">
-    <div class="relative w-full h-auto md:h-160 bg-gray-50 dark:bg-transparent">
+<div class="md:flex items-start w-full max-w-full max-h-full overflow-y-scroll overflow-x-hidden" cdkScrollable>
+    <div class="relative w-full h-auto md:h-160 bg-gray-50 dark:bg-transparent" [ngClass]="{'md:max-w-3/4': history}">
         <ng-container *ngIf="tradingRooms?.length">
             <div class="absolute md:relative top-2 left-2 z-10">
                 <mat-form-field class="min-w-32 rounded-md bg-slate-700" subscriptSizing="dynamic">
@@ -146,7 +146,7 @@
             </ng-container>
 
             <ng-template #lastResults>
-                <div class="flex justify-start p-2 md:p-6 gap-4 md:gap-6" cdkScrollable>
+                <div class="flex justify-start p-2 md:p-6 gap-4 md:gap-6 max-w-full overflow-x-scroll" cdkScrollable>
                     <div *ngFor="let group of getLastResults" class="grid gap-1 grid-cols-5">
                         <div *ngFor="let col of group" class="grid gap-1 grid-cols-1">
                             <div *ngFor="let round of col">
@@ -172,16 +172,16 @@
                     {{(betCash * (tradingConfig?.benefitPercent ?? 0) / 100) ?? 0 | currency}}
                 </div>
             </div>
-            <!-- <button class="hidden md:block" mat-icon-button (click)="history = !history">
+            <button class="hidden md:block" mat-icon-button (click)="history = !history">
                 <mat-icon *ngIf="!history" svgIcon="heroicons_outline:chevron-double-left"></mat-icon>
                 <mat-icon *ngIf="history" svgIcon="heroicons_outline:chevron-double-right"></mat-icon>
-            </button> -->
+            </button>
         </div>
         <div class="text-left font-medium px-2 pb-2">
             {{'bet amount' | transloco | capitalize}}
         </div>
 
-        <mat-form-field class="px-2 w-full">
+        <mat-form-field class="px-2 w-full" subscriptSizing="dynamic">
             <button mat-icon-button (click)="addBetCash(-tradingConfig.sliderStep)">
                 <mat-icon svgIcon="heroicons_outline:minus-circle"></mat-icon>
             </button>
@@ -191,30 +191,42 @@
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>
             </button>
         </mat-form-field>
-        <div class="hidden md:grid grid-cols-3 gap-2 px-2">
+        <div class="hidden md:grid grid-cols-3 px-2 pt-1 justify-between gap-2" [ngClass]="{'grid-cols-2': history}">
             <button mat-flat-button class="flex justify-start" (click)="addBetCash(5)">
                 <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
-                5
+                <span class="text-sm">
+                    {{'5' | transloco | capitalize}}
+                </span>
             </button>
             <button mat-flat-button class="flex justify-start" (click)="addBetCash(10)">
                 <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
-                10
+                <span class="text-sm">
+                    {{'10' | transloco | capitalize}}
+                </span>
             </button>
             <button mat-flat-button class="flex justify-start" (click)="addBetCash(20)">
                 <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
-                20
+                <span class="text-sm">
+                    {{'20' | transloco | capitalize}}
+                </span>
             </button>
             <button mat-flat-button class="flex justify-start" (click)="addBetCash(50)">
                 <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
-                50
+                <span class="text-sm">
+                    {{'50' | transloco | capitalize}}
+                </span>
             </button>
             <button mat-flat-button class="flex justify-start" (click)="addBetCash(100)">
                 <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
-                100
+                <span class="text-sm">
+                    {{'100' | transloco | capitalize}}
+                </span>
             </button>
             <button mat-flat-button class="flex justify-start" (click)="addBetCash(userCash)">
                 <mat-icon svgIcon="heroicons_outline:plus-sm" class="icon-size-3"></mat-icon>
-                {{'all' | transloco | capitalize}}
+                <span class="text-sm truncate">
+                    {{'all' | transloco | capitalize}}
+                </span>
             </button>
         </div>
         <div class="relative flex flex-auto items-center justify-center px-2 mb-2">
@@ -269,10 +281,123 @@
             </button>
         </div>
     </div>
-    <div *ngIf="history" class="w-80">
+    <div *ngIf="history" class="h-full w-80 border-l ml-2">
         <mat-tab-group>
-            <mat-tab [label]="'opening' | transloco | capitalize"> {{'opening' | transloco | capitalize}} </mat-tab>
-            <mat-tab [label]="'closed' | transloco | capitalize"> {{'closed' | transloco | capitalize}} </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <span *ngIf="getTradingCallsByStatus('opening').length <= 0">
+                        {{'opening' | transloco | capitalize}}
+                    </span>
+                    <span *ngIf="getTradingCallsByStatus('opening').length > 0"
+                        [matBadge]="getTradingCallsByStatus('opening').length" matBadgeOverlap="false">
+                        {{'opening' | transloco | capitalize}}
+                    </span>
+                </ng-template>
+                <ng-container *ngIf="getTradingCallsByStatus('opening')?.length > 0">
+                    <div class="px-2 py-2 grid grid-cols-1 gap-2 max-h-160 overflow-x-hidden overflow-y-scroll" cdkScrollable>
+                        <div *ngFor="let tradingCall of getTradingCallsByStatus('opening')"
+                            class="rounded-md shadow bg-card p-2">
+                            <div class="flex justify-between">
+                                <div class="flex items-center gap-1">
+                                    <div>
+                                        {{tradingCall.symbol}}
+                                    </div>
+                                    <div *ngIf="tradingCall.cashAccount != CashAccount.REAL"
+                                        class="bg-primary rounded-full p-1 text-sm">
+                                        {{'demo' | transloco | capitalize}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <button mat-icon-button class="rounded-full icon-size-6"
+                                        [ngClass]="{'bg-lime-500': tradingCall.type == TradingCallType.BUY,'bg-red-500': tradingCall.type == TradingCallType.SELL}">
+                                        <mat-icon *ngIf="tradingCall.type == TradingCallType.BUY"
+                                            svgIcon="heroicons_outline:trending-up"
+                                            class="icon-size-6 text-white"></mat-icon>
+                                        <mat-icon *ngIf="tradingCall.type == TradingCallType.SELL"
+                                            svgIcon="heroicons_outline:trending-down"
+                                            class="icon-size-6 text-white"></mat-icon>
+                                    </button>
+                                    <div class="font-semibold">
+                                        {{(tradingCall.type == TradingCallType.BUY ? 'buy' : 'sell') | transloco |
+                                        uppercase}}
+                                    </div>
+                                </div>
+                                <div class="font-semibold">
+                                    {{tradingCall.betCash | currency}}
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-secondary text-sm">
+                                    {{tradingCall.time | date: 'YYYY/MM/dd HH:mm:ss'}}
+                                </div>
+                                <div *ngIf="tradingCall.winType != 0">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <span *ngIf="getTradingCallsByStatus('closed').length <= 0">
+                        {{'closed' | transloco | capitalize}}
+                    </span>
+                    <span *ngIf="getTradingCallsByStatus('closed').length > 0"
+                        [matBadge]="getTradingCallsByStatus('closed').length" matBadgeOverlap="false">
+                        {{'closed' | transloco | capitalize}}
+                    </span>
+                </ng-template>
+                <ng-container *ngIf="getTradingCallsByStatus('closed')?.length > 0">
+                    <div class="px-2 py-2 grid grid-cols-1 gap-2 max-h-160 overflow-x-hidden overflow-y-scroll" cdkScrollable>
+                        <div *ngFor="let tradingCall of getTradingCallsByStatus('closed')"
+                            class="rounded-md shadow bg-card p-2">
+                            <div class="flex justify-between">
+                                <div class="flex items-center gap-1">
+                                    <div>
+                                        {{tradingCall.symbol}}
+                                    </div>
+                                    <div *ngIf="tradingCall.cashAccount != CashAccount.REAL"
+                                        class="bg-primary rounded-full p-1 text-sm">
+                                        {{'demo' | transloco | capitalize}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <button mat-icon-button class="rounded-full icon-size-6"
+                                        [ngClass]="{'bg-lime-500': tradingCall.type == TradingCallType.BUY,'bg-red-500': tradingCall.type == TradingCallType.SELL}">
+                                        <mat-icon *ngIf="tradingCall.type == TradingCallType.BUY"
+                                            svgIcon="heroicons_outline:trending-up"
+                                            class="icon-size-6 text-white"></mat-icon>
+                                        <mat-icon *ngIf="tradingCall.type == TradingCallType.SELL"
+                                            svgIcon="heroicons_outline:trending-down"
+                                            class="icon-size-6 text-white"></mat-icon>
+                                    </button>
+                                    <div class="font-semibold">
+                                        {{(tradingCall.type == TradingCallType.BUY ? 'buy' : 'sell') | transloco |
+                                        uppercase}}
+                                    </div>
+                                </div>
+                                <div class="font-semibold">
+                                    {{tradingCall.betCash | currency}}
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-secondary text-sm">
+                                    {{tradingCall.time | date: 'YYYY/MM/dd HH:mm:ss'}}
+                                </div>
+                                <div *ngIf="tradingCall.winType != 0">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </mat-tab>
         </mat-tab-group>
     </div>
 </div>

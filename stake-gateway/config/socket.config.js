@@ -8,9 +8,10 @@ const SocketEvent = {
     disconnect: 'disconnect',
     connect: 'connect',
     TRADING_CONFIG: 'TRADING_CONFIG',
-
     ADMIN_TRADING_ROUND: 'ADMIN_TRADING_ROUND',
     ADMIN_DEPOSIT_ORDER: 'ADMIN_DEPOSIT_ORDER',
+    WON: 'WON',
+    LOSED: 'LOSED',
 }
 const SocketRoom = {
     ADMIN_TRADING: 'ADMIN_TRADING',

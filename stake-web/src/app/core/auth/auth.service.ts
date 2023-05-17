@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
-import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
 import { ApiService } from '../api/api.service';
 import { SignIn } from './auth.types';
+import { constants } from 'app/common/constants';
 
 @Injectable()
 export class AuthService {
@@ -28,19 +28,19 @@ export class AuthService {
      * Setter & getter for access token
      */
     set accessToken(token: string) {
-        localStorage.setItem('accessToken', token);
+        localStorage.setItem(constants.LOCAL_STORAGE_KEYS.ACCESS_TOKEN, token);
     }
 
     get accessToken(): string {
-        return localStorage.getItem('accessToken') ?? '';
+        return localStorage.getItem(constants.LOCAL_STORAGE_KEYS.ACCESS_TOKEN) ?? '';
     }
 
     set refreshToken(token: string) {
-        localStorage.setItem('refreshToken', token);
+        localStorage.setItem(constants.LOCAL_STORAGE_KEYS.REFRESH_TOKEN, token);
     }
 
     get refreshToken(): string {
-        return localStorage.getItem('refreshToken') ?? '';
+        return localStorage.getItem(constants.LOCAL_STORAGE_KEYS.REFRESH_TOKEN) ?? '';
     }
 
     get authenicated(): boolean {
@@ -147,7 +147,9 @@ export class AuthService {
      */
     signOut(): Observable<any> {
         // Remove the access token from the local storage
-        localStorage.clear();
+        localStorage.removeItem(constants.LOCAL_STORAGE_KEYS.ACCESS_TOKEN);
+        localStorage.removeItem(constants.LOCAL_STORAGE_KEYS.REFRESH_TOKEN);
+        localStorage.removeItem(constants.LOCAL_STORAGE_KEYS.USER);
 
         // Set the authenticated flag to false
         this._authenticated = false;

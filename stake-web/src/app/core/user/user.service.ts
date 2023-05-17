@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable, ReplaySubject, tap } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { take } from 'lodash';
+import { constants } from 'app/common/constants';
 
 @Injectable({
     providedIn: 'root'
@@ -30,7 +31,7 @@ export class UserService {
             return;
         }
         // Store the value
-        localStorage.setItem('user', JSON.stringify(value));
+        localStorage.setItem(constants.LOCAL_STORAGE_KEYS.USER, JSON.stringify(value));
         this._staticUser = value;
         this._user.next(value);
     }
@@ -74,6 +75,6 @@ export class UserService {
         );
     }
     getLocal() {
-        this.user = JSON.parse(localStorage.getItem('user'));
+        this.user = JSON.parse(localStorage.getItem(constants.LOCAL_STORAGE_KEYS.USER));
     }
 }

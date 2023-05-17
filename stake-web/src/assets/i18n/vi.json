@@ -164,7 +164,7 @@
   "00x0032": "vòng đã đóng",
   "00x0033": "bạn không thể rút tiền",
   "00x0034": "máy chủ đã trả tiền mặt chiến thắng của bạn",
-  "00x0035": "mỏ không hợp lệ",
+  "00x0035": "lượng mỏ không hợp lệ",
   "00x0036": "không thể tạo lệnh gửi tiền",
   "00x0037": "không thể tìm thấy lệnh gửi tiền",
   "00x0038": "bạn đã bị chặn",
@@ -203,5 +203,12 @@
   "privacy policy": "Chính sách bảo mật",
   "create your free account": "Tạo tài khoản miễn phí",
   "opening": "đang mở",
-  "closed": "đóng cửa"
+  "closed": "đóng cửa",
+  "demo": "thử nghiệm",
+  "order failed": "đặt lệnh không thành công",
+  "order successfully": "đặt lệnh thành công",
+  "dashboard": "bảng điều khiển",
+  "games": "Trò chơi",
+  "won": "thắng",
+  "losed": "thua"
 }

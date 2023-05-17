@@ -154,11 +154,11 @@ function noGuard(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) {
-        next();
+        return next();
     }
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {
-            next();
+            return next();
         }
         req.user = user
         next();

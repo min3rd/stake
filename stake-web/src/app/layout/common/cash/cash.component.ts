@@ -7,6 +7,11 @@ import { SocketService } from 'app/core/socket/socket.service';
 import { UserService } from 'app/core/user/user.service';
 import { CashAccount, User } from 'app/core/user/user.types';
 import { Subject, takeUntil } from 'rxjs';
+import { RESULT as TradingCallResult } from './cash.types';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { TranslocoService } from '@ngneat/transloco';
+import { SoundService } from 'app/core/sound/sound.service';
+import { CurrencyPipe } from 'app/core/pipe/currency.pipe';
 
 @Component({
     selector: 'cash',
@@ -15,6 +20,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class CashComponent implements OnInit {
     user: User;
+    currencyPipe: CurrencyPipe = new CurrencyPipe();
     private _unsubscribeAll: Subject<any> = new Subject();
     constructor(
         private _userService: UserService,
@@ -23,17 +29,54 @@ export class CashComponent implements OnInit {
         private _apiService: ApiService,
         private _clientSocketService: SocketService,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _fuseConfirmationService: FuseConfirmationService,
+        private _translocoService: TranslocoService,
+        private _soundService: SoundService,
     ) { }
     ngOnInit(): void {
-        this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
+        this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((user: User) => {
             this.user = user;
 
             this._changeDetectorRef.markForCheck();
         });
-        this._clientSocketService.userSocket.fromEvent(SocketEvent.USER).subscribe(user => {
+        this._clientSocketService.userSocket.fromEvent(SocketEvent.USER).subscribe((user: User) => {
             this._userService.user = user;
 
             this._changeDetectorRef.markForCheck();
+        });
+
+        this._clientSocketService.userSocket.fromEvent(SocketEvent.WON).subscribe((tradingCallResult: TradingCallResult) => {
+            this._fuseConfirmationService.open({
+                title: this._translocoService.translate('won'),
+                message: `+${this.currencyPipe.transform(tradingCallResult.amount)}`,
+                actions: {
+                    confirm: {
+                        label: this._translocoService.translate('won'),
+                        color: 'primary',
+                    },
+                    cancel: {
+                        show: false,
+                    },
+                }
+            });
+            this._soundService.playWin();
+        });
+
+        this._clientSocketService.userSocket.fromEvent(SocketEvent.LOSED).subscribe((tradingCallResult: TradingCallResult) => {
+            this._fuseConfirmationService.open({
+                title: this._translocoService.translate('losed'),
+                message: `-${this.currencyPipe.transform(tradingCallResult.amount)}`,
+                actions: {
+                    confirm: {
+                        label: this._translocoService.translate('losed'),
+                        color: 'warn',
+                    },
+                    cancel: {
+                        show: false,
+                    },
+                }
+            });
+            this._soundService.playLose();
         });
     }
     addCash() {

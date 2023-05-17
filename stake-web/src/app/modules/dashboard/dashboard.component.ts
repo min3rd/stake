@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dashboardTradingCalls: DashboardTradingCall[];
     startDate: Date;
     endDate: Date;
+    selectedTime: string;
     private _unsubscribeAll: Subject<any> = new Subject();
     constructor(
         private _userService: UserService,
@@ -104,5 +105,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     search() {
         this._dashboardService.getDashboardTradingCall(this.startDate, this.endDate).subscribe();
+    }
+    onTimeChange(event: any) {
+        let now = moment();
+        switch (parseInt(event.value)) {
+            case 1:
+                this.startDate = now.clone().subtract(1, 'days').startOf('day').toDate();
+                this.endDate = now.clone().subtract(1, 'days').endOf('day').toDate();
+                break;
+            case 2:
+                this.startDate = now.clone().startOf('day').toDate();
+                this.endDate = now.clone().endOf('day').toDate();
+                break;
+            case 3:
+                this.startDate = now.clone().subtract(1, 'months').startOf('month').toDate();
+                this.endDate = now.clone().subtract(1, 'months').endOf('month').toDate();
+                break;
+            case 4:
+                this.startDate = now.clone().startOf('month').toDate();
+                this.endDate = now.clone().endOf('month').toDate();
+                break;
+            default:
+                return;
+        }
+        this.search();
     }
 }

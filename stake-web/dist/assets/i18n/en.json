@@ -35,7 +35,7 @@
   "00x0032": "round was already closed",
   "00x0033": "you could not cashout",
   "00x0034": "host already paid your winning cash",
-  "00x0035": "mines was invalid",
+  "00x0035": "mines amout is invalid",
   "00x0036": "could not create deposit order",
   "00x0037": "deposit order could not be found",
   "00x0038": "you were blocked",
@@ -199,5 +199,16 @@
   "privacy policy": "privacy policy",
   "create your free account": "create your free account",
   "opening": "opening",
-  "closed": "closed"
+  "closed": "closed",
+  "demo": "demo",
+  "order successfully": "order successfully",
+  "order failed": "order failed",
+  "games": "games",
+  "dashboard": "dashboard",
+  "manage your password": "manage your password",
+  "manage your public profile and private information": "manage your public profile and private information",
+  "security": "security",
+  "signed in as": "signed in as",
+  "won": "won",
+  "losed": "losed"
 }

@@ -8,4 +8,6 @@ export enum SocketEvent {
     connect = 'connect',
     NOTIFICATION = 'NOTIFICATION',
     TRADING_CONFIG = 'TRADING_CONFIG',
+    WON = 'WON',
+    LOSED = 'LOSED',
 }
