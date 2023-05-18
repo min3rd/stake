@@ -210,5 +210,9 @@
   "you traded betCash and earned profit": "vaihdoit {{betCash}} ja ansaitsit {{voitto}}",
   "your deposit order was accepted amount": "talletusmääräyksesi hyväksyttiin: {{summa}}",
   "won": "voitti",
-  "losed": "menetetty"
+  "losed": "menetetty",
+  "yesterday": "eilen",
+  "today": "tänään",
+  "last month": "viime kuukausi",
+  "this month": "tässä kuussa"
 }

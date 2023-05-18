@@ -4,6 +4,7 @@ const logger = require("../common/logger");
 const TimeUtils = require("../common/timeUtils");
 const { publicMongoose } = require("../config/publicMongoose");
 const { SocketEvent, SocketRoom } = require("../config/socket.config");
+const AppConfig = require("../models/AppConfig");
 const Kline = require("../models/Kline");
 const MonthlyProfit = require("../models/MonthlyProfit");
 const TradingCall = require("../models/TradingCall");
@@ -125,6 +126,7 @@ async function updateKline(publicIo) {
     let openTime = TimeUtils.getOpenDate(now);
     let closeTime = TimeUtils.getCloseDate(now);
     let tradingRooms = await TradingRoom.find({});
+    let appConfig = await AppConfig.findOne({});
     for (let tradingRoom of tradingRooms) {
         let tradingRound = await TradingRound.findOne({
             symbol: tradingRoom.symbol,
@@ -137,12 +139,12 @@ async function updateKline(publicIo) {
         let priceRange = tradingRound.openPrice * (tradingRoom.priceRangePercent || process.env.PRICE_RANGE_PERCENT || 0.5) / 100;
 
 
-        let analysisBuyAmount = tradingRound.analysisBuyAmount + Math.random() * (process.env.FAKE_TRADING_AMOUNT_SEED ?? 100000);
-        let analysisSellAmount = tradingRound.analysisSellAmount + Math.random() * (process.env.FAKE_TRADING_AMOUNT_SEED ?? 100000);
-        let analysisBuyCount = tradingRound.analysisBuyCount + parseInt(Math.random() * (process.env.FAKE_TRADING_COUNT_SEED ?? 10));
-        let analysisSellCount = tradingRound.analysisSellCount + parseInt(Math.random() * (process.env.FAKE_TRADING_COUNT_SEED ?? 10));
-        let analysisBuy = analysisBuyCount + parseInt(Math.random() * (process.env.FAKE_TRADING_COUNT_SEED ?? 10));
-        let analysisSell = analysisSellCount + parseInt(Math.random() * (process.env.FAKE_TRADING_COUNT_SEED ?? 10));
+        let analysisBuyAmount = tradingRound.analysisBuyAmount + Math.random() * (appConfig.AMOUNT_SEED ?? 100000);
+        let analysisSellAmount = tradingRound.analysisSellAmount + Math.random() * (appConfig.AMOUNT_SEED ?? 100000);
+        let analysisBuyCount = tradingRound.analysisBuyCount + parseInt(Math.random() * (appConfig.COUNT_SEED ?? 10));
+        let analysisSellCount = tradingRound.analysisSellCount + parseInt(Math.random() * (appConfig.COUNT_SEED ?? 10));
+        let analysisBuy = analysisBuyCount + parseInt(Math.random() * (appConfig.COUNT_SEED ?? 10));
+        let analysisSell = analysisSellCount + parseInt(Math.random() * (appConfig.COUNT_SEED ?? 10));
 
         tradingRound.analysisBuyAmount = analysisBuyAmount;
         tradingRound.analysisSellAmount = analysisSellAmount;

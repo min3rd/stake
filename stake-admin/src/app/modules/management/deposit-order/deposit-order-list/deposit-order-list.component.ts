@@ -77,4 +77,29 @@ export class DepositOrderListComponent implements OnInit {
         this.endDate = endDate;
         this._depositOrderService.searchDepositOrders(startDate, endDate).subscribe();
     }
+
+    onTimeChange(event: any) {
+        let now = moment();
+        switch (parseInt(event.value)) {
+            case 1:
+                this.startDate = now.clone().subtract(1, 'days').startOf('day').toDate();
+                this.endDate = now.clone().subtract(1, 'days').endOf('day').toDate();
+                break;
+            case 2:
+                this.startDate = now.clone().startOf('day').toDate();
+                this.endDate = now.clone().endOf('day').toDate();
+                break;
+            case 3:
+                this.startDate = now.clone().subtract(1, 'months').startOf('month').toDate();
+                this.endDate = now.clone().subtract(1, 'months').endOf('month').toDate();
+                break;
+            case 4:
+                this.startDate = now.clone().startOf('month').toDate();
+                this.endDate = now.clone().endOf('month').toDate();
+                break;
+            default:
+                return;
+        }
+        this.search();
+    }
 }

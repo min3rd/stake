@@ -210,5 +210,9 @@
   "you are now being redirected": "คุณกำลังถูกเปลี่ยนเส้นทาง!",
   "you have signed out": "คุณออกจากระบบแล้ว!",
   "won": "วอน",
-  "losed": "แพ้"
+  "losed": "แพ้",
+  "yesterday": "เมื่อวาน",
+  "today": "วันนี้",
+  "last month": "เดือนที่แล้ว",
+  "this month": "เดือนนี้"
 }

@@ -210,5 +210,9 @@
   "you are now being redirected": "şimdi yönlendiriliyorsunuz!",
   "you have signed out": "çıkış yaptınız!",
   "won": "kazanmak",
-  "losed": "kayıp"
+  "losed": "kayıp",
+  "yesterday": "Dün",
+  "today": "Bugün",
+  "last month": "geçen ay",
+  "this month": "bu ay"
 }

@@ -21,6 +21,7 @@ import { DepositOrderRoutingModule } from './deposit-order-routing.module';
 import { DepositOrderListComponent } from './deposit-order-list/deposit-order-list.component';
 import { SharedModule } from 'app/shared/shared.module';
 import { DepositOrderDetailComponent } from './deposit-order-detail/deposit-order-detail.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { DepositOrderDetailComponent } from './deposit-order-detail/deposit-orde
     CommonModule,
     DepositOrderRoutingModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatCheckboxModule,
     MatDatepickerModule,
     MatDividerModule,

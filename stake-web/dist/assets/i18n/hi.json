@@ -210,5 +210,9 @@
   "you traded betCash and earned profit": "आपने {{betCash}} में ट्रेड किया और {{मुनाफ़ा}} कमाया",
   "your deposit order was accepted amount": "आपका जमा आदेश स्वीकार कर लिया गया: {{amount}}",
   "won": "जीत गया",
-  "losed": "हार गया"
+  "losed": "हार गया",
+  "yesterday": "कल",
+  "today": "आज",
+  "last month": "पिछला महीना",
+  "this month": "इस महीने"
 }

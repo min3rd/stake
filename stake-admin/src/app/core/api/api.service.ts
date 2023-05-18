@@ -146,6 +146,18 @@ export class ApiService {
     admin_withdrawOrders_withdrawOrder_denyWithdrawOrder(withdrawOrderId: string): string {
         return this._adminApi(`/withdrawOrders/${withdrawOrderId}/denyWithdrawOrder`);
     }
+
+    admin_appConfig(): string {
+        return this._adminApi(`/appConfig`);
+    }
+
+    admin_news(): string {
+        return this._adminApi(`/news`);
+    }
+
+    admin_news_new(id: string): string {
+        return this._adminApi(`/news/${id}`);
+    }
 }
 
 

@@ -4,6 +4,8 @@ const { getTradingRooms, handle_getLatestTradingRounds, handle_updateSwithTradin
 const { searchUsers, updateUser, getUserById } = require('../services/admin/management/admin_UserService');
 const { searchDepositOrders, acceptDepositOrder, denyDepositOrder, getDepositOrderById } = require('../services/admin/management/admin_depositOrderService');
 const { searchWithdrawOrder, getWithdrawOrderById, acceptWithdrawOrder, denyWithdrawOrder } = require('../services/admin/management/admin_withdrawOrderService');
+const { getAppConfig, updateAppConfig } = require('../services/admin/management/admin_settingService');
+const { getAllNews, getNewsById, updateNewsById, deleteNewsById, createNews } = require('../services/admin/admin_newsService');
 const adminRoute = express.Router();
 
 adminRoute.post('/sign-in', adminSignIn);
@@ -29,5 +31,14 @@ adminRoute.get('/withdrawOrders', adminAuthenticateToken, searchWithdrawOrder);
 adminRoute.get('/withdrawOrders/:withdrawOrderId', adminAuthenticateToken, getWithdrawOrderById);
 adminRoute.post('/withdrawOrders/:withdrawOrderId/acceptWithdrawOrder', adminAuthenticateToken, acceptWithdrawOrder);
 adminRoute.post('/withdrawOrders/:withdrawOrderId/denyWithdrawOrder', adminAuthenticateToken, denyWithdrawOrder);
+
+adminRoute.get('/appConfig', adminAuthenticateToken, getAppConfig);
+adminRoute.post('/appConfig', adminAuthenticateToken, updateAppConfig);
+
+adminRoute.get('/news', adminAuthenticateToken, getAllNews);
+adminRoute.get('/news/:id', adminAuthenticateToken, getNewsById);
+adminRoute.post('/news/:id', adminAuthenticateToken, updateNewsById);
+adminRoute.delete('/news/:id', adminAuthenticateToken, deleteNewsById);
+adminRoute.post('/news', adminAuthenticateToken, createNews);
 
 module.exports = adminRoute;

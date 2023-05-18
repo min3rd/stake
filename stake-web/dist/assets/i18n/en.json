@@ -210,5 +210,9 @@
   "security": "security",
   "signed in as": "signed in as",
   "won": "won",
-  "losed": "losed"
+  "losed": "losed",
+  "yesterday": "yesterday",
+  "today": "today",
+  "last month": "last month",
+  "this month": "this month"
 }

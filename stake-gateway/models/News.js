@@ -6,6 +6,8 @@ const NewsSchema = new Schema({
     title: { type: String, },
     description: { type: String, },
     data: { type: Schema.Types.Mixed, },
+    start: { type: Date },
+    end: { type: Date },
 });
 const News = publicMongoose.model('News', NewsSchema);
 module.exports = News;

@@ -49,9 +49,23 @@ const navigations: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'heroicons_outline:receipt-refund',
                 link: '/management/withdrawOrders'
+            },
+            {
+                id: 'setting',
+                title: 'Setting',
+                type: 'basic',
+                icon: 'heroicons_outline:cog',
+                link: '/management/setting'
             }
         ],
-    }
+    },
+    {
+        id: 'news',
+        title: 'News',
+        type: 'basic',
+        icon: 'heroicons_outline:newspaper',
+        link: '/news'
+    },
 ];
 
 export const defaultNavigation: FuseNavigationItem[] = navigations;

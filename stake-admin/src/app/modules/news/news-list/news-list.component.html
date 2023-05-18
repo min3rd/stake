@@ -1,0 +1,109 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8">
+
+                    <!-- Title -->
+                    <div class="flex gap-6 items-center">
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                            {{'manage news' | transloco | capitalize}}
+                        </div>
+                        <button mat-flat-button color="primary" class="px-4" (click)="add()">
+                            <mat-icon matIconPrefix svgIcon="heroicons_outline:plus-circle"></mat-icon>
+                            <span>
+                                {{'add' | transloco | capitalize}}
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Main actions -->
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                        <!-- Search -->
+                        <div class="flex gap-4">
+                            <mat-button-toggle-group (change)="onTimeChange($event)">
+                                <mat-button-toggle value="1">
+                                    <span class="text-sm md:text-md">
+                                        {{'yesterday' | transloco | capitalize}}
+                                    </span>
+                                </mat-button-toggle>
+                                <mat-button-toggle value="2">
+                                    <span class="text-sm md:text-md">
+                                        {{'today' | transloco | capitalize}}
+                                    </span>
+                                </mat-button-toggle>
+                                <mat-button-toggle value="3">
+                                    <span class="text-sm md:text-md">
+                                        {{'last month' | transloco | capitalize}}
+                                    </span>
+                                </mat-button-toggle>
+                                <mat-button-toggle value="4">
+                                    <span class="text-sm md:text-md">
+                                        {{'this month' | transloco | capitalize}}
+                                    </span>
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
+                            <mat-form-field class="fuse-mat-dense fuse-mat-rounded md:min-w-64"
+                                subscriptSizing="dynamic">
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input [(ngModel)]="startDate" disabled matStartDate
+                                        [placeholder]="'select date' | transloco | capitalize" class="w-full">
+                                    <input [(ngModel)]="endDate" disabled matEndDate
+                                        [placeholder]="'select date' | transloco | capitalize" class="w-full">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
+                            </mat-form-field>
+                            <button mat-flat-button color="primary" class="px-4" (click)="search()">
+                                <mat-icon matIconPrefix svgIcon="heroicons_outline:search"></mat-icon>
+                                <span>
+                                    {{'search' | transloco | capitalize}}
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deposit Order List -->
+                <div class="flex-col">
+                    <ng-container *ngIf="allNews$ | async as allNews">
+                        <ng-container *ngIf="allNews.length > 0">
+                            <div *ngFor="let news of allNews"
+                                class="flex px-8 py-4 items-center gap-2 border-t hover:cursor-pointer"
+                                [ngClass]="{'bg-card': selected && selected._id == news._id}"
+                                [routerLink]="['./', news._id]">
+                                <div>
+                                    <div>
+                                        {{news.start | date: 'YYYY/MM/dd'}}
+                                        ~
+                                        {{news.end | date: 'YYYY/MM/dd'}}
+                                        -
+                                        {{news.title}}
+                                    </div>
+                                    <div class="text-secondary text-sm">
+                                        {{news.time | date: 'YYYY/MM/dd HH:mm:ss'}}
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+
+                </div>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+</div>

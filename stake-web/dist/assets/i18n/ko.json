@@ -210,5 +210,9 @@
   "you are now being redirected": "당신은 지금 리디렉션되고 있습니다!",
   "you have signed out": "로그아웃했습니다!",
   "won": "이겼다",
-  "losed": "졌다"
+  "losed": "졌다",
+  "yesterday": "어제",
+  "today": "오늘",
+  "last month": "지난 달",
+  "this month": "이번 달"
 }

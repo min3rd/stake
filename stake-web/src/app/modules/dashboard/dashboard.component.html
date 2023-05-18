@@ -108,7 +108,8 @@
                             {{'trade summary' | transloco | capitalize}}
                         </div>
                         <div class="mt-2">
-                            <mat-progress-bar mode="determinate" [value]="dashboardTradeStats.tradeSummary.sellCount"
+                            <mat-progress-bar mode="determinate"
+                                [value]="100 * dashboardTradeStats.tradeSummary.sellCount/(dashboardTradeStats.tradeSummary.sellCount + dashboardTradeStats.tradeSummary.buyCount)"
                                 color="warn"></mat-progress-bar>
                             <div class="flex justify-between items-center">
                                 <div class="text-xl font-semibold">

@@ -27,7 +27,29 @@
                     <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
                         <!-- Search -->
                         <div class="flex gap-4">
-                            <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full md:min-w-64"
+                            <mat-button-toggle-group (change)="onTimeChange($event)">
+                                <mat-button-toggle value="1">
+                                    <span class="text-sm md:text-md">
+                                        {{'yesterday' | transloco | capitalize}}
+                                    </span>
+                                </mat-button-toggle>
+                                <mat-button-toggle value="2">
+                                    <span class="text-sm md:text-md">
+                                        {{'today' | transloco | capitalize}}
+                                    </span>
+                                </mat-button-toggle>
+                                <mat-button-toggle value="3">
+                                    <span class="text-sm md:text-md">
+                                        {{'last month' | transloco | capitalize}}
+                                    </span>
+                                </mat-button-toggle>
+                                <mat-button-toggle value="4">
+                                    <span class="text-sm md:text-md">
+                                        {{'this month' | transloco | capitalize}}
+                                    </span>
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
+                            <mat-form-field class="fuse-mat-dense fuse-mat-rounded md:min-w-64"
                                 subscriptSizing="dynamic">
                                 <mat-date-range-input [rangePicker]="picker">
                                     <input [(ngModel)]="startDate" disabled matStartDate

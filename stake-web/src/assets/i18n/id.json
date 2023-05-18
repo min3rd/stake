@@ -210,5 +210,9 @@
   "you are now being redirected": "Anda sekarang sedang dialihkan!",
   "you have signed out": "Anda telah keluar!",
   "won": "won",
-  "losed": "kalah"
+  "losed": "kalah",
+  "yesterday": "Kemarin",
+  "today": "Hari ini",
+  "last month": "bulan lalu",
+  "this month": "bulan ini"
 }

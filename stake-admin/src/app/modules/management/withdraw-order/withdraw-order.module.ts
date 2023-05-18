@@ -21,6 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import { WithdrawOrderDetailComponent } from './withdraw-order-detail/withdraw-order-detail.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { WithdrawOrderDetailComponent } from './withdraw-order-detail/withdraw-o
         CommonModule,
         WithdrawOrderRoutingModule,
         MatButtonModule,
+        MatButtonToggleModule,
         MatCheckboxModule,
         MatDatepickerModule,
         MatDividerModule,

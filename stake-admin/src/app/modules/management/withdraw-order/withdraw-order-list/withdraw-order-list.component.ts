@@ -76,5 +76,30 @@ export class WithdrawOrderListComponent implements OnInit, OnDestroy {
         this.endDate = moment(new Date(this.endDate).getTime()).endOf('day').toDate();
         this._withdrawOrderService.searchWithdrawOrders(this.startDate, this.endDate).subscribe();
     }
+
+    onTimeChange(event: any) {
+        let now = moment();
+        switch (parseInt(event.value)) {
+            case 1:
+                this.startDate = now.clone().subtract(1, 'days').startOf('day').toDate();
+                this.endDate = now.clone().subtract(1, 'days').endOf('day').toDate();
+                break;
+            case 2:
+                this.startDate = now.clone().startOf('day').toDate();
+                this.endDate = now.clone().endOf('day').toDate();
+                break;
+            case 3:
+                this.startDate = now.clone().subtract(1, 'months').startOf('month').toDate();
+                this.endDate = now.clone().subtract(1, 'months').endOf('month').toDate();
+                break;
+            case 4:
+                this.startDate = now.clone().startOf('month').toDate();
+                this.endDate = now.clone().endOf('month').toDate();
+                break;
+            default:
+                return;
+        }
+        this.search();
+    }
 }
 

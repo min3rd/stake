@@ -210,5 +210,9 @@
   "you are now being redirected": "今リダイレクトされています!",
   "you have signed out": "サインアウトしました!",
   "won": "勝利した",
-  "losed": "負けた"
+  "losed": "負けた",
+  "yesterday": "昨日",
+  "today": "今日",
+  "last month": "先月",
+  "this month": "今月"
 }

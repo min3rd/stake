@@ -210,5 +210,9 @@
   "you traded betCash and earned profit": "Sie haben {{betCash}} gehandelt und {{profit}} verdient",
   "your deposit order was accepted amount": "Ihr Einzahlungsauftrag wurde angenommen: {{amount}}",
   "won": "gewonnen",
-  "losed": "verloren"
+  "losed": "verloren",
+  "yesterday": "gestern",
+  "today": "Heute",
+  "last month": "Im vergangenen Monat",
+  "this month": "diesen Monat"
 }

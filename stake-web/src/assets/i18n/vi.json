@@ -210,5 +210,9 @@
   "dashboard": "bảng điều khiển",
   "games": "Trò chơi",
   "won": "thắng",
-  "losed": "thua"
+  "losed": "thua",
+  "yesterday": "Hôm qua",
+  "today": "Hôm nay",
+  "last month": "tháng trước",
+  "this month": "tháng này"
 }

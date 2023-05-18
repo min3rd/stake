@@ -16,7 +16,6 @@ import { SocketIoModule } from 'ngx-socket-io';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ApiService } from './core/api/api.service';
 import { Observable, tap } from 'rxjs';
-import { WithdrawOrderModule } from './modules/management/withdraw-order/withdraw-order.module';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,

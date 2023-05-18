@@ -210,5 +210,9 @@
   "you traded betCash and earned profit": "вы обменяли {{betCash}} и заработали {{прибыль}}",
   "your deposit order was accepted amount": "ваш депозитный ордер принят: {{amount}}",
   "won": "выиграл",
-  "losed": "потерял"
+  "losed": "потерял",
+  "yesterday": "вчера",
+  "today": "сегодня",
+  "last month": "прошлый месяц",
+  "this month": "этот месяц"
 }

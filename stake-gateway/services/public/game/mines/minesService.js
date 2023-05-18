@@ -9,12 +9,12 @@ const AES = require('crypto-js/aes');
 const logger = require("../../../../common/logger");
 const engine = require("../../../../engine");
 const { SocketEvent } = require("../../../../config/socket.config");
+const AppConfig = require("../../../../models/AppConfig");
 const POSITION_TYPE = {
     UNKNOWN: 0,
     GEM: 1,
     MINE: 2,
 }
-const MINES_TOTAL_PROFIT_PERCENT = process.env.MINES_TOTAL_PROFIT_PERCENT ?? 2;
 class ClientMinesRound {
     constructor(minesRound) {
         this._id = minesRound._id;
@@ -77,7 +77,8 @@ const createMinesRound = async function (req, res, next) {
         let size = 5;
         let gems = [];
         let playerChoices = [];
-        let profitStep = MINES_TOTAL_PROFIT_PERCENT / gemsCount;
+        let appConfig = await AppConfig.findOne({});
+        let profitStep = appConfig.MINES_TOTAL_PROFIT_PERCENT / gemsCount;
         for (i = 0; i < size * size; i++) {
             gems.push(Math.pow(2, i));
             playerChoices.push(POSITION_TYPE.UNKNOWN);

@@ -1,0 +1,77 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
+
+    <!-- Main -->
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="max-w-3xl h-400 min-h-400 max-h-400 rounded-2xl">
+            <form [formGroup]="form">
+                <input type="hidden" formControlName="_id">
+                <input type="hidden" formControlName="__v">
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'min withdraw value' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [formControlName]="'withdrawMinValue'" [spellcheck]="false">
+                </mat-form-field>
+
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'trading amount seed' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [formControlName]="'AMOUNT_SEED'" [spellcheck]="false">
+                </mat-form-field>
+
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'trading count seed' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [formControlName]="'COUNT_SEED'" [spellcheck]="false">
+                </mat-form-field>
+
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'default blocking time' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [formControlName]="'DEFAULT_BLOCKING_TIME'" [spellcheck]="false">
+                    <span matTextSuffix="">{{'ms' | transloco | capitalize}}</span>
+                </mat-form-field>
+
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'master address' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [formControlName]="'MASTER_ADDRESS'" [spellcheck]="false">
+                </mat-form-field>
+
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'price range percent' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [formControlName]="'PRICE_RANGE_PERCENT'" [spellcheck]="false">
+                    <span matTextSuffix="">%</span>
+                </mat-form-field>
+
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'trading profit percent' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [formControlName]="'TRADING_BENEFIT_PERCENT'" [spellcheck]="false">
+                    <span matTextSuffix="">%</span>
+                </mat-form-field>
+
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'mines total profit percent' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="text" [formControlName]="'MINES_TOTAL_PROFIT_PERCENT'" [spellcheck]="false">
+                    <span matTextSuffix="">x</span>
+                </mat-form-field>
+            </form>
+
+            <div class="flex items-center justify-end mt-6 pt-6">
+                <button mat-flat-button color="primary" (click)="save()">
+                    {{'save' | transloco | capitalize}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

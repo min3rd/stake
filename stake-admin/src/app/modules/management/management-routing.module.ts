@@ -15,6 +15,10 @@ const routes: Routes = [
         loadChildren: () => import('./withdraw-order/withdraw-order.module').then(m => m.WithdrawOrderModule),
     },
     {
+        path: 'setting',
+        loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),
+    },
+    {
         path: '**',
         redirectTo: '/'
     }
