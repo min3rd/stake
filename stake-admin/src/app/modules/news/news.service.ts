@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, tap, take, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, take, switchMap, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from 'app/core/api/api.service';
@@ -26,6 +26,7 @@ export class NewsService {
     getAllNews(): Observable<News[]> {
         return this._httpClient.get<News[]>(this._apiService.admin_news()).pipe(tap(allNews => {
             this._allNews.next(allNews);
+            return of(allNews);
         }));
     }
 
@@ -42,6 +43,7 @@ export class NewsService {
                     }
                     this._allNews.next(allNews);
                     this._news.next(news);
+                    return of(news);
                 }));
             })
         );
@@ -60,6 +62,7 @@ export class NewsService {
                     }
                     this._allNews.next(allNews);
                     this._news.next(news);
+                    return of(news);
                 }));
             })
         );
@@ -77,6 +80,7 @@ export class NewsService {
                     }
                     this._allNews.next(allNews);
                     this._news.next(null);
+                    return of(null);
                 }));
             }));
     }
@@ -89,6 +93,7 @@ export class NewsService {
                     allNews.push(news);
                     this._allNews.next(allNews);
                     this._news.next(news);
+                    return of(news);
                 }));
             })
         );

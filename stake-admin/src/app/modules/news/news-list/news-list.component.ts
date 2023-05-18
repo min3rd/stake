@@ -35,7 +35,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
         this.allNews$ = this._newsService.allNews$;
 
         this._newsService.allNews$.pipe(takeUntil(this._unsubscribeAll)).subscribe(allNews => {
-            this.selected = null;
+
             this._changeDetectorRef.markForCheck();
         });
 
@@ -101,7 +101,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
 
     add() {
         this._newsService.createNews().subscribe((news) => {
-            this._router.navigate(['./', news._id]);
+            this._router.navigate(['/news', news._id]);
         })
     }
 }

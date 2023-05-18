@@ -1,3 +1,4 @@
+import { CapitalizePipe } from 'app/core/pipe/capitalize.pipe';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -21,6 +22,7 @@ import { CurrencyPipe } from 'app/core/pipe/currency.pipe';
 export class CashComponent implements OnInit {
     user: User;
     currencyPipe: CurrencyPipe = new CurrencyPipe();
+    capitalizePipe: CapitalizePipe = new CapitalizePipe();
     private _unsubscribeAll: Subject<any> = new Subject();
     constructor(
         private _userService: UserService,
@@ -47,11 +49,11 @@ export class CashComponent implements OnInit {
 
         this._clientSocketService.userSocket.fromEvent(SocketEvent.WON).subscribe((tradingCallResult: TradingCallResult) => {
             this._fuseConfirmationService.open({
-                title: this._translocoService.translate('won'),
+                title: this.capitalizePipe.transform(this._translocoService.translate('won')),
                 message: `+${this.currencyPipe.transform(tradingCallResult.amount)}`,
                 actions: {
                     confirm: {
-                        label: this._translocoService.translate('won'),
+                        label: this.capitalizePipe.transform(this._translocoService.translate('won')),
                         color: 'primary',
                     },
                     cancel: {
@@ -64,11 +66,11 @@ export class CashComponent implements OnInit {
 
         this._clientSocketService.userSocket.fromEvent(SocketEvent.LOSED).subscribe((tradingCallResult: TradingCallResult) => {
             this._fuseConfirmationService.open({
-                title: this._translocoService.translate('losed'),
+                title: this.capitalizePipe.transform(this._translocoService.translate('losed')),
                 message: `-${this.currencyPipe.transform(tradingCallResult.amount)}`,
                 actions: {
                     confirm: {
-                        label: this._translocoService.translate('losed'),
+                        label: this.capitalizePipe.transform(this._translocoService.translate('losed')),
                         color: 'warn',
                     },
                     cancel: {

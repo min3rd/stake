@@ -1,9 +1,12 @@
 export interface News {
     _id?: string;
     time?: Date;
-    title?: string;
-    description?: string;
+    __v?: number;
     data?: any;
+    description?: string;
+    end?: Date;
+    start?: Date;
+    title?: string;
 }
 export interface MonthlyProfit {
     _id?: string

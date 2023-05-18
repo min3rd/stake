@@ -13,7 +13,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 export class LandingComponent implements OnInit, OnDestroy {
     alertAppeareance: FuseAlertAppearance = 'outline';
     monthlyProfits$: Observable<MonthlyProfit[]>
-    news: News[];
+    allNews: News[];
     isAuthenicated: boolean;
     private _unsubscribeAll: Subject<any> = new Subject();
     constructor(
@@ -29,6 +29,11 @@ export class LandingComponent implements OnInit, OnDestroy {
             this._changeDetectorRef.markForCheck();
         });
         this.isAuthenicated = this._authService.authenicated;
+        this._landingService.allNews$.pipe(takeUntil(this._unsubscribeAll)).subscribe((allNews => {
+            this.allNews = allNews;
+
+            this._changeDetectorRef.markForCheck();
+        }));
     }
     ngOnDestroy(): void {
         this._unsubscribeAll.next(null);

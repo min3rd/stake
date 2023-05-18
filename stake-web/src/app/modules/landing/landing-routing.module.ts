@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './landing/landing.component';
-import { BestTradersResolver } from './landing.resolver';
+import { BestTradersResolver, NewsResolver } from './landing.resolver';
 
 const routes: Routes = [
     {
@@ -9,6 +9,7 @@ const routes: Routes = [
         component: LandingComponent,
         resolve: {
             BestTradersResolver: BestTradersResolver,
+            NewsResolver: NewsResolver
         }
     }
 ];

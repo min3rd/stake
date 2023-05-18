@@ -282,9 +282,9 @@ const call = async function (req, res, next) {
             logger.error(`tradingService_call`, `could not send notification to user e=${e}`);
         }
         await session.commitTransaction();
-        await session.endSession();
         logger.info('CREATE_TRADING_CALL', JSON.stringify(tradingCall));
         res.json(tradingCall);
+        await session.endSession();
     } catch (e) {
         logger.error('CREATE_TRADING_CALL', `error=${e}`);
         await session.abortTransaction();

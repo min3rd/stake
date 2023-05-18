@@ -2,14 +2,14 @@
     <!-- Main -->
     <div class="flex-auto p-2 md:p-6">
         <!-- CONTENT GOES HERE -->
-        <div class="h-400 min-h-400 max-h-400 max-w-4xl mx-auto">
+        <div class="h-400 min-h-400 max-h-400 max-w-6xl mx-auto">
             <!-- <div class="w-full">
                 <fuse-alert [appearance]="alertAppeareance" [dismissible]="true" [dismissed]="false"
                     [name]="'alertBox3'" [type]="'success'">
                     Your subscription model is successfully upgraded to the <b>Lifetime Pro</b>.
                 </fuse-alert>
             </div> -->
-            <div *ngIf="!isAuthenicated" class="rounded-xl md:shadow md:bg-card mt-4">
+            <div *ngIf="!isAuthenicated || allNews?.length > 0" class="rounded-xl md:shadow md:bg-card mt-4">
                 <div class="md:flex p-2 md:p-6 gap-8">
                     <!-- Sign in/Sign up -->
                     <div *ngIf="!isAuthenicated" class="flex-col">
@@ -34,11 +34,11 @@
                                     <div class="flex-auto mt-px border-t"></div>
                                 </div>
                                 <div class="flex justify-between gap-6 mt-4">
-                                    <button mat-button class="bg-sky-600 w-1/2">
+                                    <button mat-button class="bg-sky-600 w-1/2 hover:cursor-not-allowed">
                                         <mat-icon svgIcon="feather:facebook" class="text-white"></mat-icon>
                                         {{'facebook' | transloco | capitalize}}
                                     </button>
-                                    <button mat-button class="bg-red-500 w-1/2">
+                                    <button mat-button class="bg-red-500 w-1/2 hover:cursor-not-allowed">
                                         <mat-icon svgIcon="feather:chrome" class="text-white"></mat-icon>
                                         {{'google' | transloco | capitalize}}
                                     </button>
@@ -48,8 +48,22 @@
                     </div>
 
                     <!-- News -->
-                    <ng-container *ngIf="news?.length > 0">
-                        <div class="md:border-l p-6 sm:p-12"></div>
+                    <ng-container *ngIf="allNews?.length > 0">
+                        <div class="w-full flex-col gap-2 md:border-l p-2 md:p-6 overflow-y-scroll" cdkScrollable>
+                            <div *ngFor="let news of allNews" class="w-full h-fit p-2 border-b">
+                                <div class="text-xs">
+                                    {{ news.start | date:'YYYY/MM/dd' }}
+                                    ~
+                                    {{ news.end | date:'YYYY/MM/dd' }}
+                                </div>
+                                <div class="truncate">
+                                    {{ news.title | transloco | capitalize }}
+                                </div>
+                                <div class="text-secondary text-xs truncate">
+                                    {{ news.description | transloco | capitalize }}
+                                </div>
+                            </div>
+                        </div>
                     </ng-container>
 
                 </div>

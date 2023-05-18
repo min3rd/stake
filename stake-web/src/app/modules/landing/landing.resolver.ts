@@ -5,7 +5,7 @@ import {
     ActivatedRouteSnapshot
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { MonthlyProfit } from './landing.types';
+import { MonthlyProfit, News } from './landing.types';
 import { LandingService } from './landing.service';
 
 @Injectable({
@@ -19,5 +19,19 @@ export class BestTradersResolver implements Resolve<MonthlyProfit[]> {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MonthlyProfit[]> {
         return this._landingService.getBestTraders(new Date());
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class NewsResolver implements Resolve<News[]> {
+    constructor(
+        private _landingService: LandingService,
+    ) {
+
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<News[]> {
+        return this._landingService.getLatestNews();
     }
 }

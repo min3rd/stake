@@ -48,8 +48,8 @@ export class NewsDetailComponent implements OnInit, OnDestroy {
 
         this._newsService.news$.pipe(takeUntil(this._unsubscribeAll)).subscribe(news => {
             this.news = news;
-            this.form.reset();
             this.form.patchValue(news);
+
             this._changeDetectorRef.markForCheck();
         })
     }
@@ -67,7 +67,7 @@ export class NewsDetailComponent implements OnInit, OnDestroy {
 
     delete() {
         this._newsService.deleteNewsById(this.news._id).subscribe(() => {
-            this._router.navigate(['../'])
+            this._router.navigate(['/news'])
         })
     }
 }
