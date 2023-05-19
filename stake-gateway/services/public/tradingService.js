@@ -284,12 +284,12 @@ const call = async function (req, res, next) {
         await session.commitTransaction();
         logger.info('CREATE_TRADING_CALL', JSON.stringify(tradingCall));
         res.json(tradingCall);
-        await session.endSession();
     } catch (e) {
         logger.error('CREATE_TRADING_CALL', `error=${e}`);
         await session.abortTransaction();
-        await session.endSession();
         return next(badRequestError.make(ErrorCode.SAVE_TRADING_CALL_FAIL));
+    } finally {
+        await session.endSession();
     }
 }
 

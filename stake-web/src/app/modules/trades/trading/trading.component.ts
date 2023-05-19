@@ -331,6 +331,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                     labels: {
                         enabled: true,
                     },
+                    zoomEnabled: false,
                 },
             ],
             yAxis: [
@@ -360,6 +361,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                     resize: {
                         enabled: true
                     },
+                    zoomEnabled: false,
                 },
                 {
                     labels: {
@@ -368,6 +370,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                     top: '80%',
                     height: '20%',
                     gridLineColor: '',
+                    zoomEnabled: false,
                 }
             ],
             plotOptions: {
