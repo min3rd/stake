@@ -8,6 +8,7 @@ import { Observable, Subject, of, take, takeUntil } from 'rxjs';
 import { TradingService } from './trading.service';
 import { TradingCall, TradingRoom } from './trading.types';
 import { constants } from 'app/common/constants';
+import moment from 'moment';
 
 @Injectable({
     providedIn: 'root'
@@ -43,10 +44,11 @@ export class StorageTradingCallsResolver implements Resolve<TradingCall[]> {
                     return of(true);
                 }
                 results = results.filter(e => tradingCalls.findIndex(t => t._id == e._id) < 0);
-                localStorage.setItem(constants.LOCAL_STORAGE_KEYS.TRADING_CALLS, JSON.stringify([...results, ...tradingCalls]));
+                results = [...results, ...tradingCalls].filter(e => new Date(e.openTime).getTime() > moment().startOf('day').toDate().getTime());
+                localStorage.setItem(constants.LOCAL_STORAGE_KEYS.TRADING_CALLS, JSON.stringify(results));
             } catch (error) {
                 console.error(error);
-                localStorage.setItem(constants.LOCAL_STORAGE_KEYS.TRADING_CALLS, JSON.stringify(tradingCalls));
+                localStorage.setItem(constants.LOCAL_STORAGE_KEYS.TRADING_CALLS, JSON.stringify(tradingCalls.filter(e => new Date(e.openTime).getTime() > moment().startOf('day').toDate().getTime())));
             }
         });
         return this._tradingService.getStorageTradingCalls();
