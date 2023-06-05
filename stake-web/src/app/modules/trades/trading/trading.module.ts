@@ -26,7 +26,7 @@ import * as accessibility from 'highcharts/modules/accessibility.src';
 import * as stock from 'highcharts/modules/stock.src';
 @NgModule({
     declarations: [
-        TradingComponent
+        TradingComponent,
     ],
     imports: [
         CommonModule,

@@ -16,7 +16,7 @@ import { CountdownPipe } from 'app/core/pipe/countdown.pipe';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CurrencyPipe } from 'app/core/pipe/currency.pipe';
 import { HotToastService } from '@ngneat/hot-toast';
-import { hotToastOptions } from 'app/common/constants';
+import { constants, hotToastOptions } from 'app/common/constants';
 import { CapitalizePipe } from 'app/core/pipe/capitalize.pipe';
 import { SoundService } from 'app/core/sound/sound.service';
 enum TabType {
@@ -62,6 +62,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     bollingBands: BollingerBand[];
     history: boolean = false;
     capitalizePipe: CapitalizePipe = new CapitalizePipe();
+    maxDisplayPoint: number = constants.TRADES.MAX_DISPLAY_POINT_ON_PC;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         private _socketService: SocketService,
@@ -77,7 +78,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     }
     prepare() {
         this.isMobile = this._deviceDetectorService.isMobile();
-
+        this.maxDisplayPoint = this.isMobile ? constants.TRADES.MAX_DISPLAY_POINT_ON_MOBILE : constants.TRADES.MAX_DISPLAY_POINT_ON_PC;
         this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
             this.user = user;
 
@@ -163,6 +164,13 @@ export class TradingComponent implements OnInit, OnDestroy {
                     ];
                 }));
                 line.setData(this.bollingBands.map(e => [new Date(e.openTime).getTime(), e.average]));
+                if (this.isMobile) {
+                    let now = new Date();
+                    chart.xAxis[0].setExtremes(
+                        now.getTime() - 1000 * 60 * this.maxDisplayPoint,
+                        now.getTime(),
+                    )
+                }
             });
             this._changeDetectorRef.markForCheck();
         });
@@ -186,7 +194,7 @@ export class TradingComponent implements OnInit, OnDestroy {
 
             this.canTrade = kline.canTrade;
             this.countdown = moment(kline.closeTime).diff(moment(kline.time), 'seconds');
-
+            let now = new Date();
             this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
                 let index = this.klines.findIndex(e => new Date(e.openTime).getTime() == new Date(kline.openTime).getTime());
                 if (index >= 0) {
@@ -254,6 +262,13 @@ export class TradingComponent implements OnInit, OnDestroy {
                         this.bollingBands[this.bollingBands.length - 1].average
                     ], true, true, true);
                 }
+                if (this.isMobile) {
+                    let last = chart.series[0].data[chart.series[0].data.length - 1]?.x;
+                    chart.xAxis[0].setExtremes(
+                        now.getTime() - 1000 * 60 * this.maxDisplayPoint,
+                        last
+                    );
+                }
             });
             this._changeDetectorRef.markForCheck();
         });
@@ -300,13 +315,6 @@ export class TradingComponent implements OnInit, OnDestroy {
         let currencyPipe = new CurrencyPipe();
         let that = this;
         this.chart = new StockChart({
-            accessibility: {
-                enabled: false,
-            },
-            boost: {
-                seriesThreshold: this.isMobile ? 10 : 50,
-                enabled: true,
-            },
             time: {
                 useUTC: false,
             },
@@ -326,12 +334,10 @@ export class TradingComponent implements OnInit, OnDestroy {
             xAxis: [
                 {
                     lineColor: '#363A3E',
-                    lineWidth: this.isMobile ? 0.5 : 1,
-                    type: "datetime",
+                    lineWidth: 1,
                     labels: {
                         enabled: true,
                     },
-                    zoomEnabled: false,
                 },
             ],
             yAxis: [
@@ -351,17 +357,16 @@ export class TradingComponent implements OnInit, OnDestroy {
                     plotLines: [
                         {
                             color: "#581C87",
-                            width: this.isMobile ? 0.5 : 1,
+                            width: 1,
                             id: 'current-price',
                             zIndex: 100,
                             dashStyle: 'Solid'
                         }
                     ],
-                    lineWidth: this.isMobile ? 0.5 : 1,
+                    lineWidth: 1,
                     resize: {
                         enabled: true
                     },
-                    zoomEnabled: false,
                 },
                 {
                     labels: {
@@ -370,13 +375,12 @@ export class TradingComponent implements OnInit, OnDestroy {
                     top: '80%',
                     height: '20%',
                     gridLineColor: '',
-                    zoomEnabled: false,
                 }
             ],
             plotOptions: {
                 candlestick: {
-                    pointWidth: this.isMobile ? 2 : 8,
-                    maxPointWidth: this.isMobile ? 6 : 12,
+                    pointWidth: 8,
+                    maxPointWidth: 12,
                     lineColor: '#EF4444',
                     upLineColor: '#84CC16',
                     lineWidth: 2,
@@ -402,8 +406,8 @@ export class TradingComponent implements OnInit, OnDestroy {
                 },
                 column: {
                     minPointLength: 2,
-                    pointWidth: this.isMobile ? 2 : 8,
-                    maxPointWidth: this.isMobile ? 6 : 12,
+                    pointWidth: 8,
+                    maxPointWidth: 12,
                     borderRadius: 0
                 },
                 areasplinerange: {
@@ -464,6 +468,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                     dataGrouping: {
                         enabled: false,
                     },
+                    visible: this.isMobile ? false : true,
                 },
                 {
                     type: 'line',
@@ -473,6 +478,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                     dataGrouping: {
                         enabled: false,
                     },
+                    visible: this.isMobile ? false : true,
                 }
             ],
             stockTools: {

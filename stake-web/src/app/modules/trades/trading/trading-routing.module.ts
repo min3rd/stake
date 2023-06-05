@@ -13,7 +13,7 @@ const routes: Routes = [
             StorageTradingCallsResolver: StorageTradingCallsResolver,
         },
         canDeactivate: [TradingGuard],
-    }
+    },
 ];
 
 @NgModule({

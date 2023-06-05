@@ -10,6 +10,10 @@ export const constants = {
         position: 'top-right',
         theme: 'toast',
         dismissible: true,
+    },
+    TRADES: {
+        MAX_DISPLAY_POINT_ON_MOBILE: 10,
+        MAX_DISPLAY_POINT_ON_PC: 60,
     }
 }
 
