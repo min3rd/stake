@@ -98,6 +98,21 @@ const getLatestTradingCalls = async function (req, res, next) {
     res.json(tradingCalls);
 }
 
+const getTodayTradingCall = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
+    let startDate = moment().startOf('day').toDate();
+    let tradingCalls = await TradingCall.find({
+        userId: req.user.id,
+        time: {
+            $gte: startDate,
+        }
+    });
+    res.json(tradingCalls);
+}
+
 const getTradingCalls = async function (req, res, next) {
     let userId = req.params.userId;
     if (req.user.id != userId) {
@@ -326,4 +341,5 @@ module.exports = {
     getTradingCalls: getTradingCalls,
     getBestTrader: getBestTrader,
     getTradingRoomBySymbol: getTradingRoomBySymbol,
+    getTodayTradingCall: getTodayTradingCall,
 }

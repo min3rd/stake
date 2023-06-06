@@ -1,6 +1,6 @@
 var express = require('express');
 const { authenticateToken } = require('../services/public/authentication');
-const { call, getLatestTradingCalls, getTradingCalls } = require('../services/public/tradingService');
+const { call, getLatestTradingCalls, getTradingCalls, getTodayTradingCall } = require('../services/public/tradingService');
 const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification, updateUser, changePassword, addWalletAddress, removeWalletAddress } = require('../services/public/userService');
 const { createMinesRound, getMinesRoundById, choose, cashout, getMinesRounds } = require('../services/public/game/mines/minesService');
 const { getDepositOrderById, getDepositOrders, deleteDepositOrder, checkTransaction } = require('../services/public/wallet/depositService');
@@ -14,6 +14,7 @@ router.get('/:userId/addDemoCash', authenticateToken, addDemoCash);
 router.post('/:userId/trading/calls', authenticateToken, call);
 router.get('/:userId/trading/calls', authenticateToken, getTradingCalls);
 router.get('/:userId/trading/latestCalls', authenticateToken, getLatestTradingCalls);
+router.get('/:userId/trading/today', authenticateToken, getTodayTradingCall);
 router.get('/:userId/notifications', authenticateToken, getNotifications);
 router.patch('/:userId/notifications', authenticateToken, updateNotification);
 router.get('/:userId/notifications/markAllAsRead', authenticateToken, markAllNotificationAsRead);
