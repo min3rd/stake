@@ -5,7 +5,7 @@ const { User, ClientUser } = require("../../../models/User")
 
 const searchUsers = async function (req, res, next) {
     let query = !req.query.query ? {} : { username: { $regex: `.*${req.query.query}.*` } };
-    let users = await User.find(query).skip(req.query.offset ?? 0).limit(req.query.size ?? 10);
+    let users = await User.find(query);
     let mapped = users.map(e => new ClientUser(e));
     return res.json(mapped);
 }
