@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { Subject, takeUntil, pairwise, BehaviorSubject } from 'rxjs';
+import { Subject, takeUntil, pairwise, BehaviorSubject, Observable } from 'rxjs';
 import { ApexOptions, ChartComponent } from 'ng-apexcharts';
 import { SocketService } from 'app/core/socket/socket.service';
 import { SocketEvent } from 'app/core/config/socket.config';
@@ -39,7 +39,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     canTrade: boolean = false;
     calling: boolean = false;
     tradingRoom: TradingRoom;
-    tradingRoom$: BehaviorSubject<TradingRoom> = new BehaviorSubject(null);
+    tradingRoom$: Observable<TradingRoom>;
     tradingRooms: TradingRoom[];
     betCash: number = 0;
     tradingConfig: TradingConfig;
@@ -77,6 +77,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     ) {
     }
     prepare() {
+        this.tradingRoom$ = this._tradingService.tradingRoom$;
         this.isMobile = this._deviceDetectorService.isMobile();
         this.maxDisplayPoint = this.isMobile ? constants.TRADES.MAX_DISPLAY_POINT_ON_MOBILE : constants.TRADES.MAX_DISPLAY_POINT_ON_PC;
         this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe(user => {
@@ -86,10 +87,6 @@ export class TradingComponent implements OnInit, OnDestroy {
         });
         this._tradingService.rooms$.pipe(takeUntil(this._unsubscribeAll)).subscribe(rooms => {
             this.tradingRooms = rooms;
-            if (!this.tradingRoom) {
-                this.tradingRoom = this.tradingRooms[0];
-            }
-
             this._changeDetectorRef.markForCheck();
         });
 
@@ -132,6 +129,10 @@ export class TradingComponent implements OnInit, OnDestroy {
                 return kline;
             }).sort((a, b) => new Date(a.openTime).getTime() - new Date(b.openTime).getTime());
             this.klines = klines;
+            this._changeDetectorRef.markForCheck();
+            if (!this.chart) {
+                return;
+            }
             this.chart.ref$.pipe(takeUntil(this._unsubscribeAll)).subscribe(chart => {
                 let candlestick = chart.series[0];
                 let volume = chart.series[1];
@@ -164,6 +165,7 @@ export class TradingComponent implements OnInit, OnDestroy {
                     ];
                 }));
                 line.setData(this.bollingBands.map(e => [new Date(e.openTime).getTime(), e.average]));
+
                 if (this.isMobile) {
                     let now = new Date();
                     chart.xAxis[0].setExtremes(
@@ -172,7 +174,6 @@ export class TradingComponent implements OnInit, OnDestroy {
                     )
                 }
             });
-            this._changeDetectorRef.markForCheck();
         });
         this._socketService.socket.fromEvent(SocketEvent.NOW).subscribe(data => {
             this.currentTime = data;
@@ -272,6 +273,15 @@ export class TradingComponent implements OnInit, OnDestroy {
             });
             this._changeDetectorRef.markForCheck();
         });
+        this.tradingRoom$.pipe(takeUntil(this._unsubscribeAll)).subscribe((tradingRoom: TradingRoom) => {
+            if (!tradingRoom) {
+                return;
+            }
+            this.tradingRoom = tradingRoom;
+            this._socketService.socket.emit(SocketEvent.ROOM_JOIN, tradingRoom.symbol);
+            this.updateRounds(tradingRoom);
+            this._changeDetectorRef.markForCheck();
+        });
         this.tradingRoom$.pipe(pairwise(), takeUntil(this._unsubscribeAll)).subscribe(([old, newValue]) => {
             if (old) {
                 this._socketService.socket.emit(SocketEvent.ROOM_LEFT, old.symbol);
@@ -292,8 +302,6 @@ export class TradingComponent implements OnInit, OnDestroy {
             this._changeDetectorRef.markForCheck();
         });
         this._prepareChartData();
-        this._socketService.socket.emit(SocketEvent.ROOM_JOIN, this.tradingRoom.symbol);
-        this.updateRounds(this.tradingRoom);
     }
     ngOnInit(): void {
         this.prepare();
@@ -306,9 +314,6 @@ export class TradingComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
-
-        this.tradingRoom$.next(null);
-        this.tradingRoom$.complete();
     }
     private _prepareChartData(): void {
         let countdownPipe = new CountdownPipe();
@@ -492,8 +497,7 @@ export class TradingComponent implements OnInit, OnDestroy {
         });
     }
     onRoomChange(event: any) {
-        this.tradingRoom = event;
-        this.tradingRoom$.next(this.tradingRoom);
+        this._router.navigate(['/trades', event.symbol])
     }
     updateRounds(tradingRoom: TradingRoom) {
         this._tradingService.getConfig(tradingRoom).subscribe();
@@ -645,5 +649,9 @@ export class TradingComponent implements OnInit, OnDestroy {
                 }
             })
             .sort((a, b) => new Date(b.openTime).getTime() - new Date(a.openTime).getTime());
+    }
+    toggleHistory() {
+        this.history = !this.history;
+        this._tradingService.getTradingCallToday().subscribe();
     }
 }

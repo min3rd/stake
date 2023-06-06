@@ -4,7 +4,7 @@ import {
     RouterStateSnapshot,
     ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, Subject, of, take, takeUntil } from 'rxjs';
+import { Observable, Subject, of, take, takeUntil, tap } from 'rxjs';
 import { TradingService } from './trading.service';
 import { TradingCall, TradingRoom } from './trading.types';
 import { constants } from 'app/common/constants';
@@ -13,12 +13,36 @@ import moment from 'moment';
 @Injectable({
     providedIn: 'root'
 })
-export class TradingRoomResolver implements Resolve<TradingRoom[]> {
+export class TradingRoomsResolver implements Resolve<TradingRoom[]> {
     constructor(private _tradingService: TradingService) {
 
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TradingRoom[]> {
         return this._tradingService.getTradingRooms();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class FirstTradingRoomsResolver implements Resolve<TradingRoom[]> {
+    constructor(private _tradingService: TradingService) {
+
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TradingRoom[]> {
+        return this._tradingService.getTradingRoomsAndFirst();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class TradingRoomResolver implements Resolve<TradingRoom> {
+    constructor(private _tradingService: TradingService) {
+
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TradingRoom> {
+        return this._tradingService.getTradingRoom(route.paramMap.get('symbol'));
     }
 }
 

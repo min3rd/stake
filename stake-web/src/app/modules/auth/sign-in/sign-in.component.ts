@@ -43,8 +43,8 @@ export class AuthSignInComponent implements OnInit {
     ngOnInit(): void {
         // Create the form
         this.signInForm = this._formBuilder.group({
-            username: ['', [Validators.required]],
-            password: ['', Validators.required],
+            username: ['', [Validators.required, Validators.min(6)]],
+            password: ['', [Validators.required, Validators.min(6)]],
             rememberMe: ['']
         });
         this.redirectUrl = this._activatedRoute.snapshot.queryParamMap.get('redirectUrl') || '/signed-in-redirect';

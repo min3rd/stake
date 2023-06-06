@@ -37,6 +37,9 @@
                         <mat-error *ngIf="signUpForm.get('username').hasError('pattern')">
                             {{'wrong username format' | transloco | capitalize}}
                         </mat-error>
+                        <mat-error *ngIf="signUpForm.get('username').hasError('min')">
+                            {{'minimum 6 characters required' | transloco | capitalize}}
+                        </mat-error>
                     </mat-form-field>
 
                     <!-- Name field -->
@@ -60,8 +63,11 @@
                             <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
                                 [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
                         </button>
-                        <mat-error>
+                        <mat-error *ngIf="signUpForm.get('password').hasError('required')">
                             {{'password is required' | transloco | capitalize}}
+                        </mat-error>
+                        <mat-error *ngIf="signUpForm.get('password').hasError('min')">
+                            {{'minimum 6 characters required' | transloco | capitalize}}
                         </mat-error>
                     </mat-form-field>
 

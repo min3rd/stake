@@ -214,5 +214,7 @@
   "yesterday": "Dün",
   "today": "Bugün",
   "last month": "geçen ay",
-  "this month": "bu ay"
+  "this month": "bu ay",
+  "minimum 6 characters required": "minimum 6 karakter gerekli",
+  "maximum 32 characters required": "maksimum 32 karakter gerekli"
 }

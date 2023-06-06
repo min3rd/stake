@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AdminSocket } from './socket.types';
+import { AdminSocket, PublicSocket } from './socket.types';
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SocketService {
-  constructor(
-    private _adminSocket: AdminSocket
-  ) {
-  }
-  get adminSocket(): AdminSocket {
-    return this._adminSocket;
-  }
+    constructor(
+        private _adminSocket: AdminSocket,
+        private _publicSocket: PublicSocket,
+    ) {
+    }
+    get adminSocket(): AdminSocket {
+        return this._adminSocket;
+    }
+    get publicSocket(): PublicSocket {
+        return this._publicSocket;
+    }
 }
 

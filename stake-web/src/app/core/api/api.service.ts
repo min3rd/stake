@@ -38,6 +38,9 @@ export class ApiService {
     public_trading_rooms() {
         return this._publicApi('/trading/rooms');
     }
+    public_trading_rooms_room(symbol: string) {
+        return this._publicApi(`/trading/rooms/${symbol}`);
+    }
     public_trading_latest_klines(symbol: string, size: number = 60) {
         return this._publicApi(`/trading/rooms/${symbol}/klines/latest?size=${size}`);
     }
@@ -92,6 +95,10 @@ export class ApiService {
 
     users_trading_latestCalls() {
         return this._usersApi(`/trading/latestCalls`);
+    }
+
+    users_trading_calls_today() {
+        return this._usersApi(`/trading/today`);
     }
 
     users_notifications() {

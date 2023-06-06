@@ -22,3 +22,19 @@ export class AdminSocket extends Socket {
         });
     }
 }
+
+@Injectable({
+    providedIn: 'root'
+})
+export class PublicSocket extends Socket {
+    constructor(
+        private _apiService: ApiService,
+    ) {
+        super({
+            url: _apiService.public_socket(),
+            options: {
+                transports: ['websocket'],
+            },
+        });
+    }
+}

@@ -214,5 +214,7 @@
   "yesterday": "昨日",
   "today": "今日",
   "last month": "先月",
-  "this month": "今月"
+  "this month": "今月",
+  "minimum 6 characters required": "最低 6 文字が必要です",
+  "maximum 32 characters required": "最大 32 文字が必要です"
 }

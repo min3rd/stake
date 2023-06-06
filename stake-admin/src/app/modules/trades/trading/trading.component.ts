@@ -20,6 +20,7 @@ export class TradingComponent implements OnInit, OnDestroy {
     tradingRounds: TradingRound[] = [];
     TradingCallType = TradingCallType;
     calling: boolean = false;
+    now: any;
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _formBuilder: UntypedFormBuilder,
@@ -61,7 +62,6 @@ export class TradingComponent implements OnInit, OnDestroy {
 
         this._tradingService.rounds$.pipe(takeUntil(this._unsubscribeAll)).subscribe(tradingRounds => {
             this.tradingRounds = tradingRounds;
-
             this._changeDetectorRef.markForCheck();
         });
 
@@ -77,6 +77,9 @@ export class TradingComponent implements OnInit, OnDestroy {
             }
             this._changeDetectorRef.markForCheck();
         });
+        this._socketService.adminSocket.fromEvent(SocketEvent.NOW).subscribe(now => {
+            this.now = now;
+        });
     }
 
     ngOnDestroy(): void {
@@ -87,8 +90,9 @@ export class TradingComponent implements OnInit, OnDestroy {
     toggleEditMode(index: number, value: boolean) {
         this.editMode[index] = value;
     }
-    getLatestRound(tradingRoom: TradingRoom) {
-        return this.tradingRounds.length ? this.tradingRounds.find(e => e.symbol === tradingRoom.symbol) : null;
+    getLatestRound(tradingRoom: TradingRoom): TradingRound | null {
+        let rounds = this.tradingRounds.filter(e => e.symbol == tradingRoom.symbol).sort((a, b) => new Date(b.closeTime).getTime() - new Date(a.closeTime).getTime());
+        return rounds[0] ?? null;
     }
     result(tradingRound: TradingRound): boolean {
         return (tradingRound.closePrice - tradingRound.openPrice > 0) ? true : false;
@@ -111,6 +115,6 @@ export class TradingComponent implements OnInit, OnDestroy {
         if (!tradingRound) {
             return 0;
         }
-        return (new Date(tradingRound.closeTime).getTime() - new Date().getTime()) / 1000;
+        return (new Date(tradingRound.closeTime).getTime() - this.now) / 1000;
     }
 }

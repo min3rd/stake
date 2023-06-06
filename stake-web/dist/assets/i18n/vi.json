@@ -214,5 +214,7 @@
   "yesterday": "Hôm qua",
   "today": "Hôm nay",
   "last month": "tháng trước",
-  "this month": "tháng này"
+  "this month": "tháng này",
+  "minimum 6 characters required": "yêu cầu tối thiểu 6 ký tự",
+  "maximum 32 characters required": "yêu cầu tối đa 32 ký tự"
 }

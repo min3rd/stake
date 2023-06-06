@@ -214,5 +214,7 @@
   "yesterday": "เมื่อวาน",
   "today": "วันนี้",
   "last month": "เดือนที่แล้ว",
-  "this month": "เดือนนี้"
+  "this month": "เดือนนี้",
+  "minimum 6 characters required": "ต้องมีอักขระอย่างน้อย 6 ตัว",
+  "maximum 32 characters required": "ต้องการอักขระสูงสุด 32 ตัว"
 }

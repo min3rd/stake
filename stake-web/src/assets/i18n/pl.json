@@ -214,5 +214,7 @@
   "yesterday": "Wczoraj",
   "today": "Dzisiaj",
   "last month": "w zeszłym miesiącu",
-  "this month": "ten miesiąc"
+  "this month": "ten miesiąc",
+  "minimum 6 characters required": "wymagane minimum 6 znaków",
+  "maximum 32 characters required": "wymagane maksymalnie 32 znaki"
 }

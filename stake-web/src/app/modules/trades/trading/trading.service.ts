@@ -14,6 +14,7 @@ export class TradingService {
     private _rounds: BehaviorSubject<TradingRound[] | null> = new BehaviorSubject(null);
     private _config: BehaviorSubject<TradingConfig | null> = new BehaviorSubject(null);
     private _tradingCalls: BehaviorSubject<TradingCall[] | null> = new BehaviorSubject(null);
+    private _tradingRoom: BehaviorSubject<TradingRoom | null> = new BehaviorSubject(null);
 
     constructor(
         private _httpClient: HttpClient,
@@ -40,9 +41,26 @@ export class TradingService {
         return this._tradingCalls.asObservable();
     }
 
+    get tradingRoom$(): Observable<TradingRoom> {
+        return this._tradingRoom.asObservable();
+    }
+
     getTradingRooms(): Observable<TradingRoom[]> {
         return this._httpClient.get<TradingRoom[]>(this._apiService.public_trading_rooms()).pipe(tap(response => {
             this._rooms.next(response);
+        }));
+    }
+
+    getTradingRoomsAndFirst(): Observable<TradingRoom[]> {
+        return this._httpClient.get<TradingRoom[]>(this._apiService.public_trading_rooms()).pipe(tap(response => {
+            this._rooms.next(response);
+            this._tradingRoom.next(response[0]);
+        }));
+    }
+
+    getTradingRoom(symbol: string): Observable<TradingRoom> {
+        return this._httpClient.get<TradingRoom>(this._apiService.public_trading_rooms_room(symbol)).pipe(tap((tradingRoom: TradingRoom) => {
+            this._tradingRoom.next(tradingRoom);
         }));
     }
     getLatestKlines(tradingRoom: TradingRoom, size: number = 60): Observable<Kline[]> {
@@ -82,7 +100,20 @@ export class TradingService {
         return this._tradingCalls.pipe(
             take(1),
             switchMap(tradingCalls => this._httpClient.get<TradingCall[]>(this._apiService.users_trading_latestCalls()).pipe(tap(newTradingCalls => {
-                this._tradingCalls.next([...(tradingCalls ?? []), ...newTradingCalls]);
+                tradingCalls = tradingCalls ?? [];
+                tradingCalls = tradingCalls.filter(e => newTradingCalls.findIndex(t => t._id == e._id) < 0);
+                this._tradingCalls.next([...tradingCalls, ...newTradingCalls]);
+            })))
+        );
+    }
+
+    getTradingCallToday(): Observable<TradingCall[]> {
+        return this._tradingCalls.pipe(
+            take(1),
+            switchMap(tradingCalls => this._httpClient.get<TradingCall[]>(this._apiService.users_trading_calls_today()).pipe(tap(newTradingCalls => {
+                tradingCalls = tradingCalls ?? [];
+                tradingCalls = tradingCalls.filter(e => newTradingCalls.findIndex(t => t._id == e._id) < 0);
+                this._tradingCalls.next([...tradingCalls, ...newTradingCalls]);
             })))
         );
     }

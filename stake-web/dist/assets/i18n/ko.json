@@ -214,5 +214,7 @@
   "yesterday": "어제",
   "today": "오늘",
   "last month": "지난 달",
-  "this month": "이번 달"
+  "this month": "이번 달",
+  "minimum 6 characters required": "최소 6자 필요",
+  "maximum 32 characters required": "최대 32자 필요"
 }

@@ -214,5 +214,7 @@
   "yesterday": "ontem",
   "today": "hoje",
   "last month": "mês passado",
-  "this month": "este mês"
+  "this month": "este mês",
+  "minimum 6 characters required": "mínimo de 6 caracteres obrigatórios",
+  "maximum 32 characters required": "máximo de 32 caracteres necessários"
 }

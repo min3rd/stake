@@ -214,5 +214,7 @@
   "yesterday": "昨天",
   "today": "今天",
   "last month": "上个月",
-  "this month": "这个月"
+  "this month": "这个月",
+  "minimum 6 characters required": "至少需要 6 个字符",
+  "maximum 32 characters required": "最多需要 32 个字符"
 }

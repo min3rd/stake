@@ -1,4 +1,4 @@
-import { StorageTradingCallsResolver, TradingRoomResolver } from './trading.resolver';
+import { FirstTradingRoomsResolver, TradingRoomResolver, TradingRoomsResolver } from './trading.resolver';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TradingComponent } from './trading.component';
@@ -9,8 +9,16 @@ const routes: Routes = [
         path: '',
         component: TradingComponent,
         resolve: {
+            FirstTradingRoomsResolver: FirstTradingRoomsResolver,
+        },
+        canDeactivate: [TradingGuard],
+    },
+    {
+        path: ':symbol',
+        component: TradingComponent,
+        resolve: {
+            TradingRoomsResolver: TradingRoomsResolver,
             TradingRoomResolver: TradingRoomResolver,
-            StorageTradingCallsResolver: StorageTradingCallsResolver,
         },
         canDeactivate: [TradingGuard],
     },

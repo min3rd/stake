@@ -33,6 +33,12 @@
                         <mat-error *ngIf="signInForm.get('username').hasError('required')">
                             {{'username is required' | transloco | capitalize}}
                         </mat-error>
+                        <mat-error *ngIf="signInForm.get('username').hasError('min')">
+                            {{'minimum 6 characters required' | transloco | capitalize}}
+                        </mat-error>
+                        <mat-error *ngIf="signInForm.get('username').hasError('max')">
+                            {{'maximum 32 characters required' | transloco | capitalize}}
+                        </mat-error>
                     </mat-form-field>
 
                     <!-- Password field -->
@@ -47,7 +53,15 @@
                             <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
                                 [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
                         </button>
-                        <mat-error> {{'password is required' | transloco | capitalize}} </mat-error>
+                        <mat-error *ngIf="signInForm.get('password').hasError('required')">
+                            {{'password is required' | transloco | capitalize}}
+                        </mat-error>
+                        <mat-error *ngIf="signInForm.get('password').hasError('min')">
+                            {{'minimum 6 characters required' | transloco | capitalize}}
+                        </mat-error>
+                        <mat-error *ngIf="signInForm.get('password').hasError('max')">
+                            {{'maximum 32 characters required' | transloco | capitalize}}
+                        </mat-error>
                     </mat-form-field>
 
                     <!-- Actions -->

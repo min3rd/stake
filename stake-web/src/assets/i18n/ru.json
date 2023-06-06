@@ -214,5 +214,7 @@
   "yesterday": "вчера",
   "today": "сегодня",
   "last month": "прошлый месяц",
-  "this month": "этот месяц"
+  "this month": "этот месяц",
+  "minimum 6 characters required": "требуется минимум 6 символов",
+  "maximum 32 characters required": "требуется максимум 32 символа"
 }

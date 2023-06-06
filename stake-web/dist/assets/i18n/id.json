@@ -214,5 +214,7 @@
   "yesterday": "Kemarin",
   "today": "Hari ini",
   "last month": "bulan lalu",
-  "this month": "bulan ini"
+  "this month": "bulan ini",
+  "minimum 6 characters required": "diperlukan minimal 6 karakter",
+  "maximum 32 characters required": "maksimal 32 karakter yang diperlukan"
 }

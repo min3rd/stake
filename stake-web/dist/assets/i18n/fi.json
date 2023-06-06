@@ -214,5 +214,7 @@
   "yesterday": "eilen",
   "today": "tänään",
   "last month": "viime kuukausi",
-  "this month": "tässä kuussa"
+  "this month": "tässä kuussa",
+  "minimum 6 characters required": "vaaditaan vähintään 6 merkkiä",
+  "maximum 32 characters required": "vaaditaan enintään 32 merkkiä"
 }
