@@ -62,6 +62,7 @@ const signUp = async (req, res, next) => {
         if (!user) {
             throw new Error(ErrorCode.SIGN_UP_FAILED);
         }
+        logger.info("authentication_signUp", `user=${JSON.stringify(user)}`)
         res.send();
     }
     return next(badRequestError.make(ErrorCode.USERNAME_EXISTS));

@@ -265,6 +265,7 @@ const updateCallResult = async function (publicIo, userIo) {
             },
             closed: false,
         });
+        let appConfig = await AppConfig.findOne({});
         for (let tradingRound of tradingRounds) {
             logger.info("updateCallResult_START_PROCESS_ROUND", `round=${JSON.stringify(tradingRound)}`);
             let winType = tradingRound.closePrice - tradingRound.openPrice > 0 ? TradingCallType.BUY : TradingCallType.SELL;
@@ -304,7 +305,9 @@ const updateCallResult = async function (publicIo, userIo) {
                 tradingCall = await tradingCall.save();
 
                 // update monthly profit record
-                updateMonthlyProfit(tradingCall, user);
+                if (appConfig.AUTO_UPDATE_MONTHLY_PROFIT) {
+                    updateMonthlyProfit(tradingCall, user);
+                }
 
                 logger.info("updateCallResult_MASTER_PAID", `user=${JSON.stringify(user)} tradingCall=${JSON.stringify(tradingCall)}`);
                 let noti = await notificationService.createTradingCallResult(user, isWin, tradingCall.betCash, benefit);
