@@ -24,6 +24,15 @@ const tradingRooms = async function (req, res, next) {
         };
     }));
 }
+const getTradingRoomBySymbol = async function (req, res, next) {
+    let tradingRoom = await TradingRoom.findOne({
+        symbol: req.params.symbol,
+    });
+    res.json({
+        id: tradingRoom._id.toString(),
+        symbol: tradingRoom.symbol,
+    });
+}
 const latestKlines = async function (req, res, next) {
     let klines = await Kline.find({
         symbol: req.params.symbol,
@@ -316,4 +325,5 @@ module.exports = {
     getLatestTradingCalls: getLatestTradingCalls,
     getTradingCalls: getTradingCalls,
     getBestTrader: getBestTrader,
+    getTradingRoomBySymbol: getTradingRoomBySymbol,
 }

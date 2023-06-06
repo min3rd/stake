@@ -1,6 +1,6 @@
 const express = require('express');
 const { signUp, signIn, signInByRefreshToken, noGuard } = require('../services/public/authentication');
-const { tradingRooms, latestKlines, latestRounds, tradingConfig, getBestTrader } = require('../services/public/tradingService');
+const { tradingRooms, latestKlines, latestRounds, tradingConfig, getBestTrader, getTradingRoomBySymbol } = require('../services/public/tradingService');
 const { getNotifications } = require('../services/public/userService');
 const { getAppConfig } = require('../services/public/appConfigService');
 const { getLatestNews } = require('../services/public/landingService');
@@ -10,6 +10,7 @@ publicRoute.post('/sign-up', signUp);
 publicRoute.post('/sign-in', signIn);
 publicRoute.post('/sign-in/refreshToken', signInByRefreshToken);
 publicRoute.get('/trading/rooms', tradingRooms);
+publicRoute.get('/trading/rooms/:symbol', getTradingRoomBySymbol);
 publicRoute.get('/trading/rooms/:symbol/klines/latest', latestKlines);
 publicRoute.get('/trading/rooms/:symbol/rounds/latest', latestRounds);
 publicRoute.get('/trading/rooms/:symbol/config', tradingConfig);
