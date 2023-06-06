@@ -109,7 +109,7 @@ const getTodayTradingCall = async function (req, res, next) {
         time: {
             $gte: startDate,
         }
-    });
+    }).sort({ time: -1 }).limit(10);
     res.json(tradingCalls);
 }
 

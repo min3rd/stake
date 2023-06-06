@@ -17,6 +17,7 @@ async function updateTradingRounds(adminIo) {
             adminIo.to(SocketRoom.ADMIN_TRADING).emit(SocketEvent.ADMIN_TRADING_ROUND, tradingRound);
         }
     }
+    adminIo.emit(SocketEvent.NOW, new Date().getTime());
     setTimeout(() => {
         updateTradingRounds(adminIo);
     }, process.env.UPDATE_ADMIN_TRADING_ROUND_DURARION || 1000);
