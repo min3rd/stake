@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
     selector: 'settings',
@@ -21,7 +22,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
      */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
-        private _fuseMediaWatcherService: FuseMediaWatcherService
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _deviceDetectorService: DeviceDetectorService,
     ) {
     }
 
@@ -48,6 +50,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 title: 'security',
                 description: 'manage your password',
                 link: './security',
+            },
+            {
+                id: 'partner-registration',
+                icon: 'heroicons_outline:user-group',
+                title: 'partner registration',
+                description: 'your partner registration information',
+                link: './partner-registration',
             },
         ];
 
@@ -101,5 +110,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
      */
     trackByFn(index: number, item: any): any {
         return item.id || index;
+    }
+
+    closeDrawer() {
+        if (this._deviceDetectorService.isMobile()) {
+            this.drawer.close();
+        }
     }
 }

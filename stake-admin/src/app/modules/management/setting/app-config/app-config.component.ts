@@ -32,6 +32,8 @@ export class AppConfigComponent implements OnInit, OnDestroy {
             MASTER_ADDRESS: [''],
             __v: [''],
             MINES_TOTAL_PROFIT_PERCENT: [''],
+            MIN_CASH_TO_REGISTER_PARTNER: [''],
+            AUTO_ACCEPT_PARTNER_REGISTRATION: [false],
         });
 
         this._settingService.appConfig$.pipe(takeUntil(this._unsubscribeAll)).subscribe(appConfig => {

@@ -135,7 +135,7 @@ export class LanguagesComponent implements OnInit, OnDestroy {
         // Get the flat navigation data
         const navigation = navComponent.navigation;
 
-        // Get the Trades item and update its title
+
         const tradeItem = this._fuseNavigationService.getItem('trades', navigation);
         if (tradeItem) {
             this._translocoService.selectTranslate('trade').pipe(take(1)).subscribe(translation => {
@@ -145,7 +145,7 @@ export class LanguagesComponent implements OnInit, OnDestroy {
             });
         }
 
-        // Get the Trades item and update its title
+
         const gameItem = this._fuseNavigationService.getItem('games', navigation);
         if (gameItem) {
             this._translocoService.selectTranslate('games').pipe(take(1)).subscribe(translation => {
@@ -155,7 +155,7 @@ export class LanguagesComponent implements OnInit, OnDestroy {
             });
         }
 
-        // Get the Trades item and update its title
+
         const walletItem = this._fuseNavigationService.getItem('wallet', navigation);
         if (walletItem) {
             this._translocoService.selectTranslate('wallet').pipe(take(1)).subscribe(translation => {
@@ -165,12 +165,21 @@ export class LanguagesComponent implements OnInit, OnDestroy {
             });
         }
 
-        // Get the Trades item and update its title
+
         const dashboardItem = this._fuseNavigationService.getItem('dashboard', navigation);
         if (dashboardItem) {
             this._translocoService.selectTranslate('dashboard').pipe(take(1)).subscribe(translation => {
                 let capitalizePipe = new CapitalizePipe();
                 dashboardItem.title = capitalizePipe.transform(translation);
+                navComponent.refresh();
+            });
+        }
+
+        const partnersItem = this._fuseNavigationService.getItem('partners', navigation);
+        if (partnersItem) {
+            this._translocoService.selectTranslate('partners').pipe(take(1)).subscribe(translation => {
+                let capitalizePipe = new CapitalizePipe();
+                partnersItem.title = capitalizePipe.transform(translation);
                 navComponent.refresh();
             });
         }

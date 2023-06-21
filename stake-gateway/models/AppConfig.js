@@ -11,6 +11,8 @@ const AppConfigSchema = new Schema({
     COUNT_SEED: { type: Number, default: process.env.FAKE_TRADING_COUNT_SEED ?? 10 },
     MINES_TOTAL_PROFIT_PERCENT: { type: Number, default: process.env.MINES_TOTAL_PROFIT_PERCENT ?? 2 },
     AUTO_UPDATE_MONTHLY_PROFIT: { type: Boolean, default: true, },
+    MIN_CASH_TO_REGISTER_PARTNER: { type: Number, default: 0, },
+    AUTO_ACCEPT_PARTNER_REGISTRATION: { type: Boolean, default: false, },
 });
 
 const AppConfig = publicMongoose.model('AppConfig', AppConfigSchema);

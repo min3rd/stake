@@ -9,4 +9,6 @@ export interface AppConfig {
     MASTER_ADDRESS?: string;
     __v?: number;
     MINES_TOTAL_PROFIT_PERCENT?: number;
+    MIN_CASH_TO_REGISTER_PARTNER?: number;
+    AUTO_ACCEPT_PARTNER_REGISTRATION?: boolean;
 }

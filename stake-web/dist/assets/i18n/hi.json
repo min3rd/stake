@@ -216,5 +216,20 @@
   "last month": "पिछला महीना",
   "this month": "इस महीने",
   "minimum 6 characters required": "न्यूनतम 6 वर्ण आवश्यक हैं",
-  "maximum 32 characters required": "अधिकतम 32 वर्णों की आवश्यकता है"
+  "maximum 32 characters required": "अधिकतम 32 वर्णों की आवश्यकता है",
+  "your partner registration information": "आपके साथी पंजीकरण की जानकारी",
+  "partner registration": "भागीदार पंजीकरण",
+  "partners": "भागीदार",
+  "pending": "लंबित",
+  "phone is required": "फोन की आवश्यकता है",
+  "rejected": "अस्वीकार कर दिया",
+  "success": "सफलता",
+  "telegram is required": "टेलीग्राम की आवश्यकता है",
+  "zalo": "zalo",
+  "zalo is required": "ज़ालो की आवश्यकता है",
+  "email is required": "ईमेल की जरूरत है",
+  "facebook": "फेसबुक",
+  "facebook is required": "फेसबुक की आवश्यकता है",
+  "address": "पता",
+  "address is required": "पता आवश्यक है"
 }

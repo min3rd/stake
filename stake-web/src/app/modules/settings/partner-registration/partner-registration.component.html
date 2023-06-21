@@ -1,0 +1,108 @@
+<div class="w-full max-w-3xl">
+    <!-- Section -->
+    <div class="w-full">
+        <div class="text-xl">{{'partner registration' | transloco | capitalize}}</div>
+        <div class="text-secondary">{{'your partner registration information' | transloco |
+            capitalize}}</div>
+    </div>
+    <div class="w-full">
+        <!-- Alert -->
+        <fuse-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'soft'" [showIcon]="true" [type]="alert.type"
+            [@shake]="alert.type === 'error'">
+            {{ alert.message }}
+        </fuse-alert>
+    </div>
+    <!-- Form -->
+    <form [formGroup]="form">
+        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+            <input type="hidden" [formControlName]="'_id'">
+            <input type="hidden" [formControlName]="'time'">
+            <input type="hidden" [formControlName]="'userId'">
+            <input type="hidden" [formControlName]="'username'">
+            <input type="hidden" [formControlName]="'name'">
+            <!-- Address -->
+            <div class="sm:col-span-4">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{'address' | transloco | capitalize}}</mat-label>
+                    <mat-icon class="icon-size-5" svgIcon="mat_solid:location_on" matPrefix></mat-icon>
+                    <input [formControlName]="'address'" matInput>
+                    <mat-error *ngIf="form.get('address').hasError('required')">
+                        {{'address is required' | transloco | capitalize}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- Phone -->
+            <div class="sm:col-span-4">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{'phone' | transloco | capitalize}}</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
+                    <input [formControlName]="'phone'" matInput>
+                    <mat-error *ngIf="form.get('phone').hasError('required')">
+                        {{'phone is required' | transloco | capitalize}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <!-- Email -->
+            <div class="sm:col-span-4">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{'email' | transloco | capitalize}}</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:mail'" matPrefix></mat-icon>
+                    <input [formControlName]="'email'" matInput>
+                    <mat-error *ngIf="form.get('email').hasError('required')">
+                        {{'email is required' | transloco | capitalize}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <!-- Telegram -->
+            <div class="sm:col-span-4">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{'telegram' | transloco | capitalize}}</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
+                    <input [formControlName]="'telegram'" matInput>
+                    <mat-error *ngIf="form.get('telegram').hasError('required')">
+                        {{'telegram is required' | transloco | capitalize}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <!-- Zalo -->
+            <div class="sm:col-span-4">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{'zalo' | transloco | capitalize}}</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
+                    <input [formControlName]="'zalo'" matInput>
+                    <mat-error *ngIf="form.get('zalo').hasError('required')">
+                        {{'zalo is required' | transloco | capitalize}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <!-- Facebook -->
+            <div class="sm:col-span-4">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{'facebook' | transloco | capitalize}}</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'feather:facebook'" matPrefix></mat-icon>
+                    <input [formControlName]="'facebook'" matInput>
+                    <mat-error *ngIf="form.get('facebook').hasError('required')">
+                        {{'facebook is required' | transloco | capitalize}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="mt-11 mb-10 border-t"></div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end">
+            <button [disabled]="form.disabled" class="ml-4 w-18" mat-flat-button type="button" [color]="'primary'"
+                (click)="save()">
+                <span *ngIf="!form.disabled">
+                    {{'save' | transloco | capitalize}}
+                </span>
+                <mat-progress-spinner *ngIf="form.disabled" [diameter]="24"
+                    [mode]="'indeterminate'"></mat-progress-spinner>
+            </button>
+        </div>
+    </form>
+
+</div>

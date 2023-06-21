@@ -216,5 +216,20 @@
   "last month": "지난 달",
   "this month": "이번 달",
   "minimum 6 characters required": "최소 6자 필요",
-  "maximum 32 characters required": "최대 32자 필요"
+  "maximum 32 characters required": "최대 32자 필요",
+  "your partner registration information": "파트너 등록 정보",
+  "partner registration": "파트너 등록",
+  "partners": "파트너",
+  "pending": "보류 중",
+  "phone is required": "전화가 필요합니다",
+  "rejected": "거부",
+  "success": "성공",
+  "telegram is required": "전보가 필요합니다",
+  "zalo": "잘로",
+  "zalo is required": "잘로가 필요합니다",
+  "email is required": "이메일이 필요합니다",
+  "facebook": "페이스북",
+  "facebook is required": "페이스북은 필수",
+  "address": "주소",
+  "address is required": "주소가 필요합니다"
 }

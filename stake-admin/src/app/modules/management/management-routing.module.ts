@@ -19,6 +19,10 @@ const routes: Routes = [
         loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),
     },
     {
+        path: 'monthlyProfits',
+        loadChildren: () => import('./monthly-profits/monthly-profits.module').then(m => m.MonthlyProfitsModule),
+    },
+    {
         path: '**',
         redirectTo: '/'
     }

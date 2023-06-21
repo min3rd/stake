@@ -216,5 +216,20 @@
   "last month": "прошлый месяц",
   "this month": "этот месяц",
   "minimum 6 characters required": "требуется минимум 6 символов",
-  "maximum 32 characters required": "требуется максимум 32 символа"
+  "maximum 32 characters required": "требуется максимум 32 символа",
+  "your partner registration information": "информация о регистрации вашего партнера",
+  "partner registration": "регистрация партнера",
+  "partners": "партнеры",
+  "pending": "в ожидании",
+  "phone is required": "телефон требуется",
+  "rejected": "отклоненный",
+  "success": "успех",
+  "telegram is required": "телеграмма требуется",
+  "zalo": "зало",
+  "zalo is required": "требуется зало",
+  "email is required": "электронная почта требуется",
+  "facebook": "фейсбук",
+  "facebook is required": "требуется фейсбук",
+  "address": "адрес",
+  "address is required": "адрес требуется"
 }

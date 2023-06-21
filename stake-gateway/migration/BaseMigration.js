@@ -21,13 +21,15 @@ class BaseMigration {
         }
     }
     async run() {
+        logger.info('migrations start', `-----${this.version}-----`);
         await this.prepare();
         if (!this.canRun) {
             return;
         }
-        logger.info('migrations', `-----${this.version}-----`);
+        logger.info('migrations running', `-----${this.version}-----`);
         await this.migration();
         await this.post();
+        logger.info('migrations end', `-----${this.version}-----`);
     }
     async migration() {
         console.log('migration');

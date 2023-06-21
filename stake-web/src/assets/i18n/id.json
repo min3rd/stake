@@ -216,5 +216,20 @@
   "last month": "bulan lalu",
   "this month": "bulan ini",
   "minimum 6 characters required": "diperlukan minimal 6 karakter",
-  "maximum 32 characters required": "maksimal 32 karakter yang diperlukan"
+  "maximum 32 characters required": "maksimal 32 karakter yang diperlukan",
+  "your partner registration information": "informasi pendaftaran mitra Anda",
+  "partner registration": "pendaftaran mitra",
+  "partners": "mitra",
+  "pending": "tertunda",
+  "phone is required": "telepon diperlukan",
+  "rejected": "ditolak",
+  "success": "kesuksesan",
+  "telegram is required": "diperlukan telegram",
+  "zalo": "zalo",
+  "zalo is required": "zal diperlukan",
+  "email is required": "email diperlukan",
+  "facebook": "facebook",
+  "facebook is required": "diperlukan facebook",
+  "address": "alamat",
+  "address is required": "alamat diperlukan"
 }

@@ -22,7 +22,7 @@
                 <ng-container *ngFor="let panel of panels; trackBy: trackByFn">
                     <div class="flex px-8 py-5 cursor-pointer" [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPanel || selectedPanel !== panel.id,
                                     'bg-primary-50 dark:bg-hover': selectedPanel && selectedPanel === panel.id}"
-                        [routerLink]="panel.link" routerLinkActive>
+                        [routerLink]="panel.link" routerLinkActive (click)="closeDrawer()">
                         <mat-icon
                             [ngClass]="{'text-hint': !selectedPanel || selectedPanel !== panel.id,
                                         'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}"
@@ -52,7 +52,7 @@
 
                     <!-- Drawer toggle -->
                     <button class="lg:hidden -ml-2" mat-icon-button (click)="drawer.toggle()">
-                        <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+                        <mat-icon svgIcon="feather:settings"></mat-icon>
                     </button>
                 </div>
 

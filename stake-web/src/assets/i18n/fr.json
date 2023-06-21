@@ -216,5 +216,20 @@
   "last month": "le mois dernier",
   "this month": "ce mois-ci",
   "minimum 6 characters required": "minimum 6 caractères requis",
-  "maximum 32 characters required": "32 caractères maximum requis"
+  "maximum 32 characters required": "32 caractères maximum requis",
+  "your partner registration information": "les informations d'enregistrement de votre partenaire",
+  "partner registration": "enregistrement des partenaires",
+  "partners": "les partenaires",
+  "pending": "en attente",
+  "phone is required": "le téléphone est requis",
+  "rejected": "rejeté",
+  "success": "succès",
+  "telegram is required": "télégramme est nécessaire",
+  "zalo": "zalo",
+  "zalo is required": "zalo est requis",
+  "email is required": "e-mail est requis",
+  "facebook": "Facebook",
+  "facebook is required": "facebook est requis",
+  "address": "adresse",
+  "address is required": "l'adresse est obligatoire"
 }

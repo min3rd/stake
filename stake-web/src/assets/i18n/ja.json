@@ -216,5 +216,20 @@
   "last month": "先月",
   "this month": "今月",
   "minimum 6 characters required": "最低 6 文字が必要です",
-  "maximum 32 characters required": "最大 32 文字が必要です"
+  "maximum 32 characters required": "最大 32 文字が必要です",
+  "your partner registration information": "パートナー登録情報",
+  "partner registration": "パートナー登録",
+  "partners": "パートナー",
+  "pending": "保留中",
+  "phone is required": "電話は必須です",
+  "rejected": "拒否されました",
+  "success": "成功",
+  "telegram is required": "電報は必須です",
+  "zalo": "ザロ",
+  "zalo is required": "ザロは必須です",
+  "email is required": "電子メールは必須です",
+  "facebook": "フェイスブック",
+  "facebook is required": "フェイスブックは必須です",
+  "address": "住所",
+  "address is required": "住所は必須です"
 }

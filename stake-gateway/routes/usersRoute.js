@@ -1,7 +1,7 @@
 var express = require('express');
 const { authenticateToken } = require('../services/public/authentication');
 const { call, getLatestTradingCalls, getTradingCalls, getTodayTradingCall } = require('../services/public/tradingService');
-const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification, updateUser, changePassword, addWalletAddress, removeWalletAddress } = require('../services/public/userService');
+const { switchAccount, addDemoCash, getNotifications, updateNotification, markAllNotificationAsRead, removeNotification, updateUser, changePassword, addWalletAddress, removeWalletAddress, savePartnerRegistratrion, getPartnerRegistration } = require('../services/public/userService');
 const { createMinesRound, getMinesRoundById, choose, cashout, getMinesRounds } = require('../services/public/game/mines/minesService');
 const { getDepositOrderById, getDepositOrders, deleteDepositOrder, checkTransaction } = require('../services/public/wallet/depositService');
 const { getWithdrawOrders, getWithdrawOrder, createWithdrawOrder, deleteWithdrawOrder, getCashTransfers, getCashTransfer, createCashTransfer } = require('../services/public/wallet/withdrawService');
@@ -45,5 +45,8 @@ router.get('/:userId/wallet/cashTransfers', authenticateToken, getCashTransfers)
 router.get('/:userId/wallet/cashTransfers/:cashTransferId', authenticateToken, getCashTransfer);
 
 router.get('/:userId/dashboard/tradeStats', authenticateToken, getTradeStats);
+
+router.post('/:userId/partnerRegistration', authenticateToken, savePartnerRegistratrion);
+router.get('/:userId/partnerRegistration', authenticateToken, getPartnerRegistration);
 
 module.exports = router;

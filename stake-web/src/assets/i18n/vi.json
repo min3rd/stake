@@ -216,5 +216,20 @@
   "last month": "tháng trước",
   "this month": "tháng này",
   "minimum 6 characters required": "yêu cầu tối thiểu 6 ký tự",
-  "maximum 32 characters required": "yêu cầu tối đa 32 ký tự"
+  "maximum 32 characters required": "yêu cầu tối đa 32 ký tự",
+  "your partner registration information": "thông tin đăng ký đối tác của bạn",
+  "partner registration": "đăng ký đối tác",
+  "partners": "đại lý",
+  "pending": "chưa giải quyết",
+  "phone is required": "điện thoại là bắt buộc",
+  "rejected": "bị từ chối",
+  "success": "thành công",
+  "telegram is required": "tài khoản telegram là bắt buộc",
+  "zalo": "zalo",
+  "zalo is required": "cần có zalo",
+  "email is required": "Email thì cần thiết",
+  "facebook": "Facebook",
+  "facebook is required": "facebook là bắt buộc",
+  "address": "Địa chỉ",
+  "address is required": "địa chỉ được yêu cầu"
 }

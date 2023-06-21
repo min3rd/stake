@@ -75,5 +75,7 @@
   "description": "thông tin chi tiết",
   "start date": "ngày bắt đầu",
   "end date": "ngày kết thúc",
-  "data": "dữ liệu"
+  "data": "dữ liệu",
+  "minimum cash to register partner": "tiền mặt tối thiểu để đăng ký đối tác",
+  "auto confirm partner registration": "tự động xác nhận đăng ký đối tác"
 }

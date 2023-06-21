@@ -216,5 +216,20 @@
   "last month": "geçen ay",
   "this month": "bu ay",
   "minimum 6 characters required": "minimum 6 karakter gerekli",
-  "maximum 32 characters required": "maksimum 32 karakter gerekli"
+  "maximum 32 characters required": "maksimum 32 karakter gerekli",
+  "your partner registration information": "ortak kayıt bilgileriniz",
+  "partner registration": "ortak kaydı",
+  "partners": "ortaklar",
+  "pending": "askıda olması",
+  "phone is required": "telefon gerekli",
+  "rejected": "Reddedilmiş",
+  "success": "başarı",
+  "telegram is required": "telgraf gerekli",
+  "zalo": "zalo",
+  "zalo is required": "zalo gereklidir",
+  "email is required": "Email gereklidir",
+  "facebook": "Facebook",
+  "facebook is required": "facebook gereklidir",
+  "address": "adres",
+  "address is required": "adres gerekli"
 }

@@ -29,6 +29,13 @@ const navigations: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:chart-bar',
         link: '/dashboard'
+    },
+    {
+        id: 'partners',
+        title: 'Partners',
+        type: 'basic',
+        icon: 'heroicons_outline:user-group',
+        link: '/partners'
     }
 ];
 

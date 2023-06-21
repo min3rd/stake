@@ -14,12 +14,14 @@ import { SettingsAccountComponent } from './account/account.component';
 import { SettingsSecurityComponent } from './security/security.component';
 import { SettingsComponent } from './settings.component';
 import { settingsRoutes } from './settings.routing';
+import { PartnerRegistrationComponent } from './partner-registration/partner-registration.component';
 
 @NgModule({
     declarations: [
         SettingsComponent,
         SettingsAccountComponent,
         SettingsSecurityComponent,
+        PartnerRegistrationComponent,
     ],
     imports: [
         RouterModule.forChild(settingsRoutes),

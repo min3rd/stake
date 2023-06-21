@@ -23,7 +23,12 @@ const UserSchema = new Schema({
         {
             type: String,
         }
-    ]
+    ],
+    telegram: { type: String },
+    zalo: { type: String },
+    facebook: { type: String },
+    partner: { type: Number },
+
 });
 const User = publicMongoose.model('User', UserSchema);
 

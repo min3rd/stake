@@ -216,5 +216,20 @@
   "last month": "เดือนที่แล้ว",
   "this month": "เดือนนี้",
   "minimum 6 characters required": "ต้องมีอักขระอย่างน้อย 6 ตัว",
-  "maximum 32 characters required": "ต้องการอักขระสูงสุด 32 ตัว"
+  "maximum 32 characters required": "ต้องการอักขระสูงสุด 32 ตัว",
+  "your partner registration information": "ข้อมูลการลงทะเบียนพันธมิตรของคุณ",
+  "partner registration": "การลงทะเบียนพันธมิตร",
+  "partners": "พันธมิตร",
+  "pending": "รอดำเนินการ",
+  "phone is required": "จำเป็นต้องใช้โทรศัพท์",
+  "rejected": "ปฏิเสธ",
+  "success": "ความสำเร็จ",
+  "telegram is required": "จำเป็นต้องใช้โทรเลข",
+  "zalo": "ซาโล",
+  "zalo is required": "จำเป็นต้องมีซาโล",
+  "email is required": "จำเป็นต้องใช้อีเมล",
+  "facebook": "เฟสบุ๊ค",
+  "facebook is required": "จำเป็นต้องมีเฟสบุ๊ค",
+  "address": "ที่อยู่",
+  "address is required": "ต้องระบุที่อยู่"
 }

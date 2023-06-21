@@ -46,6 +46,12 @@ export const appRoutes: Route[] = [
                 path: 'games',
                 loadChildren: () => import('app/modules/games/games.module').then(m => m.GamesModule),
             },
+
+            // Partners
+            {
+                path: 'partners',
+                loadChildren: () => import('app/modules/partners/partners.module').then(m => m.PartnersModule),
+            }
         ]
     },
     // Auth routes for guests

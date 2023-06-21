@@ -1,6 +1,9 @@
 const badRequestError = require("../../common/badRequestError");
+const { Status } = require("../../common/constants");
 const ErrorCode = require("../../common/errorCode");
+const AppConfig = require("../../models/AppConfig");
 const Notification = require("../../models/Notification");
+const PartnerRegistration = require("../../models/PartnerRegistration");
 const { User, ClientUser } = require("../../models/User");
 const { security } = require("../security");
 const notificationService = require("./notificationService");
@@ -162,6 +165,64 @@ const removeWalletAddress = async function (req, res, next) {
     user = await user.save();
     res.json(new ClientUser(user));
 }
+const savePartnerRegistratrion = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
+    let partnerRegistration = await PartnerRegistration.findOne({
+        userId: userId,
+    });
+    let appConfig = await AppConfig.findOne({});
+    let user = await User.findOne({
+        _id: userId,
+    });
+    if (!user) {
+        return next(badRequestError.make(ErrorCode.USER_NOT_FOUND));
+    }
+    if (appConfig.MIN_CASH_TO_REGISTER_PARTNER > user.cash) {
+        return next(badRequestError.make(ErrorCode.CASH_NOT_ENOUGH));
+    }
+    if (!partnerRegistration) {
+        partnerRegistration = new PartnerRegistration({
+            userId: userId,
+            time: new Date(),
+            phone: req.body.phone,
+            email: req.body.email,
+            telegram: req.body.telegram,
+            zalo: req.body.zalo,
+            facebook: req.body.facebook,
+            address: req.body.address,
+            status: Status.PENDING,
+            username: user.username,
+            name: user.name,
+        });
+    } else {
+        partnerRegistration.phone = req.body.phone;
+        partnerRegistration.email = req.body.email;
+        partnerRegistration.telegram = req.body.telegram;
+        partnerRegistration.zalo = req.body.zalo;
+        partnerRegistration.facebook = req.body.facebook;
+        partnerRegistration.address = req.body.address;
+        partnerRegistration.username = user.username;
+        partnerRegistration.name = user.name;
+    }
+    if (appConfig.AUTO_ACCEPT_PARTNER_REGISTRATION) {
+        partnerRegistration.status = Status.SUCCESS;
+    }
+    partnerRegistration = await partnerRegistration.save();
+    res.json(partnerRegistration);
+}
+const getPartnerRegistration = async function (req, res, next) {
+    let userId = req.params.userId;
+    if (req.user.id != userId) {
+        return next(badRequestError.make(ErrorCode.USERID_NOT_MATCH));
+    }
+    let partnerRegistration = await PartnerRegistration.findOne({
+        userId: userId,
+    });
+    res.json(partnerRegistration);
+}
 module.exports = {
     switchAccount: switchAccount,
     addDemoCash: addDemoCash,
@@ -173,4 +234,6 @@ module.exports = {
     changePassword: changePassword,
     addWalletAddress: addWalletAddress,
     removeWalletAddress: removeWalletAddress,
+    savePartnerRegistratrion: savePartnerRegistratrion,
+    getPartnerRegistration: getPartnerRegistration,
 }

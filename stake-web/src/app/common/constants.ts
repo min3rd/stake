@@ -14,6 +14,11 @@ export const constants = {
     TRADES: {
         MAX_DISPLAY_POINT_ON_MOBILE: 10,
         MAX_DISPLAY_POINT_ON_PC: 60,
+    },
+    Status: {
+        PENDING: 0,
+        SUCCESS: 1,
+        CANCELED: 2,
     }
 }
 

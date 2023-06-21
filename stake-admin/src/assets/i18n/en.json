@@ -85,5 +85,7 @@
   "description": "description",
   "start date": "start date",
   "end date": "end date",
-  "data": "data"
+  "data": "data",
+  "minimum cash to register partner": "minimum cash to register partner",
+  "auto confirm partner registration": "auto confirm partner registration"
 }

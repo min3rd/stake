@@ -216,5 +216,20 @@
   "last month": "上个月",
   "this month": "这个月",
   "minimum 6 characters required": "至少需要 6 个字符",
-  "maximum 32 characters required": "最多需要 32 个字符"
+  "maximum 32 characters required": "最多需要 32 个字符",
+  "your partner registration information": "您的合作伙伴注册信息",
+  "partner registration": "合作伙伴注册",
+  "partners": "伙伴",
+  "pending": "待办的",
+  "phone is required": "需要电话",
+  "rejected": "拒绝",
+  "success": "成功",
+  "telegram is required": "需要电报",
+  "zalo": "扎洛",
+  "zalo is required": "zalo 是必需的",
+  "email is required": "电子邮件为必填项",
+  "facebook": "Facebook",
+  "facebook is required": "需要脸书",
+  "address": "地址",
+  "address is required": "地址为必填项"
 }

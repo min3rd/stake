@@ -10,28 +10,28 @@
                     <mat-label>
                         {{'min withdraw value' | transloco | capitalize}}
                     </mat-label>
-                    <input matInput type="text" [formControlName]="'withdrawMinValue'" [spellcheck]="false">
+                    <input matInput type="number" [formControlName]="'withdrawMinValue'" [spellcheck]="false">
                 </mat-form-field>
 
                 <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
                     <mat-label>
                         {{'trading amount seed' | transloco | capitalize}}
                     </mat-label>
-                    <input matInput type="text" [formControlName]="'AMOUNT_SEED'" [spellcheck]="false">
+                    <input matInput type="number" [formControlName]="'AMOUNT_SEED'" [spellcheck]="false">
                 </mat-form-field>
 
                 <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
                     <mat-label>
                         {{'trading count seed' | transloco | capitalize}}
                     </mat-label>
-                    <input matInput type="text" [formControlName]="'COUNT_SEED'" [spellcheck]="false">
+                    <input matInput type="number" [formControlName]="'COUNT_SEED'" [spellcheck]="false">
                 </mat-form-field>
 
                 <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
                     <mat-label>
                         {{'default blocking time' | transloco | capitalize}}
                     </mat-label>
-                    <input matInput type="text" [formControlName]="'DEFAULT_BLOCKING_TIME'" [spellcheck]="false">
+                    <input matInput type="number" [formControlName]="'DEFAULT_BLOCKING_TIME'" [spellcheck]="false">
                     <span matTextSuffix="">{{'ms' | transloco | capitalize}}</span>
                 </mat-form-field>
 
@@ -46,7 +46,7 @@
                     <mat-label>
                         {{'price range percent' | transloco | capitalize}}
                     </mat-label>
-                    <input matInput type="text" [formControlName]="'PRICE_RANGE_PERCENT'" [spellcheck]="false">
+                    <input matInput type="number" [formControlName]="'PRICE_RANGE_PERCENT'" [spellcheck]="false">
                     <span matTextSuffix="">%</span>
                 </mat-form-field>
 
@@ -54,7 +54,7 @@
                     <mat-label>
                         {{'trading profit percent' | transloco | capitalize}}
                     </mat-label>
-                    <input matInput type="text" [formControlName]="'TRADING_BENEFIT_PERCENT'" [spellcheck]="false">
+                    <input matInput type="number" [formControlName]="'TRADING_BENEFIT_PERCENT'" [spellcheck]="false">
                     <span matTextSuffix="">%</span>
                 </mat-form-field>
 
@@ -62,9 +62,22 @@
                     <mat-label>
                         {{'mines total profit percent' | transloco | capitalize}}
                     </mat-label>
-                    <input matInput type="text" [formControlName]="'MINES_TOTAL_PROFIT_PERCENT'" [spellcheck]="false">
+                    <input matInput type="number" [formControlName]="'MINES_TOTAL_PROFIT_PERCENT'" [spellcheck]="false">
                     <span matTextSuffix="">x</span>
                 </mat-form-field>
+                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full mt-6" [subscriptSizing]="'dynamic'">
+                    <mat-label>
+                        {{'minimum cash to register partner' | transloco | capitalize}}
+                    </mat-label>
+                    <input matInput type="number" [formControlName]="'MIN_CASH_TO_REGISTER_PARTNER'"
+                        [spellcheck]="false">
+                    <span matTextSuffix="">$</span>
+                </mat-form-field>
+
+                <mat-checkbox class="fuse-mat-dense fuse-mat-rounded w-full mt-6"
+                    [formControlName]="'AUTO_ACCEPT_PARTNER_REGISTRATION'">
+                    {{'auto confirm partner registration' | transloco | capitalize}}
+                </mat-checkbox>
             </form>
 
             <div class="flex items-center justify-end mt-6 pt-6">

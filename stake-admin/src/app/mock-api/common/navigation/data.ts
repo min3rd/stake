@@ -51,12 +51,26 @@ const navigations: FuseNavigationItem[] = [
                 link: '/management/withdrawOrders'
             },
             {
+                id: 'partners',
+                title: 'Partners',
+                type: 'basic',
+                icon: 'heroicons_outline:user-group',
+                link: '/management/partners'
+            },
+            {
+                id: 'monthly-profits',
+                title: 'Monthly Profits',
+                type: 'basic',
+                icon: 'heroicons_outline:chart-bar',
+                link: '/management/monthlyProfits'
+            },
+            {
                 id: 'setting',
                 title: 'Setting',
                 type: 'basic',
                 icon: 'heroicons_outline:cog',
                 link: '/management/setting'
-            }
+            },
         ],
     },
     {

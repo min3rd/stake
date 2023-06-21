@@ -216,5 +216,20 @@
   "last month": "viime kuukausi",
   "this month": "tässä kuussa",
   "minimum 6 characters required": "vaaditaan vähintään 6 merkkiä",
-  "maximum 32 characters required": "vaaditaan enintään 32 merkkiä"
+  "maximum 32 characters required": "vaaditaan enintään 32 merkkiä",
+  "your partner registration information": "kumppanisi rekisteröintitiedot",
+  "partner registration": "kumppanin rekisteröinti",
+  "partners": "kumppaneita",
+  "pending": "vireillä",
+  "phone is required": "puhelin vaaditaan",
+  "rejected": "hylätty",
+  "success": "menestys",
+  "telegram is required": "sähke tarvitaan",
+  "zalo": "zalo",
+  "zalo is required": "zalo vaaditaan",
+  "email is required": "sähköposti vaaditaan",
+  "facebook": "Facebook",
+  "facebook is required": "facebook vaaditaan",
+  "address": "osoite",
+  "address is required": "osoite vaaditaan"
 }

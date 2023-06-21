@@ -71,6 +71,10 @@ export class ApiService {
         return this._publicApi(`/bestTraders?time=${time}`);
     }
 
+    public_partner_registrations(): string {
+        return this._publicApi(`/partnerRegistrations`);
+    }
+
     user_socket(): string {
         return `${this.API_URL}/user`;
     }
@@ -179,6 +183,11 @@ export class ApiService {
     users_dashboard_tradeStats() {
         return this._usersApi(`/dashboard/tradeStats`);
     }
+
+    users_partner_registration(): string {
+        return this._usersApi(`/partnerRegistration`);
+    }
+
 }
 
 

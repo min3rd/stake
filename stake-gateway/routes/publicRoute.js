@@ -4,6 +4,7 @@ const { tradingRooms, latestKlines, latestRounds, tradingConfig, getBestTrader, 
 const { getNotifications } = require('../services/public/userService');
 const { getAppConfig } = require('../services/public/appConfigService');
 const { getLatestNews } = require('../services/public/landingService');
+const { getPartnerRegistrations } = require('../services/public/publicService');
 const publicRoute = express.Router();
 
 publicRoute.post('/sign-up', signUp);
@@ -18,4 +19,5 @@ publicRoute.get('/notifications', noGuard, getNotifications);
 publicRoute.get('/appConfig', getAppConfig);
 publicRoute.get('/bestTraders', getBestTrader);
 publicRoute.get('/news', getLatestNews);
+publicRoute.get('/partnerRegistrations', getPartnerRegistrations);
 module.exports = publicRoute;
