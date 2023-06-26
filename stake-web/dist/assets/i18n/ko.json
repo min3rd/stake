@@ -231,5 +231,8 @@
   "facebook": "페이스북",
   "facebook is required": "페이스북은 필수",
   "address": "주소",
-  "address is required": "주소가 필요합니다"
+  "address is required": "주소가 필요합니다",
+  "are you sure": "확실합니까?",
+  "ready": "준비가 된",
+  "this action will make you become our partners": "이 행동은 당신을 우리의 파트너로 만들 것입니다"
 }

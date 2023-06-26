@@ -7,6 +7,7 @@ import { FuseAlertType } from '@fuse/components/alert';
 import { constants } from 'app/common/constants';
 import { TranslocoService } from '@ngneat/transloco';
 import { CapitalizePipe } from 'app/core/pipe/capitalize.pipe';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
     selector: 'app-partner-registration',
@@ -26,6 +27,7 @@ export class PartnerRegistrationComponent implements OnInit, OnDestroy {
         private _formBuilder: UntypedFormBuilder,
         private _settingsService: SettingsService,
         private _translocoService: TranslocoService,
+        private _fuseConfirmationService: FuseConfirmationService,
     ) { }
 
     ngOnInit(): void {
@@ -84,11 +86,31 @@ export class PartnerRegistrationComponent implements OnInit, OnDestroy {
         if (this.form.invalid) {
             return;
         }
-        this.form.disable();
-        this._settingsService.updatePartnerRegistration(this.form.getRawValue()).subscribe(() => {
-            this.form.enable();
-        }, () => {
-            this.form.enable();
+        // Open the confirmation and save the reference
+        const dialogRef = this._fuseConfirmationService.open({
+            title: this.capitalizePipe.transform(this._translocoService.translate('are you sure')),
+            message: this.capitalizePipe.transform(this._translocoService.translate('this action will make you become our partners')),
+            actions: {
+                confirm: {
+                    label: this.capitalizePipe.transform(this._translocoService.translate('ready')),
+                },
+                cancel: {
+                    label: this.capitalizePipe.transform(this._translocoService.translate('cancel')),
+                }
+            }
         });
+
+        // Subscribe to afterClosed from the dialog reference
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result == 'confirmed') {
+                this.form.disable();
+                this._settingsService.updatePartnerRegistration(this.form.getRawValue()).subscribe(() => {
+                    this.form.enable();
+                }, () => {
+                    this.form.enable();
+                });
+            }
+        });
+
     }
 }

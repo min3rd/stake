@@ -77,5 +77,18 @@
   "end date": "ngày kết thúc",
   "data": "dữ liệu",
   "minimum cash to register partner": "tiền mặt tối thiểu để đăng ký đối tác",
-  "auto confirm partner registration": "tự động xác nhận đăng ký đối tác"
+  "auto confirm partner registration": "tự động xác nhận đăng ký đối tác",
+  "partners": "đại lý",
+  "monthly profits": "lợi nhuận hàng tháng",
+  "win amount": "số tiền thắng",
+  "lose amount": "mất số tiền",
+  "win count": "số lần thắng",
+  "lose count": "mất số lượng",
+  "buy count": "số lượng mua",
+  "sell count": "số lượng bán",
+  "user identity": "danh tính người dùng",
+  "username": "tên tài khoản",
+  "name": "tên",
+  "are you sure": "bạn có chắc không?",
+  "this action will remove your record": "hành động này sẽ xóa dữ liệu của bạn"
 }

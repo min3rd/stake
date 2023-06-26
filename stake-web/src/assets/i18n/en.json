@@ -231,5 +231,8 @@
   "pending": "pending",
   "success": "success",
   "rejected": "rejected",
-  "partners": "partners"
+  "partners": "partners",
+  "are you sure": "are you sure?",
+  "this action will make you become our partners": "this action will make you become our partners",
+  "ready": "ready"
 }

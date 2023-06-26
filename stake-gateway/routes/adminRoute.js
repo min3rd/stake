@@ -6,6 +6,8 @@ const { searchDepositOrders, acceptDepositOrder, denyDepositOrder, getDepositOrd
 const { searchWithdrawOrder, getWithdrawOrderById, acceptWithdrawOrder, denyWithdrawOrder } = require('../services/admin/management/admin_withdrawOrderService');
 const { getAppConfig, updateAppConfig } = require('../services/admin/management/admin_settingService');
 const { getAllNews, getNewsById, updateNewsById, deleteNewsById, createNews } = require('../services/admin/admin_newsService');
+const { getPartnerRegistration, getPartnerRegistrations, savePartnerRegistration } = require('../services/admin/management/admin_partnerRegistration');
+const { getMonthlyProfits, getMonthlyProfit, saveMonthlyProfit, createMonthlyProfit, deleteMonthlyProfit } = require('../services/admin/management/admin_monthlyProfit');
 const adminRoute = express.Router();
 
 adminRoute.post('/sign-in', adminSignIn);
@@ -40,5 +42,15 @@ adminRoute.get('/news/:id', adminAuthenticateToken, getNewsById);
 adminRoute.post('/news/:id', adminAuthenticateToken, updateNewsById);
 adminRoute.delete('/news/:id', adminAuthenticateToken, deleteNewsById);
 adminRoute.post('/news', adminAuthenticateToken, createNews);
+
+adminRoute.get('/partnerRegistrations', adminAuthenticateToken, getPartnerRegistrations);
+adminRoute.get('/partnerRegistrations/:id', adminAuthenticateToken, getPartnerRegistration);
+adminRoute.post('/partnerRegistrations/:id', adminAuthenticateToken, savePartnerRegistration);
+
+adminRoute.get('/monthlyProfits', adminAuthenticateToken, getMonthlyProfits);
+adminRoute.post('/monthlyProfits', adminAuthenticateToken, createMonthlyProfit);
+adminRoute.get('/monthlyProfits/:id', adminAuthenticateToken, getMonthlyProfit);
+adminRoute.post('/monthlyProfits/:id', adminAuthenticateToken, saveMonthlyProfit);
+adminRoute.delete('/monthlyProfits/:id', adminAuthenticateToken, deleteMonthlyProfit);
 
 module.exports = adminRoute;

@@ -1,0 +1,99 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8">
+
+                    <!-- Title -->
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                            {{'partners' | transloco | capitalize}}
+                        </div>
+                    </div>
+
+                    <!-- Main actions -->
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                        <!-- Search -->
+                        <div class="flex gap-4">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deposit Order List -->
+                <div class="flex-col">
+                    <ng-container *ngIf="partnerRegistrations$ | async as partnerRegistrations">
+                        <ng-container *ngIf="partnerRegistrations.length > 0">
+                            <div *ngFor="let partnerRegistration of partnerRegistrations"
+                                class="flex px-8 py-4 items-center gap-2 border-t hover:cursor-pointer"
+                                [ngClass]="{'bg-card': selected && selected._id == partnerRegistration._id}"
+                                [routerLink]="['./', partnerRegistration._id]">
+                                <!-- Status -->
+                                <ng-container>
+                                    <div *ngIf="partnerRegistration.status == 0">
+                                        <div
+                                            class="absolute rounded-full bg-amber-500 icon-size-4 transition animate-ping">
+                                        </div>
+                                        <div class="rounded-full bg-amber-500 icon-size-4"></div>
+                                    </div>
+                                    <div *ngIf="partnerRegistration.status == 1">
+
+                                        <div class="rounded-full bg-lime-500 icon-size-3"></div>
+                                    </div>
+                                    <div *ngIf="partnerRegistration.status == 2">
+                                        <div class="rounded-full bg-red-500 icon-size-3"></div>
+                                    </div>
+                                </ng-container>
+
+                                <!-- Detail -->
+                                <ng-container *ngIf="partnerRegistration.username">
+                                    <div class="flex justify-between items-center">
+                                        <!-- information -->
+                                        <div>
+                                            <div class="flex gap-2 items-center">
+                                                <div>
+                                                    {{partnerRegistration.name}}
+                                                </div>
+                                                <span>-</span>
+                                                <div>
+                                                    ({{partnerRegistration.username}})
+                                                </div>
+                                                <span>-</span>
+                                                <div>
+                                                    {{partnerRegistration.address}}
+                                                </div>
+                                            </div>
+                                            <div class="text-secondary text-xs">
+                                                {{partnerRegistration.time | date:'YYYY-MM-dd HH:mm:ss'}}
+                                            </div>
+                                        </div>
+                                        <!-- contacts -->
+                                        <div>
+
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+
+                </div>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

@@ -87,5 +87,17 @@
   "end date": "end date",
   "data": "data",
   "minimum cash to register partner": "minimum cash to register partner",
-  "auto confirm partner registration": "auto confirm partner registration"
+  "auto confirm partner registration": "auto confirm partner registration",
+  "partners": "partners",
+  "monthly profits": "monthly profits",
+  "win amount": "win amount",
+  "lose amount": "lose amount",
+  "win count": "win count",
+  "lose count": "lose count",
+  "buy count": "buy count",
+  "sell count": "sell count",
+  "user identity": "user identity",
+  "name": "name",
+  "are you sure": "are you sure?",
+  "this action will remove your record": "this action will remove your record"
 }

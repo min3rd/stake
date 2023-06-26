@@ -23,6 +23,10 @@ const routes: Routes = [
         loadChildren: () => import('./monthly-profits/monthly-profits.module').then(m => m.MonthlyProfitsModule),
     },
     {
+        path: 'partners',
+        loadChildren: () => import('./partners/partners.module').then(m => m.PartnersModule),
+    },
+    {
         path: '**',
         redirectTo: '/'
     }

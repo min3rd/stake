@@ -161,6 +161,22 @@ export class ApiService {
     admin_news_new(id: string): string {
         return this._adminApi(`/news/${id}`);
     }
+
+    admin_partner_registrations(): string {
+        return this._adminApi(`/partnerRegistrations`);
+    }
+
+    admin_partner_registrations_partner_registration(id: string): string {
+        return this._adminApi(`/partnerRegistrations/${id}`);
+    }
+
+    admin_monthly_profits(): string {
+        return this._adminApi(`/monthlyProfits`);
+    }
+
+    admin_monthly_profits_monthly_profit(id: string): string {
+        return this._adminApi(`/monthlyProfits/${id}`);
+    }
 }
 
 

@@ -231,5 +231,8 @@
   "facebook": "เฟสบุ๊ค",
   "facebook is required": "จำเป็นต้องมีเฟสบุ๊ค",
   "address": "ที่อยู่",
-  "address is required": "ต้องระบุที่อยู่"
+  "address is required": "ต้องระบุที่อยู่",
+  "are you sure": "คุณแน่ใจไหม?",
+  "ready": "พร้อม",
+  "this action will make you become our partners": "การกระทำนี้จะทำให้คุณกลายเป็นหุ้นส่วนของเรา"
 }

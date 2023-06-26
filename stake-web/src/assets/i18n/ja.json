@@ -231,5 +231,8 @@
   "facebook": "フェイスブック",
   "facebook is required": "フェイスブックは必須です",
   "address": "住所",
-  "address is required": "住所は必須です"
+  "address is required": "住所は必須です",
+  "are you sure": "本気ですか？",
+  "ready": "準備",
+  "this action will make you become our partners": "このアクションにより、あなたは私たちのパートナーになります"
 }

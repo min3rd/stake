@@ -231,5 +231,8 @@
   "facebook": "Facebook",
   "facebook is required": "se requiere facebook",
   "address": "DIRECCIÓN",
-  "address is required": "La dirección es necesaria"
+  "address is required": "La dirección es necesaria",
+  "are you sure": "¿está seguro?",
+  "ready": "listo",
+  "this action will make you become our partners": "esta acción hará que se conviertan en nuestros socios"
 }

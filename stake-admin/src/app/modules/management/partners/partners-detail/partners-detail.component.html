@@ -1,0 +1,93 @@
+<div class="flex flex-col w-full">
+    <!-- Header -->
+    <div class="relative w-full px-8 sm:px-12 flex items-center py-6 justify-between">
+        <ng-container>
+            <div *ngIf="partnerRegistration.status == 0">
+                <div class="absolute rounded-full bg-amber-500 icon-size-3 transition animate-ping">
+                </div>
+                <div class="rounded-full bg-amber-500 icon-size-3"></div>
+            </div>
+            <div *ngIf="partnerRegistration.status == 1">
+                <div class="absolute rounded-full bg-lime-500 icon-size-3 transition animate-ping">
+                </div>
+                <div class="rounded-full bg-lime-500 icon-size-3"></div>
+            </div>
+            <div *ngIf="partnerRegistration.status == 2">
+                <div class="absolute rounded-full bg-red-500 icon-size-3 transition animate-ping">
+                </div>
+                <div class="rounded-full bg-red-500 icon-size-3"></div>
+            </div>
+        </ng-container>
+
+        <div class="flex items-center gap-2">
+            <span class="text-2xl font-semibold text-lime-500">
+                {{partnerRegistration.name}}
+            </span>
+            <a class="text-secondary hover:cursor-pointer"
+                [routerLink]="['/management','users',partnerRegistration.userId]">
+                @{{partnerRegistration.username}}
+            </a>
+        </div>
+        <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']">
+            <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </a>
+    </div>
+
+    <!-- Detail -->
+    <div class="grid grid-cols-1 gap-8 px-8 border-t py-8">
+        <div class="flex items-center gap-6">
+            <mat-icon svgIcon="heroicons_outline:map"></mat-icon>
+            <div>
+                {{partnerRegistration.address}}
+            </div>
+        </div>
+        <div class="flex items-center gap-6">
+            <mat-icon svgIcon="heroicons_outline:phone"></mat-icon>
+            <div>
+                {{partnerRegistration.phone}}
+            </div>
+        </div>
+        <div class="flex items-center gap-6">
+            <img class="icon-size-8 rounded-md" src="/assets/images/ui/applications/zalo.png" alt="Zalo">
+            <div>
+                {{partnerRegistration.zalo}}
+            </div>
+            <button mat-icon-button (click)="zalo(partnerRegistration.zalo)">
+                <mat-icon svgIcon="heroicons_outline:link"></mat-icon>
+            </button>
+        </div>
+        <div class="flex items-center gap-6">
+            <img class="icon-size-8 rounded-md" src="/assets/images/ui/applications/telegram.png" alt="Zalo">
+            <div>
+                {{partnerRegistration.telegram}}
+            </div>
+            <button mat-icon-button (click)="telegram(partnerRegistration.telegram)">
+                <mat-icon svgIcon="heroicons_outline:link"></mat-icon>
+            </button>
+        </div>
+        <div class="flex items-center gap-6">
+            <img class="icon-size-8 rounded-md" src="/assets/images/ui/applications/facebook.png" alt="Zalo">
+            <div>
+                {{partnerRegistration.facebook}}
+            </div>
+            <button mat-icon-button (click)="facebook(partnerRegistration.facebook)">
+                <mat-icon svgIcon="heroicons_outline:link"></mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-between px-8 py-8 border-t">
+        <div class="flex gap-2">
+            <button mat-flat-button class="bg-red-500" (click)="deny()">
+                {{'deny' | transloco | capitalize}}
+            </button>
+            <a mat-button [routerLink]="['../']">
+                {{'cancel' | transloco | capitalize}}
+            </a>
+        </div>
+        <button mat-flat-button class="bg-lime-500" (click)="accept()">
+            {{'accept' | transloco | capitalize}}
+        </button>
+    </div>
+</div>

@@ -19,10 +19,10 @@ export class DepositOrderDetailComponent implements OnInit {
     form: UntypedFormGroup;
     private _unsubscribeAll: Subject<any> = new Subject();
     constructor(
-        private _depositOrderService: DepositOrderService,
         private _listComponent: DepositOrderListComponent,
         private _formBuilder: UntypedFormBuilder,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _depositOrderService: DepositOrderService,
     ) {
 
     }

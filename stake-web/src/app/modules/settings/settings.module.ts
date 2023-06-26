@@ -14,6 +14,7 @@ import { SettingsAccountComponent } from './account/account.component';
 import { SettingsSecurityComponent } from './security/security.component';
 import { SettingsComponent } from './settings.component';
 import { settingsRoutes } from './settings.routing';
+import { FuseConfirmationModule } from '@fuse/services/confirmation';
 import { PartnerRegistrationComponent } from './partner-registration/partner-registration.component';
 
 @NgModule({
@@ -34,7 +35,8 @@ import { PartnerRegistrationComponent } from './partner-registration/partner-reg
         MatSidenavModule,
         MatSlideToggleModule,
         FuseAlertModule,
-        SharedModule
+        SharedModule,
+        FuseConfirmationModule
     ]
 })
 export class SettingsModule {
