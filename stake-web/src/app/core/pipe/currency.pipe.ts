@@ -24,7 +24,7 @@ export function nFormatter(num: number, digits: number) {
 export class CurrencyPipe implements PipeTransform {
 
     transform(value: any, ...args: unknown[]): any {
-        if (value > 999) {
+        if (value > 9999 && !Object.keys(args).includes('no-minimal')) {
             return '$' + nFormatter(value, 2);
         }
         return currency(value).format({

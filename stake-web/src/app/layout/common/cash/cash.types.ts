@@ -1,4 +1,4 @@
-export interface RESULT {
+export interface LiveNotificationData {
     isDemo?: boolean;
     amount?: number;
 }

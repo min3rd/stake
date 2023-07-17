@@ -7,10 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@ngneat/transloco';
 import { PipeModule } from 'app/core/pipe/pipe.module';
 import { FuseConfirmationModule } from '@fuse/services/confirmation';
+import { LiveNotificationComponent } from './live-notification/live-notification.component';
 
 @NgModule({
     declarations: [
         CashComponent,
+        LiveNotificationComponent,
     ],
     imports: [
         CommonModule,
