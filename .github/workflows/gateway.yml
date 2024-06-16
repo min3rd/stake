@@ -15,14 +15,8 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
                   whoami
-                  cd /usr/share/nginx/stake
+                  cd /home/azureuser
                   git fetch --all
                   git reset --hard origin/master
                   git pull origin master
                   cd stake-gateway
-                  rm -rf node_modules
-                  rm -rf package-lock.json
-                  yes | cp .pd.env .env
-                  npm i
-                  pm2 restart 0
-                  systemctl restart nginx
