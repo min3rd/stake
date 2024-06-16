@@ -1,0 +1,7 @@
+version: "2.0"
+services:
+  stake-mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
